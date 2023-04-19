@@ -2,6 +2,8 @@
 #include "PythonLexer.h"
 #include "PythonParser.h"
 #include "antlr4-runtime.h"
+#include "mylistener.cpp"
+
 
 
 using namespace antlrcpp;
@@ -20,7 +22,15 @@ int main(int , const char **) {
   PythonParser parser(&tokens);
   tree::ParseTree *tree2 = parser.program();
 
-  std::cout << tree2->children.at(0)->toString() << std::endl;
+  MyListener listener;
+
+  antlr4::tree::ParseTreeWalker::DEFAULT.walk(&listener, tree2);
+
+
+
+  
+
+  // std::cout << tree2->children.at(0)->toStringTree(&parser) << std::endl;
 
   // std::cout << tree2->toString() <<std::endl;
 
