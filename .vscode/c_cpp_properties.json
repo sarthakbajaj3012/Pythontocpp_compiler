@@ -3,7 +3,8 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**",
+                "/usr/local/Cellar/antlr4-cpp-runtime/4.12.0/include/antlr4-runtime"
             ],
             "defines": [],
             "macFrameworkPath": [
