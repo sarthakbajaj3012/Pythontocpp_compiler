@@ -24,13 +24,11 @@ int main(int , const char **) {
 
   MyListener listener;
 
+
   antlr4::tree::ParseTreeWalker::DEFAULT.walk(&listener, tree2);
 
 
-
-  
-
-  // std::cout << tree2->children.at(0)->toStringTree(&parser) << std::endl;
+  std::cout << tree2->children.at(0)->toStringTree(&parser) << std::endl;
 
   // std::cout << tree2->toString() <<std::endl;
 
