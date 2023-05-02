@@ -41,6 +41,12 @@ public:
   virtual void enterExpression_statement(PythonParser::Expression_statementContext *ctx) = 0;
   virtual void exitExpression_statement(PythonParser::Expression_statementContext *ctx) = 0;
 
+  virtual void enterAddop(PythonParser::AddopContext *ctx) = 0;
+  virtual void exitAddop(PythonParser::AddopContext *ctx) = 0;
+
+  virtual void enterMulop(PythonParser::MulopContext *ctx) = 0;
+  virtual void exitMulop(PythonParser::MulopContext *ctx) = 0;
+
   virtual void enterExpression(PythonParser::ExpressionContext *ctx) = 0;
   virtual void exitExpression(PythonParser::ExpressionContext *ctx) = 0;
 

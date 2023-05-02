@@ -54,12 +54,14 @@ public:
     virtual void exitReturn_statement(PythonParser::Return_statementContext * /*ctx*/) override { }
 
     virtual void enterExpression_statement(PythonParser::Expression_statementContext * ctx) override { 
-        std::cout << ctx.
+        
     }
     virtual void exitExpression_statement(PythonParser::Expression_statementContext * /*ctx*/) override { }
 
     virtual void enterExpression(PythonParser::ExpressionContext * ctx) override {
-        
+        if( ctx->addop().size() > 0) {
+            std::cout <<ctx->addop().at(0)->getText() << std::endl;
+        }
     }
     virtual void exitExpression(PythonParser::ExpressionContext * /*ctx*/) override { }
 
@@ -67,6 +69,12 @@ public:
         
      }
     virtual void exitTerm(PythonParser::TermContext * /*ctx*/) override { }
+
+    virtual void enterAddop(PythonParser::AddopContext * /*ctx*/) override { }
+    virtual void exitAddop(PythonParser::AddopContext * /*ctx*/) override { }
+
+    virtual void enterMulop(PythonParser::MulopContext * /*ctx*/) override { }
+    virtual void exitMulop(PythonParser::MulopContext * /*ctx*/) override { }
 
     virtual void enterFactor(PythonParser::FactorContext * ctx) override {
         // std::string temp ="";

@@ -24,11 +24,13 @@ return_statement : 'return' expression;
 
 expression_statement : expression;
 
-expression : term (('+'|'-') term)*;
+addop : '+' | '-' ;
+ 
+mulop : '*' | '/' | '%' ;
 
-term : factor (('*'|'/'|'%') factor)*;
+expression : term ( addop term)*;
 
-
+term : factor ( mulop factor)*;
 
 factor : INTEGER
        | FLOAT

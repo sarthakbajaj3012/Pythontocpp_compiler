@@ -20,8 +20,9 @@ public:
   enum {
     RuleProgram = 0, RuleStatement_list = 1, RuleStatement = 2, RuleAssignment_statement = 3, 
     RuleIf_statement = 4, RuleWhile_statement = 5, RuleFunction_statement = 6, 
-    RuleReturn_statement = 7, RuleExpression_statement = 8, RuleExpression = 9, 
-    RuleTerm = 10, RuleFactor = 11, RuleParameter_list = 12, RuleParameter = 13
+    RuleReturn_statement = 7, RuleExpression_statement = 8, RuleAddop = 9, 
+    RuleMulop = 10, RuleExpression = 11, RuleTerm = 12, RuleFactor = 13, 
+    RuleParameter_list = 14, RuleParameter = 15
   };
 
   explicit PythonParser(antlr4::TokenStream *input);
@@ -50,6 +51,8 @@ public:
   class Function_statementContext;
   class Return_statementContext;
   class Expression_statementContext;
+  class AddopContext;
+  class MulopContext;
   class ExpressionContext;
   class TermContext;
   class FactorContext;
@@ -186,12 +189,38 @@ public:
 
   Expression_statementContext* expression_statement();
 
+  class  AddopContext : public antlr4::ParserRuleContext {
+  public:
+    AddopContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  AddopContext* addop();
+
+  class  MulopContext : public antlr4::ParserRuleContext {
+  public:
+    MulopContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  MulopContext* mulop();
+
   class  ExpressionContext : public antlr4::ParserRuleContext {
   public:
     ExpressionContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
     std::vector<TermContext *> term();
     TermContext* term(size_t i);
+    std::vector<AddopContext *> addop();
+    AddopContext* addop(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -206,6 +235,8 @@ public:
     virtual size_t getRuleIndex() const override;
     std::vector<FactorContext *> factor();
     FactorContext* factor(size_t i);
+    std::vector<MulopContext *> mulop();
+    MulopContext* mulop(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;

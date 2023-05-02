@@ -43,6 +43,12 @@ public:
   virtual void enterExpression_statement(PythonParser::Expression_statementContext * /*ctx*/) override { }
   virtual void exitExpression_statement(PythonParser::Expression_statementContext * /*ctx*/) override { }
 
+  virtual void enterAddop(PythonParser::AddopContext * /*ctx*/) override { }
+  virtual void exitAddop(PythonParser::AddopContext * /*ctx*/) override { }
+
+  virtual void enterMulop(PythonParser::MulopContext * /*ctx*/) override { }
+  virtual void exitMulop(PythonParser::MulopContext * /*ctx*/) override { }
+
   virtual void enterExpression(PythonParser::ExpressionContext * /*ctx*/) override { }
   virtual void exitExpression(PythonParser::ExpressionContext * /*ctx*/) override { }
 
