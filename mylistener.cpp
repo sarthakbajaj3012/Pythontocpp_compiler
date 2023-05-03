@@ -61,7 +61,13 @@ public:
         
     }
     virtual void exitStatement(PythonParser::StatementContext * ctx) override { 
-    //    converted_code.append(";\n");
+       
+       if( ctx->if_statement() != nullptr || ctx->while_statement() != nullptr){
+            converted_code.append("\n");
+       }
+       else {
+        converted_code.append(";\n");
+       }
     }
 
     virtual void enterAssignment_statement(PythonParser::Assignment_statementContext * ctx) override { 
@@ -89,11 +95,19 @@ public:
     virtual void enterIf_statement(PythonParser::If_statementContext * ctx) override { 
         std::string temp = addtab();
         tabspaces++;
-        // if(ctx->expression_statement() != nullptr){
-        //     converted_code.append(temp + "if(")
-        // }
+        if(ctx->expression_statement() != nullptr){
+            converted_code.append(temp + "if(");
+        }
+        else {
+            converted_code.append(temp + "if(");
+        }
     }
-    virtual void exitIf_statement(PythonParser::If_statementContext * /*ctx*/) override { }
+    virtual void exitIf_statement(PythonParser::If_statementContext * /*ctx*/) override {
+        tabspaces--;
+        std::string temp = addtab();
+        converted_code.append(temp +"}");
+        
+     }
 
     virtual void enterWhile_statement(PythonParser::While_statementContext * /*ctx*/) override { }
     virtual void exitWhile_statement(PythonParser::While_statementContext * /*ctx*/) override { }
@@ -111,7 +125,7 @@ public:
 
     virtual void enterExpression(PythonParser::ExpressionContext * /*ctx*/) override {}
     virtual void exitExpression(PythonParser::ExpressionContext * /*ctx*/) override { 
-        converted_code.append(";\n");
+        // converted_code.append(";\n");
     }
 
     virtual void enterTerm(PythonParser::TermContext * /*ctx*/) override {
@@ -163,15 +177,19 @@ public:
     virtual void visitErrorNode(antlr4::tree::ErrorNode * /*node*/) override { }
 
     virtual void enterComparison(PythonParser::ComparisonContext * /*ctx*/) override { }
-    virtual void exitComparison(PythonParser::ComparisonContext * /*ctx*/) override { }
+    virtual void exitComparison(PythonParser::ComparisonContext * ctx) override { 
+        converted_code.append("){\n");
+    }
 
-    virtual void enterConop(PythonParser::ConopContext * /*ctx*/) override { }
+    virtual void enterConop(PythonParser::ConopContext * ctx) override {
+        converted_code.append( " "+ ctx->getText() + " ");
+     }
     virtual void exitConop(PythonParser::ConopContext * /*ctx*/) override { }
 
     virtual void enterPrint(PythonParser::PrintContext * ctx) override { 
         std::string temp = addtab();
         converted_code.append(
-            temp + "std::cout << " + ctx->NAME()->getText() + " << std::endl;"
+            temp + "std::cout << " + ctx->NAME()->getText() + " << std::endl"
         );
     }
     virtual void exitPrint(PythonParser::PrintContext * /*ctx*/) override { }
