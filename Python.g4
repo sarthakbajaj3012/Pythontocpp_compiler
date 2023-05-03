@@ -10,6 +10,7 @@ statement : assignment_statement
           | while_statement
           | function_statement
           | return_statement
+          | print
           | expression_statement;
 
 assignment_statement : NAME '=' expression;
@@ -31,6 +32,8 @@ expression_statement : expression;
 addop : '+' | '-' ;
  
 mulop : '*' | '/' | '%' ;
+
+print: 'print(' NAME ')';
 
 expression : term ( addop term)*;
 

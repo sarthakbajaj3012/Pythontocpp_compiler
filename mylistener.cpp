@@ -115,9 +115,6 @@ public:
 
     virtual void enterMulop(PythonParser::MulopContext * ctx) override {
         converted_code.append( ctx->getText());
-        // if(ctx->getText() == "/"){
-        //     libraries += "#include <cmath>";
-        // }
     }
     virtual void exitMulop(PythonParser::MulopContext * /*ctx*/) override { }
 
@@ -137,7 +134,7 @@ public:
     virtual void exitFactor(PythonParser::FactorContext * ctx) override { 
         if(ctx->expression() != nullptr) {
             converted_code.append(")");
-            
+
         }
     }
 
@@ -158,5 +155,12 @@ public:
 
     virtual void enterConop(PythonParser::ConopContext * /*ctx*/) override { }
     virtual void exitConop(PythonParser::ConopContext * /*ctx*/) override { }
+
+    virtual void enterPrint(PythonParser::PrintContext * ctx) override { 
+        converted_code.append(
+            "std::cout<<" + ctx->NAME()->getText() + "<<std::endl"
+        );
+    }
+    virtual void exitPrint(PythonParser::PrintContext * /*ctx*/) override { }
     
 };

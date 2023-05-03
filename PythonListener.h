@@ -53,6 +53,9 @@ public:
   virtual void enterMulop(PythonParser::MulopContext *ctx) = 0;
   virtual void exitMulop(PythonParser::MulopContext *ctx) = 0;
 
+  virtual void enterPrint(PythonParser::PrintContext *ctx) = 0;
+  virtual void exitPrint(PythonParser::PrintContext *ctx) = 0;
+
   virtual void enterExpression(PythonParser::ExpressionContext *ctx) = 0;
   virtual void exitExpression(PythonParser::ExpressionContext *ctx) = 0;
 

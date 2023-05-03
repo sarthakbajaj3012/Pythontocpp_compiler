@@ -15,16 +15,16 @@ public:
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
-    T__20 = 21, T__21 = 22, T__22 = 23, NAME = 24, INTEGER = 25, FLOAT = 26, 
-    WS = 27
+    T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, NAME = 25, INTEGER = 26, 
+    FLOAT = 27, WS = 28
   };
 
   enum {
     RuleProgram = 0, RuleStatement_list = 1, RuleStatement = 2, RuleAssignment_statement = 3, 
     RuleIf_statement = 4, RuleComparison = 5, RuleConop = 6, RuleWhile_statement = 7, 
     RuleFunction_statement = 8, RuleReturn_statement = 9, RuleExpression_statement = 10, 
-    RuleAddop = 11, RuleMulop = 12, RuleExpression = 13, RuleTerm = 14, 
-    RuleFactor = 15, RuleParameter_list = 16, RuleParameter = 17
+    RuleAddop = 11, RuleMulop = 12, RulePrint = 13, RuleExpression = 14, 
+    RuleTerm = 15, RuleFactor = 16, RuleParameter_list = 17, RuleParameter = 18
   };
 
   explicit PythonParser(antlr4::TokenStream *input);
@@ -57,6 +57,7 @@ public:
   class Expression_statementContext;
   class AddopContext;
   class MulopContext;
+  class PrintContext;
   class ExpressionContext;
   class TermContext;
   class FactorContext;
@@ -99,6 +100,7 @@ public:
     While_statementContext *while_statement();
     Function_statementContext *function_statement();
     Return_statementContext *return_statement();
+    PrintContext *print();
     Expression_statementContext *expression_statement();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -244,6 +246,19 @@ public:
   };
 
   MulopContext* mulop();
+
+  class  PrintContext : public antlr4::ParserRuleContext {
+  public:
+    PrintContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *NAME();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  PrintContext* print();
 
   class  ExpressionContext : public antlr4::ParserRuleContext {
   public:

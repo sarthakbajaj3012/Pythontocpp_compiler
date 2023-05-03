@@ -55,6 +55,9 @@ public:
   virtual void enterMulop(PythonParser::MulopContext * /*ctx*/) override { }
   virtual void exitMulop(PythonParser::MulopContext * /*ctx*/) override { }
 
+  virtual void enterPrint(PythonParser::PrintContext * /*ctx*/) override { }
+  virtual void exitPrint(PythonParser::PrintContext * /*ctx*/) override { }
+
   virtual void enterExpression(PythonParser::ExpressionContext * /*ctx*/) override { }
   virtual void exitExpression(PythonParser::ExpressionContext * /*ctx*/) override { }
 
