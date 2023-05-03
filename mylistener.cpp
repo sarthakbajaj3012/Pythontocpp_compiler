@@ -16,11 +16,20 @@ using namespace antlr4;
 
 class MyListener : public PythonBaseListener {
 public:
-    std::string converted_code = "\nint main(){\n";
-    std::string libraries = "#include <iostream>\n";
+
+    
+    std::string converted_code = "#include <iostream>\n int main(){\n";
+    // std::string libraries = "";
     std::set<std::string> var_names;
     int tabspaces = 1;
     int index = converted_code.size();
+    std::string addtab() {
+        std::string temp =  "";
+        for(int i = 0;  i < tabspaces;i++) {
+               temp += "\t";
+        }
+        return temp;
+    }
     virtual void enterProgram(PythonParser::ProgramContext * /*ctx*/) override { }
     virtual void exitProgram(PythonParser::ProgramContext * /*ctx*/) override { 
         converted_code.append("\treturn 0; \n}");
@@ -56,11 +65,8 @@ public:
     }
 
     virtual void enterAssignment_statement(PythonParser::Assignment_statementContext * ctx) override { 
-        std::string temp = "";
+        std::string temp = addtab();
         std::string var = ctx->NAME()->toString();
-        for(int i = 0;  i < tabspaces;i++) {
-               temp += "\t";
-        }
 
         if(var_names.find(var) == var_names.end()){
             var_names.insert(var);
@@ -80,7 +86,13 @@ public:
 
     virtual void exitAssignment_statement(PythonParser::Assignment_statementContext * /*ctx*/) override { }
 
-    virtual void enterIf_statement(PythonParser::If_statementContext * /*ctx*/) override { }
+    virtual void enterIf_statement(PythonParser::If_statementContext * ctx) override { 
+        std::string temp = addtab();
+        tabspaces++;
+        // if(ctx->expression_statement() != nullptr){
+        //     converted_code.append(temp + "if(")
+        // }
+    }
     virtual void exitIf_statement(PythonParser::If_statementContext * /*ctx*/) override { }
 
     virtual void enterWhile_statement(PythonParser::While_statementContext * /*ctx*/) override { }
@@ -157,8 +169,9 @@ public:
     virtual void exitConop(PythonParser::ConopContext * /*ctx*/) override { }
 
     virtual void enterPrint(PythonParser::PrintContext * ctx) override { 
+        std::string temp = addtab();
         converted_code.append(
-            "std::cout<<" + ctx->NAME()->getText() + "<<std::endl"
+            temp + "std::cout << " + ctx->NAME()->getText() + " << std::endl;"
         );
     }
     virtual void exitPrint(PythonParser::PrintContext * /*ctx*/) override { }

@@ -49,62 +49,63 @@ void pythonParserInitialize() {
       "expression", "term", "factor", "parameter_list", "parameter"
     },
     std::vector<std::string>{
-      "", "'='", "'if'", "':'", "'elif'", "'else'", "'>='", "'>'", "'<'", 
-      "'<='", "'=='", "'!='", "'in'", "'while'", "'def'", "'('", "')'", 
-      "'return'", "'+'", "'-'", "'*'", "'/'", "'%'", "'print('", "','"
+      "", "'='", "'if'", "':\\n\\t'", "'elif'", "':'", "'else'", "'>='", 
+      "'>'", "'<'", "'<='", "'=='", "'!='", "'in'", "'while'", "'def'", 
+      "'('", "')'", "'return'", "'+'", "'-'", "'*'", "'/'", "'%'", "'print('", 
+      "','"
     },
     std::vector<std::string>{
       "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-      "", "", "", "", "", "", "", "", "NAME", "INTEGER", "FLOAT", "WS"
+      "", "", "", "", "", "", "", "", "", "NAME", "INTEGER", "FLOAT", "WS"
     }
   );
   static const int32_t serializedATNSegment[] = {
-  	4,1,28,155,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
+  	4,1,29,155,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
   	7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,
   	14,2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,1,0,1,0,1,1,1,1,1,1,1,1,1,
   	1,5,1,46,8,1,10,1,12,1,49,9,1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,3,2,58,8,2,
-  	1,3,1,3,1,3,1,3,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,5,4,74,8,4,10,
-  	4,12,4,77,9,4,1,4,1,4,1,4,3,4,82,8,4,3,4,84,8,4,1,5,1,5,1,5,1,5,1,6,1,
-  	6,1,7,1,7,1,7,1,7,1,7,1,8,1,8,1,8,1,8,1,8,1,8,1,8,1,8,1,9,1,9,1,9,1,10,
-  	1,10,1,11,1,11,1,12,1,12,1,13,1,13,1,13,1,13,1,14,1,14,1,14,1,14,5,14,
-  	122,8,14,10,14,12,14,125,9,14,1,15,1,15,1,15,1,15,5,15,131,8,15,10,15,
-  	12,15,134,9,15,1,16,1,16,1,16,1,16,1,16,1,16,1,16,3,16,143,8,16,1,17,
-  	1,17,1,17,5,17,148,8,17,10,17,12,17,151,9,17,1,18,1,18,1,18,0,1,2,19,
-  	0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,0,3,1,0,6,12,1,0,
-  	18,19,1,0,20,22,151,0,38,1,0,0,0,2,40,1,0,0,0,4,57,1,0,0,0,6,59,1,0,0,
-  	0,8,83,1,0,0,0,10,85,1,0,0,0,12,89,1,0,0,0,14,91,1,0,0,0,16,96,1,0,0,
-  	0,18,104,1,0,0,0,20,107,1,0,0,0,22,109,1,0,0,0,24,111,1,0,0,0,26,113,
+  	1,3,1,3,1,3,1,3,1,4,1,4,1,4,3,4,67,8,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,5,
+  	4,76,8,4,10,4,12,4,79,9,4,1,4,1,4,1,4,3,4,84,8,4,1,5,1,5,1,5,1,5,1,6,
+  	1,6,1,7,1,7,1,7,1,7,1,7,1,8,1,8,1,8,1,8,1,8,1,8,1,8,1,8,1,9,1,9,1,9,1,
+  	10,1,10,1,11,1,11,1,12,1,12,1,13,1,13,1,13,1,13,1,14,1,14,1,14,1,14,5,
+  	14,122,8,14,10,14,12,14,125,9,14,1,15,1,15,1,15,1,15,5,15,131,8,15,10,
+  	15,12,15,134,9,15,1,16,1,16,1,16,1,16,1,16,1,16,1,16,3,16,143,8,16,1,
+  	17,1,17,1,17,5,17,148,8,17,10,17,12,17,151,9,17,1,18,1,18,1,18,0,1,2,
+  	19,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,0,3,1,0,7,13,1,
+  	0,19,20,1,0,21,23,151,0,38,1,0,0,0,2,40,1,0,0,0,4,57,1,0,0,0,6,59,1,0,
+  	0,0,8,63,1,0,0,0,10,85,1,0,0,0,12,89,1,0,0,0,14,91,1,0,0,0,16,96,1,0,
+  	0,0,18,104,1,0,0,0,20,107,1,0,0,0,22,109,1,0,0,0,24,111,1,0,0,0,26,113,
   	1,0,0,0,28,117,1,0,0,0,30,126,1,0,0,0,32,142,1,0,0,0,34,144,1,0,0,0,36,
   	152,1,0,0,0,38,39,3,2,1,0,39,1,1,0,0,0,40,41,6,1,-1,0,41,42,3,4,2,0,42,
   	47,1,0,0,0,43,44,10,1,0,0,44,46,3,4,2,0,45,43,1,0,0,0,46,49,1,0,0,0,47,
   	45,1,0,0,0,47,48,1,0,0,0,48,3,1,0,0,0,49,47,1,0,0,0,50,58,3,6,3,0,51,
   	58,3,8,4,0,52,58,3,14,7,0,53,58,3,16,8,0,54,58,3,18,9,0,55,58,3,26,13,
   	0,56,58,3,20,10,0,57,50,1,0,0,0,57,51,1,0,0,0,57,52,1,0,0,0,57,53,1,0,
-  	0,0,57,54,1,0,0,0,57,55,1,0,0,0,57,56,1,0,0,0,58,5,1,0,0,0,59,60,5,25,
-  	0,0,60,61,5,1,0,0,61,62,3,28,14,0,62,7,1,0,0,0,63,64,5,2,0,0,64,84,3,
-  	28,14,0,65,66,3,10,5,0,66,67,5,3,0,0,67,75,3,2,1,0,68,69,5,4,0,0,69,70,
-  	3,28,14,0,70,71,5,3,0,0,71,72,3,2,1,0,72,74,1,0,0,0,73,68,1,0,0,0,74,
-  	77,1,0,0,0,75,73,1,0,0,0,75,76,1,0,0,0,76,81,1,0,0,0,77,75,1,0,0,0,78,
-  	79,5,5,0,0,79,80,5,3,0,0,80,82,3,2,1,0,81,78,1,0,0,0,81,82,1,0,0,0,82,
-  	84,1,0,0,0,83,63,1,0,0,0,83,65,1,0,0,0,84,9,1,0,0,0,85,86,3,28,14,0,86,
+  	0,0,57,54,1,0,0,0,57,55,1,0,0,0,57,56,1,0,0,0,58,5,1,0,0,0,59,60,5,26,
+  	0,0,60,61,5,1,0,0,61,62,3,28,14,0,62,7,1,0,0,0,63,66,5,2,0,0,64,67,3,
+  	20,10,0,65,67,3,10,5,0,66,64,1,0,0,0,66,65,1,0,0,0,67,68,1,0,0,0,68,69,
+  	5,3,0,0,69,77,3,2,1,0,70,71,5,4,0,0,71,72,3,28,14,0,72,73,5,5,0,0,73,
+  	74,3,2,1,0,74,76,1,0,0,0,75,70,1,0,0,0,76,79,1,0,0,0,77,75,1,0,0,0,77,
+  	78,1,0,0,0,78,83,1,0,0,0,79,77,1,0,0,0,80,81,5,6,0,0,81,82,5,5,0,0,82,
+  	84,3,2,1,0,83,80,1,0,0,0,83,84,1,0,0,0,84,9,1,0,0,0,85,86,3,28,14,0,86,
   	87,3,12,6,0,87,88,3,28,14,0,88,11,1,0,0,0,89,90,7,0,0,0,90,13,1,0,0,0,
-  	91,92,5,13,0,0,92,93,3,28,14,0,93,94,5,3,0,0,94,95,3,2,1,0,95,15,1,0,
-  	0,0,96,97,5,14,0,0,97,98,5,25,0,0,98,99,5,15,0,0,99,100,3,34,17,0,100,
-  	101,5,16,0,0,101,102,5,3,0,0,102,103,3,2,1,0,103,17,1,0,0,0,104,105,5,
-  	17,0,0,105,106,3,28,14,0,106,19,1,0,0,0,107,108,3,28,14,0,108,21,1,0,
+  	91,92,5,14,0,0,92,93,3,28,14,0,93,94,5,5,0,0,94,95,3,2,1,0,95,15,1,0,
+  	0,0,96,97,5,15,0,0,97,98,5,26,0,0,98,99,5,16,0,0,99,100,3,34,17,0,100,
+  	101,5,17,0,0,101,102,5,5,0,0,102,103,3,2,1,0,103,17,1,0,0,0,104,105,5,
+  	18,0,0,105,106,3,28,14,0,106,19,1,0,0,0,107,108,3,28,14,0,108,21,1,0,
   	0,0,109,110,7,1,0,0,110,23,1,0,0,0,111,112,7,2,0,0,112,25,1,0,0,0,113,
-  	114,5,23,0,0,114,115,5,25,0,0,115,116,5,16,0,0,116,27,1,0,0,0,117,123,
+  	114,5,24,0,0,114,115,5,26,0,0,115,116,5,17,0,0,116,27,1,0,0,0,117,123,
   	3,30,15,0,118,119,3,22,11,0,119,120,3,30,15,0,120,122,1,0,0,0,121,118,
   	1,0,0,0,122,125,1,0,0,0,123,121,1,0,0,0,123,124,1,0,0,0,124,29,1,0,0,
   	0,125,123,1,0,0,0,126,132,3,32,16,0,127,128,3,24,12,0,128,129,3,32,16,
   	0,129,131,1,0,0,0,130,127,1,0,0,0,131,134,1,0,0,0,132,130,1,0,0,0,132,
-  	133,1,0,0,0,133,31,1,0,0,0,134,132,1,0,0,0,135,143,5,26,0,0,136,143,5,
-  	27,0,0,137,143,5,25,0,0,138,139,5,15,0,0,139,140,3,28,14,0,140,141,5,
-  	16,0,0,141,143,1,0,0,0,142,135,1,0,0,0,142,136,1,0,0,0,142,137,1,0,0,
-  	0,142,138,1,0,0,0,143,33,1,0,0,0,144,149,3,36,18,0,145,146,5,24,0,0,146,
+  	133,1,0,0,0,133,31,1,0,0,0,134,132,1,0,0,0,135,143,5,27,0,0,136,143,5,
+  	28,0,0,137,143,5,26,0,0,138,139,5,16,0,0,139,140,3,28,14,0,140,141,5,
+  	17,0,0,141,143,1,0,0,0,142,135,1,0,0,0,142,136,1,0,0,0,142,137,1,0,0,
+  	0,142,138,1,0,0,0,143,33,1,0,0,0,144,149,3,36,18,0,145,146,5,25,0,0,146,
   	148,3,36,18,0,147,145,1,0,0,0,148,151,1,0,0,0,149,147,1,0,0,0,149,150,
-  	1,0,0,0,150,35,1,0,0,0,151,149,1,0,0,0,152,153,5,25,0,0,153,37,1,0,0,
-  	0,9,47,57,75,81,83,123,132,142,149
+  	1,0,0,0,150,35,1,0,0,0,151,149,1,0,0,0,152,153,5,26,0,0,153,37,1,0,0,
+  	0,9,47,57,66,77,83,123,132,142,149
   };
   staticData->serializedATN = antlr4::atn::SerializedATNView(serializedATNSegment, sizeof(serializedATNSegment) / sizeof(serializedATNSegment[0]));
 
@@ -491,24 +492,28 @@ PythonParser::If_statementContext::If_statementContext(ParserRuleContext *parent
   : ParserRuleContext(parent, invokingState) {
 }
 
-std::vector<PythonParser::ExpressionContext *> PythonParser::If_statementContext::expression() {
-  return getRuleContexts<PythonParser::ExpressionContext>();
-}
-
-PythonParser::ExpressionContext* PythonParser::If_statementContext::expression(size_t i) {
-  return getRuleContext<PythonParser::ExpressionContext>(i);
-}
-
-PythonParser::ComparisonContext* PythonParser::If_statementContext::comparison() {
-  return getRuleContext<PythonParser::ComparisonContext>(0);
-}
-
 std::vector<PythonParser::Statement_listContext *> PythonParser::If_statementContext::statement_list() {
   return getRuleContexts<PythonParser::Statement_listContext>();
 }
 
 PythonParser::Statement_listContext* PythonParser::If_statementContext::statement_list(size_t i) {
   return getRuleContext<PythonParser::Statement_listContext>(i);
+}
+
+PythonParser::Expression_statementContext* PythonParser::If_statementContext::expression_statement() {
+  return getRuleContext<PythonParser::Expression_statementContext>(0);
+}
+
+PythonParser::ComparisonContext* PythonParser::If_statementContext::comparison() {
+  return getRuleContext<PythonParser::ComparisonContext>(0);
+}
+
+std::vector<PythonParser::ExpressionContext *> PythonParser::If_statementContext::expression() {
+  return getRuleContexts<PythonParser::ExpressionContext>();
+}
+
+PythonParser::ExpressionContext* PythonParser::If_statementContext::expression(size_t i) {
+  return getRuleContext<PythonParser::ExpressionContext>(i);
 }
 
 
@@ -541,69 +546,65 @@ PythonParser::If_statementContext* PythonParser::if_statement() {
   });
   try {
     size_t alt;
-    setState(83);
+    enterOuterAlt(_localctx, 1);
+    setState(63);
+    match(PythonParser::T__1);
+    setState(66);
     _errHandler->sync(this);
-    switch (_input->LA(1)) {
-      case PythonParser::T__1: {
-        enterOuterAlt(_localctx, 1);
-        setState(63);
-        match(PythonParser::T__1);
-        setState(64);
-        expression();
-        break;
-      }
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 2, _ctx)) {
+    case 1: {
+      setState(64);
+      expression_statement();
+      break;
+    }
 
-      case PythonParser::T__14:
-      case PythonParser::NAME:
-      case PythonParser::INTEGER:
-      case PythonParser::FLOAT: {
-        enterOuterAlt(_localctx, 2);
-        setState(65);
-        comparison();
-        setState(66);
-        match(PythonParser::T__2);
-        setState(67);
-        statement_list(0);
-        setState(75);
-        _errHandler->sync(this);
-        alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 2, _ctx);
-        while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
-          if (alt == 1) {
-            setState(68);
-            match(PythonParser::T__3);
-            setState(69);
-            expression();
-            setState(70);
-            match(PythonParser::T__2);
-            setState(71);
-            statement_list(0); 
-          }
-          setState(77);
-          _errHandler->sync(this);
-          alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 2, _ctx);
-        }
-        setState(81);
-        _errHandler->sync(this);
-
-        switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 3, _ctx)) {
-        case 1: {
-          setState(78);
-          match(PythonParser::T__4);
-          setState(79);
-          match(PythonParser::T__2);
-          setState(80);
-          statement_list(0);
-          break;
-        }
-
-        default:
-          break;
-        }
-        break;
-      }
+    case 2: {
+      setState(65);
+      comparison();
+      break;
+    }
 
     default:
-      throw NoViableAltException(this);
+      break;
+    }
+    setState(68);
+    match(PythonParser::T__2);
+    setState(69);
+    statement_list(0);
+    setState(77);
+    _errHandler->sync(this);
+    alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 3, _ctx);
+    while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
+      if (alt == 1) {
+        setState(70);
+        match(PythonParser::T__3);
+        setState(71);
+        expression();
+        setState(72);
+        match(PythonParser::T__4);
+        setState(73);
+        statement_list(0); 
+      }
+      setState(79);
+      _errHandler->sync(this);
+      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 3, _ctx);
+    }
+    setState(83);
+    _errHandler->sync(this);
+
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 4, _ctx)) {
+    case 1: {
+      setState(80);
+      match(PythonParser::T__5);
+      setState(81);
+      match(PythonParser::T__4);
+      setState(82);
+      statement_list(0);
+      break;
+    }
+
+    default:
+      break;
     }
    
   }
@@ -721,7 +722,7 @@ PythonParser::ConopContext* PythonParser::conop() {
     setState(89);
     _la = _input->LA(1);
     if (!((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & 8128) != 0))) {
+      ((1ULL << _la) & 16256) != 0))) {
     _errHandler->recoverInline(this);
     }
     else {
@@ -784,11 +785,11 @@ PythonParser::While_statementContext* PythonParser::while_statement() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(91);
-    match(PythonParser::T__12);
+    match(PythonParser::T__13);
     setState(92);
     expression();
     setState(93);
-    match(PythonParser::T__2);
+    match(PythonParser::T__4);
     setState(94);
     statement_list(0);
    
@@ -851,17 +852,17 @@ PythonParser::Function_statementContext* PythonParser::function_statement() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(96);
-    match(PythonParser::T__13);
+    match(PythonParser::T__14);
     setState(97);
     match(PythonParser::NAME);
     setState(98);
-    match(PythonParser::T__14);
+    match(PythonParser::T__15);
     setState(99);
     parameter_list();
     setState(100);
-    match(PythonParser::T__15);
+    match(PythonParser::T__16);
     setState(101);
-    match(PythonParser::T__2);
+    match(PythonParser::T__4);
     setState(102);
     statement_list(0);
    
@@ -916,7 +917,7 @@ PythonParser::Return_statementContext* PythonParser::return_statement() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(104);
-    match(PythonParser::T__16);
+    match(PythonParser::T__17);
     setState(105);
     expression();
    
@@ -1022,9 +1023,9 @@ PythonParser::AddopContext* PythonParser::addop() {
     enterOuterAlt(_localctx, 1);
     setState(109);
     _la = _input->LA(1);
-    if (!(_la == PythonParser::T__17
+    if (!(_la == PythonParser::T__18
 
-    || _la == PythonParser::T__18)) {
+    || _la == PythonParser::T__19)) {
     _errHandler->recoverInline(this);
     }
     else {
@@ -1082,7 +1083,7 @@ PythonParser::MulopContext* PythonParser::mulop() {
     setState(111);
     _la = _input->LA(1);
     if (!((((_la & ~ 0x3fULL) == 0) &&
-      ((1ULL << _la) & 7340032) != 0))) {
+      ((1ULL << _la) & 14680064) != 0))) {
     _errHandler->recoverInline(this);
     }
     else {
@@ -1141,11 +1142,11 @@ PythonParser::PrintContext* PythonParser::print() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(113);
-    match(PythonParser::T__22);
+    match(PythonParser::T__23);
     setState(114);
     match(PythonParser::NAME);
     setState(115);
-    match(PythonParser::T__15);
+    match(PythonParser::T__16);
    
   }
   catch (RecognitionException &e) {
@@ -1392,14 +1393,14 @@ PythonParser::FactorContext* PythonParser::factor() {
         break;
       }
 
-      case PythonParser::T__14: {
+      case PythonParser::T__15: {
         enterOuterAlt(_localctx, 4);
         setState(138);
-        match(PythonParser::T__14);
+        match(PythonParser::T__15);
         setState(139);
         expression();
         setState(140);
-        match(PythonParser::T__15);
+        match(PythonParser::T__16);
         break;
       }
 
@@ -1467,9 +1468,9 @@ PythonParser::Parameter_listContext* PythonParser::parameter_list() {
     setState(149);
     _errHandler->sync(this);
     _la = _input->LA(1);
-    while (_la == PythonParser::T__23) {
+    while (_la == PythonParser::T__24) {
       setState(145);
-      match(PythonParser::T__23);
+      match(PythonParser::T__24);
       setState(146);
       parameter();
       setState(151);

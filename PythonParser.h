@@ -15,8 +15,8 @@ public:
     T__0 = 1, T__1 = 2, T__2 = 3, T__3 = 4, T__4 = 5, T__5 = 6, T__6 = 7, 
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
-    T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, NAME = 25, INTEGER = 26, 
-    FLOAT = 27, WS = 28
+    T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, T__24 = 25, NAME = 26, 
+    INTEGER = 27, FLOAT = 28, WS = 29
   };
 
   enum {
@@ -128,11 +128,12 @@ public:
   public:
     If_statementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    std::vector<ExpressionContext *> expression();
-    ExpressionContext* expression(size_t i);
-    ComparisonContext *comparison();
     std::vector<Statement_listContext *> statement_list();
     Statement_listContext* statement_list(size_t i);
+    Expression_statementContext *expression_statement();
+    ComparisonContext *comparison();
+    std::vector<ExpressionContext *> expression();
+    ExpressionContext* expression(size_t i);
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
