@@ -29,6 +29,12 @@ public:
   virtual void enterIf_statement(PythonParser::If_statementContext *ctx) = 0;
   virtual void exitIf_statement(PythonParser::If_statementContext *ctx) = 0;
 
+  virtual void enterComparison(PythonParser::ComparisonContext *ctx) = 0;
+  virtual void exitComparison(PythonParser::ComparisonContext *ctx) = 0;
+
+  virtual void enterConop(PythonParser::ConopContext *ctx) = 0;
+  virtual void exitConop(PythonParser::ConopContext *ctx) = 0;
+
   virtual void enterWhile_statement(PythonParser::While_statementContext *ctx) = 0;
   virtual void exitWhile_statement(PythonParser::While_statementContext *ctx) = 0;
 

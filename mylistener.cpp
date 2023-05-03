@@ -16,7 +16,8 @@ using namespace antlr4;
 
 class MyListener : public PythonBaseListener {
 public:
-    std::string converted_code = "#include <iostream>\n\nint main(){\n";
+    std::string converted_code = "\nint main(){\n";
+    std::string libraries = "#include <iostream>\n";
     std::set<std::string> var_names;
     int tabspaces = 1;
     int index = converted_code.size();
@@ -36,6 +37,7 @@ public:
             std::cout << "New file created: " << filename << std::endl;
             system("g++ -o new newfile.cpp"); // Compile the C++ file
             system("./new"); // Execute the compiled program
+            //to-do add error catching while compiling the c++ file
 
         }  
         else {
@@ -103,19 +105,23 @@ public:
     virtual void enterTerm(PythonParser::TermContext * /*ctx*/) override {
     }
     virtual void exitTerm(PythonParser::TermContext * /*ctx*/) override {
-        converted_code.append(" ");
+        converted_code.append("");
     }
 
     virtual void enterAddop(PythonParser::AddopContext * ctx) override { 
-          converted_code.append( ctx->getText() + " ");
+          converted_code.append( " "+ ctx->getText() + " ");
     }
     virtual void exitAddop(PythonParser::AddopContext * /*ctx*/) override { }
 
-    virtual void enterMulop(PythonParser::MulopContext * /*ctx*/) override { }
+    virtual void enterMulop(PythonParser::MulopContext * ctx) override {
+        converted_code.append( ctx->getText());
+        // if(ctx->getText() == "/"){
+        //     libraries += "#include <cmath>";
+        // }
+    }
     virtual void exitMulop(PythonParser::MulopContext * /*ctx*/) override { }
 
     virtual void enterFactor(PythonParser::FactorContext * ctx) override {
-        // std::string temp ="";
 
         if(ctx->INTEGER() != nullptr){
             converted_code.append(ctx->INTEGER()->getText());
@@ -123,9 +129,17 @@ public:
         else if(ctx->NAME() != nullptr){
             converted_code.append( ctx->NAME()->getText());
         }
+        else if(ctx->expression() != nullptr) {
+            converted_code.append("(");
+        }
   
     }
-    virtual void exitFactor(PythonParser::FactorContext * /*ctx*/) override { }
+    virtual void exitFactor(PythonParser::FactorContext * ctx) override { 
+        if(ctx->expression() != nullptr) {
+            converted_code.append(")");
+            
+        }
+    }
 
     virtual void enterParameter_list(PythonParser::Parameter_listContext * /*ctx*/) override { }
     virtual void exitParameter_list(PythonParser::Parameter_listContext * /*ctx*/) override { }
@@ -138,7 +152,11 @@ public:
     virtual void exitEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }
     virtual void visitTerminal(antlr4::tree::TerminalNode * /*node*/) override { }
     virtual void visitErrorNode(antlr4::tree::ErrorNode * /*node*/) override { }
-    
 
+    virtual void enterComparison(PythonParser::ComparisonContext * /*ctx*/) override { }
+    virtual void exitComparison(PythonParser::ComparisonContext * /*ctx*/) override { }
+
+    virtual void enterConop(PythonParser::ConopContext * /*ctx*/) override { }
+    virtual void exitConop(PythonParser::ConopContext * /*ctx*/) override { }
     
 };

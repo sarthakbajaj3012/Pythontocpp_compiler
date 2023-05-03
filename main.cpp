@@ -10,9 +10,13 @@ using namespace antlrcpp;
 using namespace antlr4;
 
 int main(int , const char **) {
-  ANTLRInputStream input("x = 8\n x = x + 9");
+  ANTLRInputStream input("x = 8/2 + 5/4\n x = x + 9");
   PythonLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
+
+  // int x = 5;
+  // float y = 5/2;
+  // std::cout << y << std::endl;
 
   tokens.fill();
   // for (auto token : tokens.getTokens()) {

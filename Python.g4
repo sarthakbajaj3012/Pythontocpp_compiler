@@ -14,7 +14,11 @@ statement : assignment_statement
 
 assignment_statement : NAME '=' expression;
 
-if_statement : 'if' expression ':' statement_list 'elif' expression ':' statement_list 'else' ':' statement_list;
+if_statement : 'if' expression | comparison ':' statement_list ('elif' expression ':' statement_list)* ('else' ':' statement_list)?;
+
+comparison: expression conop expression;
+
+conop: '>=' | '>' | '<' | '<=' | '==' | '!=' | 'in';
 
 while_statement : 'while' expression ':' statement_list;
 

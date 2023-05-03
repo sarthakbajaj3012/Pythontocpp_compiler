@@ -31,6 +31,12 @@ public:
   virtual void enterIf_statement(PythonParser::If_statementContext * /*ctx*/) override { }
   virtual void exitIf_statement(PythonParser::If_statementContext * /*ctx*/) override { }
 
+  virtual void enterComparison(PythonParser::ComparisonContext * /*ctx*/) override { }
+  virtual void exitComparison(PythonParser::ComparisonContext * /*ctx*/) override { }
+
+  virtual void enterConop(PythonParser::ConopContext * /*ctx*/) override { }
+  virtual void exitConop(PythonParser::ConopContext * /*ctx*/) override { }
+
   virtual void enterWhile_statement(PythonParser::While_statementContext * /*ctx*/) override { }
   virtual void exitWhile_statement(PythonParser::While_statementContext * /*ctx*/) override { }
 
