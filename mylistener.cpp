@@ -107,10 +107,18 @@ public:
         std::string temp = addtab();
         converted_code.append(temp +"}");
         
-     }
+    }
 
-    virtual void enterWhile_statement(PythonParser::While_statementContext * /*ctx*/) override { }
-    virtual void exitWhile_statement(PythonParser::While_statementContext * /*ctx*/) override { }
+    virtual void enterWhile_statement(PythonParser::While_statementContext * ctx) override {
+        std::string temp = addtab();
+        tabspaces++;
+        converted_code.append(temp + "while(" );
+     }
+    virtual void exitWhile_statement(PythonParser::While_statementContext * /*ctx*/) override {
+        tabspaces--;
+        std::string temp = addtab();
+        converted_code.append(temp + "}");
+     }
 
     virtual void enterFunction_statement(PythonParser::Function_statementContext * /*ctx*/) override { }
     virtual void exitFunction_statement(PythonParser::Function_statementContext * /*ctx*/) override { }
@@ -119,7 +127,7 @@ public:
     virtual void exitReturn_statement(PythonParser::Return_statementContext * /*ctx*/) override { }
 
     virtual void enterExpression_statement(PythonParser::Expression_statementContext * ctx) override { 
-        
+        // if(ctx->parent == PythonParser::if_statement)
     }
     virtual void exitExpression_statement(PythonParser::Expression_statementContext * /*ctx*/) override { }
 
@@ -160,7 +168,6 @@ public:
     virtual void exitFactor(PythonParser::FactorContext * ctx) override { 
         if(ctx->expression() != nullptr) {
             converted_code.append(")");
-
         }
     }
 

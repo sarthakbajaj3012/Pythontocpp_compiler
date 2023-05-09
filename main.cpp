@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "PythonLexer.h"
 #include "PythonParser.h"
 #include "antlr4-runtime.h"
@@ -10,7 +11,9 @@ using namespace antlrcpp;
 using namespace antlr4;
 
 int main(int , const char **) {
-  ANTLRInputStream input("x = 8/2 + 5/4\n x = x + 9\n if x > 10 :\n\t print(x)");
+  std::ifstream python_file("test.py");
+  std::string string_stream((std::istreambuf_iterator<char>(python_file)),std::istreambuf_iterator<char>());
+  ANTLRInputStream input(string_stream);
   PythonLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
 
@@ -32,7 +35,7 @@ int main(int , const char **) {
   antlr4::tree::ParseTreeWalker::DEFAULT.walk(&listener, tree2);
 
 
-  std::cout << tree2->children.at(0)->toStringTree(&parser) << std::endl;
+  // std::cout << tree2->children.at(0)->toStringTree(&parser) << std::endl;
 
   // std::cout << tree2->toString() <<std::endl;
 

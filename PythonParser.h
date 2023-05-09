@@ -173,7 +173,7 @@ public:
   public:
     While_statementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    ExpressionContext *expression();
+    ComparisonContext *comparison();
     Statement_listContext *statement_list();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;

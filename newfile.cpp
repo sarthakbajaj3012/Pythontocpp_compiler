@@ -1,9 +1,9 @@
 #include <iostream>
  int main(){
-	int x = 8/2 + 5/4;
-	x = x + 9;
-	if(x > 10){
+	int x = 15;
+	while(x > 10){
 		std::cout << x << std::endl;
+		x = x - 1;
 	}
 	return 0; 
 }

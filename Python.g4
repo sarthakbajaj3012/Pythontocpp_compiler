@@ -21,7 +21,7 @@ comparison: expression conop expression;
 
 conop: '>=' | '>' | '<' | '<=' | '==' | '!=' | 'in';
 
-while_statement : 'while' expression ':' statement_list;
+while_statement : 'while' comparison ':' statement_list;
 
 function_statement : 'def' NAME '(' parameter_list ')' ':' statement_list;
 
