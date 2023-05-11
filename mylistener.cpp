@@ -1,7 +1,7 @@
 #include "antlr4-runtime.h"
 #include "PythonBaseListener.h"
 #include "PythonParser.h"
-#include "set"
+#include <map>
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -20,9 +20,12 @@ public:
     
     std::string converted_code = "#include <iostream>\n int main(){\n";
     // std::string libraries = "";
-    std::set<std::string> var_names;
+    std::map<std::string, std::string> var_names;
     int tabspaces = 1;
     int index = converted_code.size();
+    bool assignment = false;
+    std::string type = "int";
+    std::string assignment_string = "";
     std::string addtab() {
         std::string temp =  "";
         for(int i = 0;  i < tabspaces;i++) {
@@ -33,7 +36,7 @@ public:
     virtual void enterProgram(PythonParser::ProgramContext * /*ctx*/) override { }
     virtual void exitProgram(PythonParser::ProgramContext * /*ctx*/) override { 
         converted_code.append("\treturn 0; \n}");
-        std::cout << converted_code <<std::endl;
+        // std::cout << converted_code <<std::endl;
 
         std::string filename = "newfile.cpp";
         std::ofstream outfile(filename);
@@ -73,24 +76,23 @@ public:
     virtual void enterAssignment_statement(PythonParser::Assignment_statementContext * ctx) override { 
         std::string temp = addtab();
         std::string var = ctx->NAME()->toString();
-
-        if(var_names.find(var) == var_names.end()){
-            var_names.insert(var);
-            
-            temp += "int " + var + " = ";
-            converted_code.append(temp);
-
-        } else {
-            temp += var + " = ";
-            converted_code.append(temp);
-        }
-      
         
-        std::vector<PythonParser::TermContext*> terms = ctx->expression()->term();
-        // std::cout << temp <<std::endl;
+        if(var_names.find(var) == var_names.end()){
+            assignment_string = "";
+            type = "int";
+            assignment = true;
+            assignment_string = var + " = ";
+        } 
+        else {
+            converted_code.append(temp + var + " = ");
+        }
     }
 
-    virtual void exitAssignment_statement(PythonParser::Assignment_statementContext * /*ctx*/) override { }
+    virtual void exitAssignment_statement(PythonParser::Assignment_statementContext * /*ctx*/) override { 
+        if(assignment) converted_code.append(addtab() + type +" " + assignment_string);
+        assignment_string ="";
+        assignment = false;
+    }
 
     virtual void enterIf_statement(PythonParser::If_statementContext * ctx) override { 
         std::string temp = addtab();
@@ -139,35 +141,58 @@ public:
     virtual void enterTerm(PythonParser::TermContext * /*ctx*/) override {
     }
     virtual void exitTerm(PythonParser::TermContext * /*ctx*/) override {
-        converted_code.append("");
     }
 
     virtual void enterAddop(PythonParser::AddopContext * ctx) override { 
+        if(assignment){
+            assignment_string.append( " "+ ctx->getText() + " ");
+        } else {
           converted_code.append( " "+ ctx->getText() + " ");
+        }
+
     }
     virtual void exitAddop(PythonParser::AddopContext * /*ctx*/) override { }
 
     virtual void enterMulop(PythonParser::MulopContext * ctx) override {
-        converted_code.append( ctx->getText());
+        if(assignment) {
+            assignment_string.append( ctx->getText());
+        }
+        else {
+            converted_code.append( ctx->getText());
+        }
     }
     virtual void exitMulop(PythonParser::MulopContext * /*ctx*/) override { }
 
     virtual void enterFactor(PythonParser::FactorContext * ctx) override {
 
         if(ctx->INTEGER() != nullptr){
-            converted_code.append(ctx->INTEGER()->getText());
+            if(assignment) assignment_string.append(ctx->INTEGER()->getText());
+            else  converted_code.append(ctx->INTEGER()->getText());
+
         }
-        else if(ctx->NAME() != nullptr){
-            converted_code.append( ctx->NAME()->getText());
+        else if(ctx->NAME() != nullptr){  
+           if(assignment) assignment_string.append( ctx->NAME()->getText());
+           else converted_code.append( ctx->NAME()->getText());
+            if(var_names[ctx->NAME()->getText()] != "int"){
+                type = "float";
+            }
+        }
+        else if(ctx->FLOAT() != nullptr){
+            if(assignment)  assignment_string.append( ctx->FLOAT()->getText());
+            else converted_code.append( ctx->FLOAT()->getText());
+            type = "float";
         }
         else if(ctx->expression() != nullptr) {
-            converted_code.append("(");
+            if(assignment) assignment_string.append("(");
+            else converted_code.append("(");
+
         }
   
     }
     virtual void exitFactor(PythonParser::FactorContext * ctx) override { 
         if(ctx->expression() != nullptr) {
-            converted_code.append(")");
+            if(assignment) assignment_string.append(")");
+            else converted_code.append(")");
         }
     }
 
@@ -189,7 +214,11 @@ public:
     }
 
     virtual void enterConop(PythonParser::ConopContext * ctx) override {
-        converted_code.append( " "+ ctx->getText() + " ");
+        if(assignment){
+            assignment_string.append( " "+ ctx->getText() + " ");
+        } else {
+            converted_code.append( " "+ ctx->getText() + " ");
+        }
      }
     virtual void exitConop(PythonParser::ConopContext * /*ctx*/) override { }
 
@@ -198,6 +227,7 @@ public:
         converted_code.append(
             temp + "std::cout << " + ctx->NAME()->getText() + " << std::endl"
         );
+        
     }
     virtual void exitPrint(PythonParser::PrintContext * /*ctx*/) override { }
     

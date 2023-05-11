@@ -15,7 +15,7 @@ statement : assignment_statement
 
 assignment_statement : NAME '=' expression;
 
-if_statement : 'if' (expression_statement | comparison) ':\n\t' statement_list ('elif' expression ':' statement_list)* ('else' ':' statement_list)?;
+if_statement : 'if' (expression_statement | comparison) ':' statement_list ('elif' expression ':' statement_list)* ('else' ':' statement_list)?;
 
 comparison: expression conop expression;
 
