@@ -19,13 +19,13 @@ public:
 
     
     std::string converted_code = "#include <iostream>\n int main(){\n";
-    // std::string libraries = "";
     std::map<std::string, std::string> var_names;
     int tabspaces = 1;
     int index = converted_code.size();
     bool assignment = false;
     std::string type = "int";
     std::string assignment_string = "";
+
     std::string addtab() {
         std::string temp =  "";
         for(int i = 0;  i < tabspaces;i++) {
@@ -36,8 +36,6 @@ public:
     virtual void enterProgram(PythonParser::ProgramContext * /*ctx*/) override { }
     virtual void exitProgram(PythonParser::ProgramContext * /*ctx*/) override { 
         converted_code.append("\treturn 0; \n}");
-        // std::cout << converted_code <<std::endl;
-
         std::string filename = "newfile.cpp";
         std::ofstream outfile(filename);
         if (outfile.is_open()) {
@@ -60,17 +58,10 @@ public:
     virtual void enterStatement_list(PythonParser::Statement_listContext * /*ctx*/) override { }
     virtual void exitStatement_list(PythonParser::Statement_listContext * /*ctx*/) override { }
 
-    virtual void enterStatement(PythonParser::StatementContext * ctx) override {
-        
-    }
+    virtual void enterStatement(PythonParser::StatementContext * /*ctx*/) override {}
     virtual void exitStatement(PythonParser::StatementContext * ctx) override { 
-       
-       if( ctx->if_statement() != nullptr || ctx->while_statement() != nullptr){
-            converted_code.append("\n");
-       }
-       else {
-        converted_code.append(";\n");
-       }
+       if( ctx->if_statement() != nullptr || ctx->while_statement() != nullptr) converted_code.append("\n");
+       else converted_code.append(";\n");
     }
 
     virtual void enterAssignment_statement(PythonParser::Assignment_statementContext * ctx) override { 
