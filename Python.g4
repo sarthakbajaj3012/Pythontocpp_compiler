@@ -15,9 +15,13 @@ statement : assignment_statement
 
 assignment_statement : NAME '=' expression;
 
-if_statement : 'if' (expression_statement | comparison) ':' statement_list ('elif' expression ':' statement_list)* ('else' ':' statement_list)?;
+if_statement : 'if' comparison ':' statement_list ( elif )* (elseop)?;
 
-comparison: expression conop expression;
+comparison: expression (conop expression)?;
+
+elif: 'elif' comparison ':' statement_list;
+
+elseop : 'else' ':' statement_list;
 
 conop: '>=' | '>' | '<' | '<=' | '==' | '!=' | 'in';
 
@@ -44,7 +48,7 @@ factor : INTEGER
        | NAME
        | '(' expression ')';
 
-parameter_list : parameter (',' parameter)*;
+parameter_list : (parameter (',' parameter)*)?;
 
 parameter : NAME;
 

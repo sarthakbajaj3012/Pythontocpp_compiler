@@ -34,6 +34,12 @@ public:
   virtual void enterComparison(PythonParser::ComparisonContext * /*ctx*/) override { }
   virtual void exitComparison(PythonParser::ComparisonContext * /*ctx*/) override { }
 
+  virtual void enterElif(PythonParser::ElifContext * /*ctx*/) override { }
+  virtual void exitElif(PythonParser::ElifContext * /*ctx*/) override { }
+
+  virtual void enterElseop(PythonParser::ElseopContext * /*ctx*/) override { }
+  virtual void exitElseop(PythonParser::ElseopContext * /*ctx*/) override { }
+
   virtual void enterConop(PythonParser::ConopContext * /*ctx*/) override { }
   virtual void exitConop(PythonParser::ConopContext * /*ctx*/) override { }
 

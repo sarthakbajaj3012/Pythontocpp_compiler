@@ -44,9 +44,10 @@ void pythonParserInitialize() {
   auto staticData = std::make_unique<PythonParserStaticData>(
     std::vector<std::string>{
       "program", "statement_list", "statement", "assignment_statement", 
-      "if_statement", "comparison", "conop", "while_statement", "function_statement", 
-      "return_statement", "expression_statement", "addop", "mulop", "print", 
-      "expression", "term", "factor", "parameter_list", "parameter"
+      "if_statement", "comparison", "elif", "elseop", "conop", "while_statement", 
+      "function_statement", "return_statement", "expression_statement", 
+      "addop", "mulop", "print", "expression", "term", "factor", "parameter_list", 
+      "parameter"
     },
     std::vector<std::string>{
       "", "'='", "'if'", "':'", "'elif'", "'else'", "'>='", "'>'", "'<'", 
@@ -59,52 +60,55 @@ void pythonParserInitialize() {
     }
   );
   static const int32_t serializedATNSegment[] = {
-  	4,1,28,155,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
+  	4,1,28,163,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,2,
   	7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,2,14,7,
-  	14,2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,1,0,1,0,1,1,1,1,1,1,1,1,1,
-  	1,5,1,46,8,1,10,1,12,1,49,9,1,1,2,1,2,1,2,1,2,1,2,1,2,1,2,3,2,58,8,2,
-  	1,3,1,3,1,3,1,3,1,4,1,4,1,4,3,4,67,8,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,5,
-  	4,76,8,4,10,4,12,4,79,9,4,1,4,1,4,1,4,3,4,84,8,4,1,5,1,5,1,5,1,5,1,6,
-  	1,6,1,7,1,7,1,7,1,7,1,7,1,8,1,8,1,8,1,8,1,8,1,8,1,8,1,8,1,9,1,9,1,9,1,
-  	10,1,10,1,11,1,11,1,12,1,12,1,13,1,13,1,13,1,13,1,14,1,14,1,14,1,14,5,
-  	14,122,8,14,10,14,12,14,125,9,14,1,15,1,15,1,15,1,15,5,15,131,8,15,10,
-  	15,12,15,134,9,15,1,16,1,16,1,16,1,16,1,16,1,16,1,16,3,16,143,8,16,1,
-  	17,1,17,1,17,5,17,148,8,17,10,17,12,17,151,9,17,1,18,1,18,1,18,0,1,2,
-  	19,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,0,3,1,0,6,12,1,
-  	0,18,19,1,0,20,22,151,0,38,1,0,0,0,2,40,1,0,0,0,4,57,1,0,0,0,6,59,1,0,
-  	0,0,8,63,1,0,0,0,10,85,1,0,0,0,12,89,1,0,0,0,14,91,1,0,0,0,16,96,1,0,
-  	0,0,18,104,1,0,0,0,20,107,1,0,0,0,22,109,1,0,0,0,24,111,1,0,0,0,26,113,
-  	1,0,0,0,28,117,1,0,0,0,30,126,1,0,0,0,32,142,1,0,0,0,34,144,1,0,0,0,36,
-  	152,1,0,0,0,38,39,3,2,1,0,39,1,1,0,0,0,40,41,6,1,-1,0,41,42,3,4,2,0,42,
-  	47,1,0,0,0,43,44,10,1,0,0,44,46,3,4,2,0,45,43,1,0,0,0,46,49,1,0,0,0,47,
-  	45,1,0,0,0,47,48,1,0,0,0,48,3,1,0,0,0,49,47,1,0,0,0,50,58,3,6,3,0,51,
-  	58,3,8,4,0,52,58,3,14,7,0,53,58,3,16,8,0,54,58,3,18,9,0,55,58,3,26,13,
-  	0,56,58,3,20,10,0,57,50,1,0,0,0,57,51,1,0,0,0,57,52,1,0,0,0,57,53,1,0,
-  	0,0,57,54,1,0,0,0,57,55,1,0,0,0,57,56,1,0,0,0,58,5,1,0,0,0,59,60,5,25,
-  	0,0,60,61,5,1,0,0,61,62,3,28,14,0,62,7,1,0,0,0,63,66,5,2,0,0,64,67,3,
-  	20,10,0,65,67,3,10,5,0,66,64,1,0,0,0,66,65,1,0,0,0,67,68,1,0,0,0,68,69,
-  	5,3,0,0,69,77,3,2,1,0,70,71,5,4,0,0,71,72,3,28,14,0,72,73,5,3,0,0,73,
-  	74,3,2,1,0,74,76,1,0,0,0,75,70,1,0,0,0,76,79,1,0,0,0,77,75,1,0,0,0,77,
-  	78,1,0,0,0,78,83,1,0,0,0,79,77,1,0,0,0,80,81,5,5,0,0,81,82,5,3,0,0,82,
-  	84,3,2,1,0,83,80,1,0,0,0,83,84,1,0,0,0,84,9,1,0,0,0,85,86,3,28,14,0,86,
-  	87,3,12,6,0,87,88,3,28,14,0,88,11,1,0,0,0,89,90,7,0,0,0,90,13,1,0,0,0,
-  	91,92,5,13,0,0,92,93,3,10,5,0,93,94,5,3,0,0,94,95,3,2,1,0,95,15,1,0,0,
-  	0,96,97,5,14,0,0,97,98,5,25,0,0,98,99,5,15,0,0,99,100,3,34,17,0,100,101,
-  	5,16,0,0,101,102,5,3,0,0,102,103,3,2,1,0,103,17,1,0,0,0,104,105,5,17,
-  	0,0,105,106,3,28,14,0,106,19,1,0,0,0,107,108,3,28,14,0,108,21,1,0,0,0,
-  	109,110,7,1,0,0,110,23,1,0,0,0,111,112,7,2,0,0,112,25,1,0,0,0,113,114,
-  	5,23,0,0,114,115,5,25,0,0,115,116,5,16,0,0,116,27,1,0,0,0,117,123,3,30,
-  	15,0,118,119,3,22,11,0,119,120,3,30,15,0,120,122,1,0,0,0,121,118,1,0,
-  	0,0,122,125,1,0,0,0,123,121,1,0,0,0,123,124,1,0,0,0,124,29,1,0,0,0,125,
-  	123,1,0,0,0,126,132,3,32,16,0,127,128,3,24,12,0,128,129,3,32,16,0,129,
-  	131,1,0,0,0,130,127,1,0,0,0,131,134,1,0,0,0,132,130,1,0,0,0,132,133,1,
-  	0,0,0,133,31,1,0,0,0,134,132,1,0,0,0,135,143,5,26,0,0,136,143,5,27,0,
-  	0,137,143,5,25,0,0,138,139,5,15,0,0,139,140,3,28,14,0,140,141,5,16,0,
-  	0,141,143,1,0,0,0,142,135,1,0,0,0,142,136,1,0,0,0,142,137,1,0,0,0,142,
-  	138,1,0,0,0,143,33,1,0,0,0,144,149,3,36,18,0,145,146,5,24,0,0,146,148,
-  	3,36,18,0,147,145,1,0,0,0,148,151,1,0,0,0,149,147,1,0,0,0,149,150,1,0,
-  	0,0,150,35,1,0,0,0,151,149,1,0,0,0,152,153,5,25,0,0,153,37,1,0,0,0,9,
-  	47,57,66,77,83,123,132,142,149
+  	14,2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,7,20,1,0,1,
+  	0,1,1,1,1,1,1,1,1,1,1,5,1,50,8,1,10,1,12,1,53,9,1,1,2,1,2,1,2,1,2,1,2,
+  	1,2,1,2,3,2,62,8,2,1,3,1,3,1,3,1,3,1,4,1,4,1,4,1,4,1,4,5,4,73,8,4,10,
+  	4,12,4,76,9,4,1,4,3,4,79,8,4,1,5,1,5,1,5,1,5,3,5,85,8,5,1,6,1,6,1,6,1,
+  	6,1,6,1,7,1,7,1,7,1,7,1,8,1,8,1,9,1,9,1,9,1,9,1,9,1,10,1,10,1,10,1,10,
+  	1,10,1,10,1,10,1,10,1,11,1,11,1,11,1,12,1,12,1,13,1,13,1,14,1,14,1,15,
+  	1,15,1,15,1,15,1,16,1,16,1,16,1,16,5,16,128,8,16,10,16,12,16,131,9,16,
+  	1,17,1,17,1,17,1,17,5,17,137,8,17,10,17,12,17,140,9,17,1,18,1,18,1,18,
+  	1,18,1,18,1,18,1,18,3,18,149,8,18,1,19,1,19,1,19,5,19,154,8,19,10,19,
+  	12,19,157,9,19,3,19,159,8,19,1,20,1,20,1,20,0,1,2,21,0,2,4,6,8,10,12,
+  	14,16,18,20,22,24,26,28,30,32,34,36,38,40,0,3,1,0,6,12,1,0,18,19,1,0,
+  	20,22,158,0,42,1,0,0,0,2,44,1,0,0,0,4,61,1,0,0,0,6,63,1,0,0,0,8,67,1,
+  	0,0,0,10,80,1,0,0,0,12,86,1,0,0,0,14,91,1,0,0,0,16,95,1,0,0,0,18,97,1,
+  	0,0,0,20,102,1,0,0,0,22,110,1,0,0,0,24,113,1,0,0,0,26,115,1,0,0,0,28,
+  	117,1,0,0,0,30,119,1,0,0,0,32,123,1,0,0,0,34,132,1,0,0,0,36,148,1,0,0,
+  	0,38,158,1,0,0,0,40,160,1,0,0,0,42,43,3,2,1,0,43,1,1,0,0,0,44,45,6,1,
+  	-1,0,45,46,3,4,2,0,46,51,1,0,0,0,47,48,10,1,0,0,48,50,3,4,2,0,49,47,1,
+  	0,0,0,50,53,1,0,0,0,51,49,1,0,0,0,51,52,1,0,0,0,52,3,1,0,0,0,53,51,1,
+  	0,0,0,54,62,3,6,3,0,55,62,3,8,4,0,56,62,3,18,9,0,57,62,3,20,10,0,58,62,
+  	3,22,11,0,59,62,3,30,15,0,60,62,3,24,12,0,61,54,1,0,0,0,61,55,1,0,0,0,
+  	61,56,1,0,0,0,61,57,1,0,0,0,61,58,1,0,0,0,61,59,1,0,0,0,61,60,1,0,0,0,
+  	62,5,1,0,0,0,63,64,5,25,0,0,64,65,5,1,0,0,65,66,3,32,16,0,66,7,1,0,0,
+  	0,67,68,5,2,0,0,68,69,3,10,5,0,69,70,5,3,0,0,70,74,3,2,1,0,71,73,3,12,
+  	6,0,72,71,1,0,0,0,73,76,1,0,0,0,74,72,1,0,0,0,74,75,1,0,0,0,75,78,1,0,
+  	0,0,76,74,1,0,0,0,77,79,3,14,7,0,78,77,1,0,0,0,78,79,1,0,0,0,79,9,1,0,
+  	0,0,80,84,3,32,16,0,81,82,3,16,8,0,82,83,3,32,16,0,83,85,1,0,0,0,84,81,
+  	1,0,0,0,84,85,1,0,0,0,85,11,1,0,0,0,86,87,5,4,0,0,87,88,3,10,5,0,88,89,
+  	5,3,0,0,89,90,3,2,1,0,90,13,1,0,0,0,91,92,5,5,0,0,92,93,5,3,0,0,93,94,
+  	3,2,1,0,94,15,1,0,0,0,95,96,7,0,0,0,96,17,1,0,0,0,97,98,5,13,0,0,98,99,
+  	3,10,5,0,99,100,5,3,0,0,100,101,3,2,1,0,101,19,1,0,0,0,102,103,5,14,0,
+  	0,103,104,5,25,0,0,104,105,5,15,0,0,105,106,3,38,19,0,106,107,5,16,0,
+  	0,107,108,5,3,0,0,108,109,3,2,1,0,109,21,1,0,0,0,110,111,5,17,0,0,111,
+  	112,3,32,16,0,112,23,1,0,0,0,113,114,3,32,16,0,114,25,1,0,0,0,115,116,
+  	7,1,0,0,116,27,1,0,0,0,117,118,7,2,0,0,118,29,1,0,0,0,119,120,5,23,0,
+  	0,120,121,5,25,0,0,121,122,5,16,0,0,122,31,1,0,0,0,123,129,3,34,17,0,
+  	124,125,3,26,13,0,125,126,3,34,17,0,126,128,1,0,0,0,127,124,1,0,0,0,128,
+  	131,1,0,0,0,129,127,1,0,0,0,129,130,1,0,0,0,130,33,1,0,0,0,131,129,1,
+  	0,0,0,132,138,3,36,18,0,133,134,3,28,14,0,134,135,3,36,18,0,135,137,1,
+  	0,0,0,136,133,1,0,0,0,137,140,1,0,0,0,138,136,1,0,0,0,138,139,1,0,0,0,
+  	139,35,1,0,0,0,140,138,1,0,0,0,141,149,5,26,0,0,142,149,5,27,0,0,143,
+  	149,5,25,0,0,144,145,5,15,0,0,145,146,3,32,16,0,146,147,5,16,0,0,147,
+  	149,1,0,0,0,148,141,1,0,0,0,148,142,1,0,0,0,148,143,1,0,0,0,148,144,1,
+  	0,0,0,149,37,1,0,0,0,150,155,3,40,20,0,151,152,5,24,0,0,152,154,3,40,
+  	20,0,153,151,1,0,0,0,154,157,1,0,0,0,155,153,1,0,0,0,155,156,1,0,0,0,
+  	156,159,1,0,0,0,157,155,1,0,0,0,158,150,1,0,0,0,158,159,1,0,0,0,159,39,
+  	1,0,0,0,160,161,5,25,0,0,161,41,1,0,0,0,10,51,61,74,78,84,129,138,148,
+  	155,158
   };
   staticData->serializedATN = antlr4::atn::SerializedATNView(serializedATNSegment, sizeof(serializedATNSegment) / sizeof(serializedATNSegment[0]));
 
@@ -193,7 +197,7 @@ PythonParser::ProgramContext* PythonParser::program() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(38);
+    setState(42);
     statement_list(0);
    
   }
@@ -263,10 +267,10 @@ PythonParser::Statement_listContext* PythonParser::statement_list(int precedence
   try {
     size_t alt;
     enterOuterAlt(_localctx, 1);
-    setState(41);
+    setState(45);
     statement();
     _ctx->stop = _input->LT(-1);
-    setState(47);
+    setState(51);
     _errHandler->sync(this);
     alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 0, _ctx);
     while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
@@ -276,13 +280,13 @@ PythonParser::Statement_listContext* PythonParser::statement_list(int precedence
         previousContext = _localctx;
         _localctx = _tracker.createInstance<Statement_listContext>(parentContext, parentState);
         pushNewRecursionContext(_localctx, startState, RuleStatement_list);
-        setState(43);
+        setState(47);
 
         if (!(precpred(_ctx, 1))) throw FailedPredicateException(this, "precpred(_ctx, 1)");
-        setState(44);
+        setState(48);
         statement(); 
       }
-      setState(49);
+      setState(53);
       _errHandler->sync(this);
       alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 0, _ctx);
     }
@@ -358,54 +362,54 @@ PythonParser::StatementContext* PythonParser::statement() {
     exitRule();
   });
   try {
-    setState(57);
+    setState(61);
     _errHandler->sync(this);
     switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 1, _ctx)) {
     case 1: {
       enterOuterAlt(_localctx, 1);
-      setState(50);
+      setState(54);
       assignment_statement();
       break;
     }
 
     case 2: {
       enterOuterAlt(_localctx, 2);
-      setState(51);
+      setState(55);
       if_statement();
       break;
     }
 
     case 3: {
       enterOuterAlt(_localctx, 3);
-      setState(52);
+      setState(56);
       while_statement();
       break;
     }
 
     case 4: {
       enterOuterAlt(_localctx, 4);
-      setState(53);
+      setState(57);
       function_statement();
       break;
     }
 
     case 5: {
       enterOuterAlt(_localctx, 5);
-      setState(54);
+      setState(58);
       return_statement();
       break;
     }
 
     case 6: {
       enterOuterAlt(_localctx, 6);
-      setState(55);
+      setState(59);
       print();
       break;
     }
 
     case 7: {
       enterOuterAlt(_localctx, 7);
-      setState(56);
+      setState(60);
       expression_statement();
       break;
     }
@@ -468,11 +472,11 @@ PythonParser::Assignment_statementContext* PythonParser::assignment_statement() 
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(59);
+    setState(63);
     match(PythonParser::NAME);
-    setState(60);
+    setState(64);
     match(PythonParser::T__0);
-    setState(61);
+    setState(65);
     expression();
    
   }
@@ -491,28 +495,24 @@ PythonParser::If_statementContext::If_statementContext(ParserRuleContext *parent
   : ParserRuleContext(parent, invokingState) {
 }
 
-std::vector<PythonParser::Statement_listContext *> PythonParser::If_statementContext::statement_list() {
-  return getRuleContexts<PythonParser::Statement_listContext>();
-}
-
-PythonParser::Statement_listContext* PythonParser::If_statementContext::statement_list(size_t i) {
-  return getRuleContext<PythonParser::Statement_listContext>(i);
-}
-
-PythonParser::Expression_statementContext* PythonParser::If_statementContext::expression_statement() {
-  return getRuleContext<PythonParser::Expression_statementContext>(0);
-}
-
 PythonParser::ComparisonContext* PythonParser::If_statementContext::comparison() {
   return getRuleContext<PythonParser::ComparisonContext>(0);
 }
 
-std::vector<PythonParser::ExpressionContext *> PythonParser::If_statementContext::expression() {
-  return getRuleContexts<PythonParser::ExpressionContext>();
+PythonParser::Statement_listContext* PythonParser::If_statementContext::statement_list() {
+  return getRuleContext<PythonParser::Statement_listContext>(0);
 }
 
-PythonParser::ExpressionContext* PythonParser::If_statementContext::expression(size_t i) {
-  return getRuleContext<PythonParser::ExpressionContext>(i);
+std::vector<PythonParser::ElifContext *> PythonParser::If_statementContext::elif() {
+  return getRuleContexts<PythonParser::ElifContext>();
+}
+
+PythonParser::ElifContext* PythonParser::If_statementContext::elif(size_t i) {
+  return getRuleContext<PythonParser::ElifContext>(i);
+}
+
+PythonParser::ElseopContext* PythonParser::If_statementContext::elseop() {
+  return getRuleContext<PythonParser::ElseopContext>(0);
 }
 
 
@@ -546,59 +546,33 @@ PythonParser::If_statementContext* PythonParser::if_statement() {
   try {
     size_t alt;
     enterOuterAlt(_localctx, 1);
-    setState(63);
+    setState(67);
     match(PythonParser::T__1);
-    setState(66);
-    _errHandler->sync(this);
-    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 2, _ctx)) {
-    case 1: {
-      setState(64);
-      expression_statement();
-      break;
-    }
-
-    case 2: {
-      setState(65);
-      comparison();
-      break;
-    }
-
-    default:
-      break;
-    }
     setState(68);
-    match(PythonParser::T__2);
+    comparison();
     setState(69);
+    match(PythonParser::T__2);
+    setState(70);
     statement_list(0);
-    setState(77);
+    setState(74);
     _errHandler->sync(this);
-    alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 3, _ctx);
+    alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 2, _ctx);
     while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
       if (alt == 1) {
-        setState(70);
-        match(PythonParser::T__3);
         setState(71);
-        expression();
-        setState(72);
-        match(PythonParser::T__2);
-        setState(73);
-        statement_list(0); 
+        elif(); 
       }
-      setState(79);
+      setState(76);
       _errHandler->sync(this);
-      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 3, _ctx);
+      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 2, _ctx);
     }
-    setState(83);
+    setState(78);
     _errHandler->sync(this);
 
-    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 4, _ctx)) {
+    switch (getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 3, _ctx)) {
     case 1: {
-      setState(80);
-      match(PythonParser::T__4);
-      setState(81);
-      match(PythonParser::T__2);
-      setState(82);
-      statement_list(0);
+      setState(77);
+      elseop();
       break;
     }
 
@@ -654,6 +628,7 @@ void PythonParser::ComparisonContext::exitRule(tree::ParseTreeListener *listener
 PythonParser::ComparisonContext* PythonParser::comparison() {
   ComparisonContext *_localctx = _tracker.createInstance<ComparisonContext>(_ctx, getState());
   enterRule(_localctx, 10, PythonParser::RuleComparison);
+  size_t _la = 0;
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -664,12 +639,139 @@ PythonParser::ComparisonContext* PythonParser::comparison() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(85);
+    setState(80);
     expression();
+    setState(84);
+    _errHandler->sync(this);
+
+    _la = _input->LA(1);
+    if ((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 8128) != 0)) {
+      setState(81);
+      conop();
+      setState(82);
+      expression();
+    }
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ElifContext ------------------------------------------------------------------
+
+PythonParser::ElifContext::ElifContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+PythonParser::ComparisonContext* PythonParser::ElifContext::comparison() {
+  return getRuleContext<PythonParser::ComparisonContext>(0);
+}
+
+PythonParser::Statement_listContext* PythonParser::ElifContext::statement_list() {
+  return getRuleContext<PythonParser::Statement_listContext>(0);
+}
+
+
+size_t PythonParser::ElifContext::getRuleIndex() const {
+  return PythonParser::RuleElif;
+}
+
+void PythonParser::ElifContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<PythonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterElif(this);
+}
+
+void PythonParser::ElifContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<PythonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitElif(this);
+}
+
+PythonParser::ElifContext* PythonParser::elif() {
+  ElifContext *_localctx = _tracker.createInstance<ElifContext>(_ctx, getState());
+  enterRule(_localctx, 12, PythonParser::RuleElif);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
     setState(86);
-    conop();
+    match(PythonParser::T__3);
     setState(87);
-    expression();
+    comparison();
+    setState(88);
+    match(PythonParser::T__2);
+    setState(89);
+    statement_list(0);
+   
+  }
+  catch (RecognitionException &e) {
+    _errHandler->reportError(this, e);
+    _localctx->exception = std::current_exception();
+    _errHandler->recover(this, _localctx->exception);
+  }
+
+  return _localctx;
+}
+
+//----------------- ElseopContext ------------------------------------------------------------------
+
+PythonParser::ElseopContext::ElseopContext(ParserRuleContext *parent, size_t invokingState)
+  : ParserRuleContext(parent, invokingState) {
+}
+
+PythonParser::Statement_listContext* PythonParser::ElseopContext::statement_list() {
+  return getRuleContext<PythonParser::Statement_listContext>(0);
+}
+
+
+size_t PythonParser::ElseopContext::getRuleIndex() const {
+  return PythonParser::RuleElseop;
+}
+
+void PythonParser::ElseopContext::enterRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<PythonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->enterElseop(this);
+}
+
+void PythonParser::ElseopContext::exitRule(tree::ParseTreeListener *listener) {
+  auto parserListener = dynamic_cast<PythonListener *>(listener);
+  if (parserListener != nullptr)
+    parserListener->exitElseop(this);
+}
+
+PythonParser::ElseopContext* PythonParser::elseop() {
+  ElseopContext *_localctx = _tracker.createInstance<ElseopContext>(_ctx, getState());
+  enterRule(_localctx, 14, PythonParser::RuleElseop);
+
+#if __cplusplus > 201703L
+  auto onExit = finally([=, this] {
+#else
+  auto onExit = finally([=] {
+#endif
+    exitRule();
+  });
+  try {
+    enterOuterAlt(_localctx, 1);
+    setState(91);
+    match(PythonParser::T__4);
+    setState(92);
+    match(PythonParser::T__2);
+    setState(93);
+    statement_list(0);
    
   }
   catch (RecognitionException &e) {
@@ -706,7 +808,7 @@ void PythonParser::ConopContext::exitRule(tree::ParseTreeListener *listener) {
 
 PythonParser::ConopContext* PythonParser::conop() {
   ConopContext *_localctx = _tracker.createInstance<ConopContext>(_ctx, getState());
-  enterRule(_localctx, 12, PythonParser::RuleConop);
+  enterRule(_localctx, 16, PythonParser::RuleConop);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -718,7 +820,7 @@ PythonParser::ConopContext* PythonParser::conop() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(89);
+    setState(95);
     _la = _input->LA(1);
     if (!((((_la & ~ 0x3fULL) == 0) &&
       ((1ULL << _la) & 8128) != 0))) {
@@ -772,7 +874,7 @@ void PythonParser::While_statementContext::exitRule(tree::ParseTreeListener *lis
 
 PythonParser::While_statementContext* PythonParser::while_statement() {
   While_statementContext *_localctx = _tracker.createInstance<While_statementContext>(_ctx, getState());
-  enterRule(_localctx, 14, PythonParser::RuleWhile_statement);
+  enterRule(_localctx, 18, PythonParser::RuleWhile_statement);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -783,13 +885,13 @@ PythonParser::While_statementContext* PythonParser::while_statement() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(91);
+    setState(97);
     match(PythonParser::T__12);
-    setState(92);
+    setState(98);
     comparison();
-    setState(93);
+    setState(99);
     match(PythonParser::T__2);
-    setState(94);
+    setState(100);
     statement_list(0);
    
   }
@@ -839,7 +941,7 @@ void PythonParser::Function_statementContext::exitRule(tree::ParseTreeListener *
 
 PythonParser::Function_statementContext* PythonParser::function_statement() {
   Function_statementContext *_localctx = _tracker.createInstance<Function_statementContext>(_ctx, getState());
-  enterRule(_localctx, 16, PythonParser::RuleFunction_statement);
+  enterRule(_localctx, 20, PythonParser::RuleFunction_statement);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -850,19 +952,19 @@ PythonParser::Function_statementContext* PythonParser::function_statement() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(96);
-    match(PythonParser::T__13);
-    setState(97);
-    match(PythonParser::NAME);
-    setState(98);
-    match(PythonParser::T__14);
-    setState(99);
-    parameter_list();
-    setState(100);
-    match(PythonParser::T__15);
-    setState(101);
-    match(PythonParser::T__2);
     setState(102);
+    match(PythonParser::T__13);
+    setState(103);
+    match(PythonParser::NAME);
+    setState(104);
+    match(PythonParser::T__14);
+    setState(105);
+    parameter_list();
+    setState(106);
+    match(PythonParser::T__15);
+    setState(107);
+    match(PythonParser::T__2);
+    setState(108);
     statement_list(0);
    
   }
@@ -904,7 +1006,7 @@ void PythonParser::Return_statementContext::exitRule(tree::ParseTreeListener *li
 
 PythonParser::Return_statementContext* PythonParser::return_statement() {
   Return_statementContext *_localctx = _tracker.createInstance<Return_statementContext>(_ctx, getState());
-  enterRule(_localctx, 18, PythonParser::RuleReturn_statement);
+  enterRule(_localctx, 22, PythonParser::RuleReturn_statement);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -915,9 +1017,9 @@ PythonParser::Return_statementContext* PythonParser::return_statement() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(104);
+    setState(110);
     match(PythonParser::T__16);
-    setState(105);
+    setState(111);
     expression();
    
   }
@@ -959,7 +1061,7 @@ void PythonParser::Expression_statementContext::exitRule(tree::ParseTreeListener
 
 PythonParser::Expression_statementContext* PythonParser::expression_statement() {
   Expression_statementContext *_localctx = _tracker.createInstance<Expression_statementContext>(_ctx, getState());
-  enterRule(_localctx, 20, PythonParser::RuleExpression_statement);
+  enterRule(_localctx, 24, PythonParser::RuleExpression_statement);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -970,7 +1072,7 @@ PythonParser::Expression_statementContext* PythonParser::expression_statement() 
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(107);
+    setState(113);
     expression();
    
   }
@@ -1008,7 +1110,7 @@ void PythonParser::AddopContext::exitRule(tree::ParseTreeListener *listener) {
 
 PythonParser::AddopContext* PythonParser::addop() {
   AddopContext *_localctx = _tracker.createInstance<AddopContext>(_ctx, getState());
-  enterRule(_localctx, 22, PythonParser::RuleAddop);
+  enterRule(_localctx, 26, PythonParser::RuleAddop);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1020,7 +1122,7 @@ PythonParser::AddopContext* PythonParser::addop() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(109);
+    setState(115);
     _la = _input->LA(1);
     if (!(_la == PythonParser::T__17
 
@@ -1067,7 +1169,7 @@ void PythonParser::MulopContext::exitRule(tree::ParseTreeListener *listener) {
 
 PythonParser::MulopContext* PythonParser::mulop() {
   MulopContext *_localctx = _tracker.createInstance<MulopContext>(_ctx, getState());
-  enterRule(_localctx, 24, PythonParser::RuleMulop);
+  enterRule(_localctx, 28, PythonParser::RuleMulop);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1079,7 +1181,7 @@ PythonParser::MulopContext* PythonParser::mulop() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(111);
+    setState(117);
     _la = _input->LA(1);
     if (!((((_la & ~ 0x3fULL) == 0) &&
       ((1ULL << _la) & 7340032) != 0))) {
@@ -1129,7 +1231,7 @@ void PythonParser::PrintContext::exitRule(tree::ParseTreeListener *listener) {
 
 PythonParser::PrintContext* PythonParser::print() {
   PrintContext *_localctx = _tracker.createInstance<PrintContext>(_ctx, getState());
-  enterRule(_localctx, 26, PythonParser::RulePrint);
+  enterRule(_localctx, 30, PythonParser::RulePrint);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1140,11 +1242,11 @@ PythonParser::PrintContext* PythonParser::print() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(113);
+    setState(119);
     match(PythonParser::T__22);
-    setState(114);
+    setState(120);
     match(PythonParser::NAME);
-    setState(115);
+    setState(121);
     match(PythonParser::T__15);
    
   }
@@ -1198,7 +1300,7 @@ void PythonParser::ExpressionContext::exitRule(tree::ParseTreeListener *listener
 
 PythonParser::ExpressionContext* PythonParser::expression() {
   ExpressionContext *_localctx = _tracker.createInstance<ExpressionContext>(_ctx, getState());
-  enterRule(_localctx, 28, PythonParser::RuleExpression);
+  enterRule(_localctx, 32, PythonParser::RuleExpression);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1210,19 +1312,19 @@ PythonParser::ExpressionContext* PythonParser::expression() {
   try {
     size_t alt;
     enterOuterAlt(_localctx, 1);
-    setState(117);
-    term();
     setState(123);
+    term();
+    setState(129);
     _errHandler->sync(this);
     alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 5, _ctx);
     while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
       if (alt == 1) {
-        setState(118);
+        setState(124);
         addop();
-        setState(119);
+        setState(125);
         term(); 
       }
-      setState(125);
+      setState(131);
       _errHandler->sync(this);
       alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 5, _ctx);
     }
@@ -1278,7 +1380,7 @@ void PythonParser::TermContext::exitRule(tree::ParseTreeListener *listener) {
 
 PythonParser::TermContext* PythonParser::term() {
   TermContext *_localctx = _tracker.createInstance<TermContext>(_ctx, getState());
-  enterRule(_localctx, 30, PythonParser::RuleTerm);
+  enterRule(_localctx, 34, PythonParser::RuleTerm);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1290,19 +1392,19 @@ PythonParser::TermContext* PythonParser::term() {
   try {
     size_t alt;
     enterOuterAlt(_localctx, 1);
-    setState(126);
-    factor();
     setState(132);
+    factor();
+    setState(138);
     _errHandler->sync(this);
     alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 6, _ctx);
     while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
       if (alt == 1) {
-        setState(127);
+        setState(133);
         mulop();
-        setState(128);
+        setState(134);
         factor(); 
       }
-      setState(134);
+      setState(140);
       _errHandler->sync(this);
       alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 6, _ctx);
     }
@@ -1358,7 +1460,7 @@ void PythonParser::FactorContext::exitRule(tree::ParseTreeListener *listener) {
 
 PythonParser::FactorContext* PythonParser::factor() {
   FactorContext *_localctx = _tracker.createInstance<FactorContext>(_ctx, getState());
-  enterRule(_localctx, 32, PythonParser::RuleFactor);
+  enterRule(_localctx, 36, PythonParser::RuleFactor);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1368,37 +1470,37 @@ PythonParser::FactorContext* PythonParser::factor() {
     exitRule();
   });
   try {
-    setState(142);
+    setState(148);
     _errHandler->sync(this);
     switch (_input->LA(1)) {
       case PythonParser::INTEGER: {
         enterOuterAlt(_localctx, 1);
-        setState(135);
+        setState(141);
         match(PythonParser::INTEGER);
         break;
       }
 
       case PythonParser::FLOAT: {
         enterOuterAlt(_localctx, 2);
-        setState(136);
+        setState(142);
         match(PythonParser::FLOAT);
         break;
       }
 
       case PythonParser::NAME: {
         enterOuterAlt(_localctx, 3);
-        setState(137);
+        setState(143);
         match(PythonParser::NAME);
         break;
       }
 
       case PythonParser::T__14: {
         enterOuterAlt(_localctx, 4);
-        setState(138);
+        setState(144);
         match(PythonParser::T__14);
-        setState(139);
+        setState(145);
         expression();
-        setState(140);
+        setState(146);
         match(PythonParser::T__15);
         break;
       }
@@ -1450,7 +1552,7 @@ void PythonParser::Parameter_listContext::exitRule(tree::ParseTreeListener *list
 
 PythonParser::Parameter_listContext* PythonParser::parameter_list() {
   Parameter_listContext *_localctx = _tracker.createInstance<Parameter_listContext>(_ctx, getState());
-  enterRule(_localctx, 34, PythonParser::RuleParameter_list);
+  enterRule(_localctx, 38, PythonParser::RuleParameter_list);
   size_t _la = 0;
 
 #if __cplusplus > 201703L
@@ -1462,19 +1564,25 @@ PythonParser::Parameter_listContext* PythonParser::parameter_list() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(144);
-    parameter();
-    setState(149);
+    setState(158);
     _errHandler->sync(this);
+
     _la = _input->LA(1);
-    while (_la == PythonParser::T__23) {
-      setState(145);
-      match(PythonParser::T__23);
-      setState(146);
+    if (_la == PythonParser::NAME) {
+      setState(150);
       parameter();
-      setState(151);
+      setState(155);
       _errHandler->sync(this);
       _la = _input->LA(1);
+      while (_la == PythonParser::T__23) {
+        setState(151);
+        match(PythonParser::T__23);
+        setState(152);
+        parameter();
+        setState(157);
+        _errHandler->sync(this);
+        _la = _input->LA(1);
+      }
     }
    
   }
@@ -1516,7 +1624,7 @@ void PythonParser::ParameterContext::exitRule(tree::ParseTreeListener *listener)
 
 PythonParser::ParameterContext* PythonParser::parameter() {
   ParameterContext *_localctx = _tracker.createInstance<ParameterContext>(_ctx, getState());
-  enterRule(_localctx, 36, PythonParser::RuleParameter);
+  enterRule(_localctx, 40, PythonParser::RuleParameter);
 
 #if __cplusplus > 201703L
   auto onExit = finally([=, this] {
@@ -1527,7 +1635,7 @@ PythonParser::ParameterContext* PythonParser::parameter() {
   });
   try {
     enterOuterAlt(_localctx, 1);
-    setState(152);
+    setState(160);
     match(PythonParser::NAME);
    
   }

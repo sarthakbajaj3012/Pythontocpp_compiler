@@ -21,10 +21,11 @@ public:
 
   enum {
     RuleProgram = 0, RuleStatement_list = 1, RuleStatement = 2, RuleAssignment_statement = 3, 
-    RuleIf_statement = 4, RuleComparison = 5, RuleConop = 6, RuleWhile_statement = 7, 
-    RuleFunction_statement = 8, RuleReturn_statement = 9, RuleExpression_statement = 10, 
-    RuleAddop = 11, RuleMulop = 12, RulePrint = 13, RuleExpression = 14, 
-    RuleTerm = 15, RuleFactor = 16, RuleParameter_list = 17, RuleParameter = 18
+    RuleIf_statement = 4, RuleComparison = 5, RuleElif = 6, RuleElseop = 7, 
+    RuleConop = 8, RuleWhile_statement = 9, RuleFunction_statement = 10, 
+    RuleReturn_statement = 11, RuleExpression_statement = 12, RuleAddop = 13, 
+    RuleMulop = 14, RulePrint = 15, RuleExpression = 16, RuleTerm = 17, 
+    RuleFactor = 18, RuleParameter_list = 19, RuleParameter = 20
   };
 
   explicit PythonParser(antlr4::TokenStream *input);
@@ -50,6 +51,8 @@ public:
   class Assignment_statementContext;
   class If_statementContext;
   class ComparisonContext;
+  class ElifContext;
+  class ElseopContext;
   class ConopContext;
   class While_statementContext;
   class Function_statementContext;
@@ -128,12 +131,11 @@ public:
   public:
     If_statementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    std::vector<Statement_listContext *> statement_list();
-    Statement_listContext* statement_list(size_t i);
-    Expression_statementContext *expression_statement();
     ComparisonContext *comparison();
-    std::vector<ExpressionContext *> expression();
-    ExpressionContext* expression(size_t i);
+    Statement_listContext *statement_list();
+    std::vector<ElifContext *> elif();
+    ElifContext* elif(size_t i);
+    ElseopContext *elseop();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -156,6 +158,33 @@ public:
   };
 
   ComparisonContext* comparison();
+
+  class  ElifContext : public antlr4::ParserRuleContext {
+  public:
+    ElifContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    ComparisonContext *comparison();
+    Statement_listContext *statement_list();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  ElifContext* elif();
+
+  class  ElseopContext : public antlr4::ParserRuleContext {
+  public:
+    ElseopContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    Statement_listContext *statement_list();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  ElseopContext* elseop();
 
   class  ConopContext : public antlr4::ParserRuleContext {
   public:

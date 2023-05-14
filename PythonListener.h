@@ -32,6 +32,12 @@ public:
   virtual void enterComparison(PythonParser::ComparisonContext *ctx) = 0;
   virtual void exitComparison(PythonParser::ComparisonContext *ctx) = 0;
 
+  virtual void enterElif(PythonParser::ElifContext *ctx) = 0;
+  virtual void exitElif(PythonParser::ElifContext *ctx) = 0;
+
+  virtual void enterElseop(PythonParser::ElseopContext *ctx) = 0;
+  virtual void exitElseop(PythonParser::ElseopContext *ctx) = 0;
+
   virtual void enterConop(PythonParser::ConopContext *ctx) = 0;
   virtual void exitConop(PythonParser::ConopContext *ctx) = 0;
 

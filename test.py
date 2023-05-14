@@ -1,7 +1,12 @@
-x = 15.5
-y = 15.7
-z = 20
-m = x + y + z 
-print(m)
-
-    
+def trying(d,e):
+    a = 3
+    b = 2
+    if a > b:
+        c = 4
+        if a > c:
+            print(c)
+        else:
+            print(a)
+    else:
+        print(b)
+    return b
