@@ -123,8 +123,12 @@ public:
         
     }
 
-    virtual void enterElif(PythonParser::ElifContext * /*ctx*/) override { }
-    virtual void exitElif(PythonParser::ElifContext * /*ctx*/) override { }
+    virtual void enterElif(PythonParser::ElifContext * ctx) override { 
+        if(function) function_string.append(functionaddtab() + "} else if(");
+        else converted_code.append(addtab() + "}\n" + addtab() + "else if(");
+    
+    }
+    virtual void exitElif(PythonParser::ElifContext * /*ctx*/) override {}
 
     virtual void enterElseop(PythonParser::ElseopContext * ctx) override {
         if(function) {

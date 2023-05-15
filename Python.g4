@@ -15,19 +15,19 @@ statement : assignment_statement
 
 assignment_statement : NAME '=' expression ;
 
-if_statement : 'if' comparison ':' statement_list ( elif )* (elseop)?;
+if_statement : 'if' comparison ':' '<<INDENT>>' statement_list '<<DEDENT>>' ( elif )* (elseop)?;
 
 comparison: expression (conop expression)?;
 
-elif: 'elif' comparison ':' statement_list ;
+elif: 'elif' comparison ':' '<<INDENT>>'statement_list '<<DEDENT>>' ;
 
-elseop : 'else' ':' statement_list ;
+elseop : 'else' ':' '<<INDENT>>'statement_list '<<DEDENT>>' ;
 
 conop: '>=' | '>' | '<' | '<=' | '==' | '!=' | 'in';
 
-while_statement : 'while' comparison ':' statement_list;
+while_statement : 'while' comparison ':' '<<INDENT>>'statement_list '<<DEDENT>>';
 
-function_statement : 'def' NAME '(' parameter_list ')' ':' statement_list;
+function_statement : 'def' NAME '(' parameter_list ')' ':' '<<INDENT>>'statement_list '<<DEDENT>>';
 
 return_statement : 'return' expression;
 

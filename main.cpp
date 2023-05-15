@@ -16,8 +16,8 @@ using namespace antlr4;
 int main(int , const char **) {
   std::ifstream python_file("test.py");
   std::string string_stream((std::istreambuf_iterator<char>(python_file)),std::istreambuf_iterator<char>());
-  // ANTLRInputStream input("def trying(a,b):\n<<INDENT>>a+b<<DEDENT>>d = 4\ne=5\nprint(b)");
-  ANTLRInputStream input(string_stream);
+  ANTLRInputStream input("a=4\nb=6\nif a > b:<<INDENT>>\nprint(a)<<DEDENT>>\nprint(b)");
+  // ANTLRInputStream input(string_stream);
   PythonLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
   // PyObject *python_file = PyFile_FromString("test.py", "r");
