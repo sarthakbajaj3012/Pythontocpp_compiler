@@ -16,11 +16,7 @@ using namespace antlr4;
 int main(int , const char **) {
   std::ifstream python_file("test.py");
   std::string string_stream((std::istreambuf_iterator<char>(python_file)),std::istreambuf_iterator<char>());
-  // std::cout << string_stream <<std::endl;
-
-  // std::wifstream f(L"test.py");
-  // std::wstring s(std::istreambuf_iterator<wchar_t>(f), (std::istreambuf_iterator<wchar_t>()) );
-  // std::wcout <<s << std::endl;
+  // ANTLRInputStream input("def trying(a,b):\n<<INDENT>>a+b<<DEDENT>>d = 4\ne=5\nprint(b)");
   ANTLRInputStream input(string_stream);
   PythonLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
@@ -50,7 +46,7 @@ int main(int , const char **) {
   antlr4::tree::ParseTreeWalker::DEFAULT.walk(&listener, tree2);
 
 
-  // std::cout << tree2->children.at(0)->toStringTree(&parser) << std::endl;
+  std::cout << tree2->children.at(0)->toStringTree(&parser) << std::endl;
 
   // std::cout << tree2->toString() <<std::endl;
 

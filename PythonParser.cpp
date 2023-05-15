@@ -56,7 +56,7 @@ void pythonParserInitialize() {
     },
     std::vector<std::string>{
       "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-      "", "", "", "", "", "", "", "", "NAME", "INTEGER", "FLOAT", "WS"
+      "", "", "", "", "", "", "", "", "NAME", "INTEGER", "FLOAT", "WHITESPACE"
     }
   );
   static const int32_t serializedATNSegment[] = {

@@ -51,7 +51,7 @@ void pythonlexerLexerInitialize() {
       "T__0", "T__1", "T__2", "T__3", "T__4", "T__5", "T__6", "T__7", "T__8", 
       "T__9", "T__10", "T__11", "T__12", "T__13", "T__14", "T__15", "T__16", 
       "T__17", "T__18", "T__19", "T__20", "T__21", "T__22", "T__23", "NAME", 
-      "INTEGER", "FLOAT", "WS"
+      "INTEGER", "FLOAT", "WHITESPACE"
     },
     std::vector<std::string>{
       "DEFAULT_TOKEN_CHANNEL", "HIDDEN"
@@ -66,7 +66,7 @@ void pythonlexerLexerInitialize() {
     },
     std::vector<std::string>{
       "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", 
-      "", "", "", "", "", "", "", "", "NAME", "INTEGER", "FLOAT", "WS"
+      "", "", "", "", "", "", "", "", "NAME", "INTEGER", "FLOAT", "WHITESPACE"
     }
   );
   static const int32_t serializedATNSegment[] = {

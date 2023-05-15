@@ -13,15 +13,15 @@ statement : assignment_statement
           | print
           | expression_statement;
 
-assignment_statement : NAME '=' expression;
+assignment_statement : NAME '=' expression ;
 
 if_statement : 'if' comparison ':' statement_list ( elif )* (elseop)?;
 
 comparison: expression (conop expression)?;
 
-elif: 'elif' comparison ':' statement_list;
+elif: 'elif' comparison ':' statement_list ;
 
-elseop : 'else' ':' statement_list;
+elseop : 'else' ':' statement_list ;
 
 conop: '>=' | '>' | '<' | '<=' | '==' | '!=' | 'in';
 
@@ -56,4 +56,4 @@ parameter : NAME;
 NAME : [a-zA-Z_] [a-zA-Z0-9_]*;
 INTEGER : [0-9]+;
 FLOAT : [0-9]* '.' [0-9]+;
-WS : [ \t\n\r]+ -> skip;
+WHITESPACE : [ \t\r\n]+ -> skip;

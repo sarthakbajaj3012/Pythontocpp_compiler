@@ -58,7 +58,7 @@ null
 NAME
 INTEGER
 FLOAT
-WS
+WHITESPACE
 
 rule names:
 program

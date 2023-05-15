@@ -82,12 +82,14 @@ public:
 
     virtual void enterAssignment_statement(PythonParser::Assignment_statementContext * ctx) override { 
         std::string var = ctx->NAME()->toString();
+
         
         if(var_names.find(var) == var_names.end()){
             assignment_string = "";
             assignment_type = "int";
             assignment = true;
             assignment_string = var + " = ";
+            var_names[var] = assignment_type;
         } 
         else {
             if(function) function_string.append(functionaddtab() + var +" = ");
@@ -159,6 +161,7 @@ public:
         headers.append( function_type+ " " +function_string);
         tabspaces--;
         headers.append(addtab() + "}\n");
+        function = false;
     }
 
     virtual void enterReturn_statement(PythonParser::Return_statementContext * ctx) override {

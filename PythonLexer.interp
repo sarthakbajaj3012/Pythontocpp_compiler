@@ -58,7 +58,7 @@ null
 NAME
 INTEGER
 FLOAT
-WS
+WHITESPACE
 
 rule names:
 T__0
@@ -88,7 +88,7 @@ T__23
 NAME
 INTEGER
 FLOAT
-WS
+WHITESPACE
 
 channel names:
 DEFAULT_TOKEN_CHANNEL
