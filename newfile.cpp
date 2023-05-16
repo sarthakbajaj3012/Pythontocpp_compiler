@@ -1,16 +1,10 @@
 #include <iostream>
+float trying( int a, int b){
+	return a + b;
+}
 int main(){
-	int a = 20;
-	while(a > 1){
-		if(a > 2){
-			std::cout << a << std::endl;
-			} else {
-				std::cout << a << std::endl;
-		}
-
-		a = a - 1;
-	}
-	int c = a + 10;
-	std::cout << c << std::endl;
+	int a = 5;
+	int b = 6;
+	std::cout << a << std::endl;
 	return 0; 
 }

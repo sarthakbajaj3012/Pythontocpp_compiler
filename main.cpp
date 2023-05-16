@@ -34,9 +34,6 @@ int main(int argc, char* argv[]) {
         tab_num++;
         x++;
       }
-      
-      std::cout << tab_num <<" " << tabspaces<<std::endl;
-
       if(tab_num > tabspaces ){
         line = "<<INDENT>>" + line;
         tabspaces+=4;
@@ -55,7 +52,7 @@ int main(int argc, char* argv[]) {
     dedent_num++;
  }
 
-  std::cout<< new_string;
+  // std::cout<< new_string;
 
 
 
@@ -68,7 +65,7 @@ int main(int argc, char* argv[]) {
   tree::ParseTree *tree2 = parser.program();
   MyListener listener;
   antlr4::tree::ParseTreeWalker::DEFAULT.walk(&listener, tree2);
-  std::cout << tree2->children.at(0)->toStringTree(&parser) << std::endl;
+  // std::cout << tree2->children.at(0)->toStringTree(&parser) << std::endl;
 
   // std::cout << tree2->toString() <<std::endl;
     // // PyObject *python_file = PyFile_FromString("test.py", "r");
