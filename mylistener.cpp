@@ -73,7 +73,8 @@ public:
 
     virtual void enterStatement(PythonParser::StatementContext * /*ctx*/) override {}
     virtual void exitStatement(PythonParser::StatementContext * ctx) override { 
-       if( ctx->if_statement() != nullptr || ctx->while_statement() != nullptr) converted_code.append("\n");
+       if( ctx->if_statement() != nullptr || ctx->while_statement() != nullptr ) converted_code.append("\n");
+       else if(ctx->function_statement()!= nullptr) converted_code.append("");
        else {
             if(function) function_string.append(";\n");
             else converted_code.append(";\n");
@@ -84,7 +85,7 @@ public:
         std::string var = ctx->NAME()->toString();
 
         
-        if(var_names.find(var) == var_names.end()){
+        if(var_names.find(var) == var_names.end() || var_names[var] == ""){
             assignment_string = "";
             assignment_type = "int";
             assignment = true;
@@ -163,8 +164,8 @@ public:
     }
     virtual void exitFunction_statement(PythonParser::Function_statementContext * /*ctx*/) override { 
         headers.append( function_type+ " " +function_string);
-        tabspaces--;
-        headers.append(addtab() + "}\n");
+        function_tabspaces--;
+        headers.append(functionaddtab() + "}\n");
         function = false;
     }
 
