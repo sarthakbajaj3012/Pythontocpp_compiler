@@ -13,8 +13,8 @@
 using namespace antlrcpp;
 using namespace antlr4;
 
-int main(int , const char **) {
-  std::ifstream python_file("test.py");
+int main(int argc, char* argv[]) {
+  std::ifstream python_file(argv[1]);
   // std::string string_stream((std::istreambuf_iterator<char>(python_file)),std::istreambuf_iterator<char>());
   std::string line;
   std::string new_string = "";

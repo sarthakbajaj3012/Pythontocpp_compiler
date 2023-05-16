@@ -15,7 +15,7 @@ statement : assignment_statement
 
 assignment_statement : NAME '=' expression ;
 
-if_statement : 'if' comparison ':' '<<INDENT>>' statement_list '<<DEDENT>>' ( elif )* (elseop)?;
+if_statement : 'if' '('? comparison')'? ':' '<<INDENT>>' statement_list '<<DEDENT>>' ( elif )* (elseop)?;
 
 comparison: expression (conop expression)?;
 
@@ -25,7 +25,7 @@ elseop : 'else' ':' '<<INDENT>>'statement_list '<<DEDENT>>' ;
 
 conop: '>=' | '>' | '<' | '<=' | '==' | '!=' | 'in';
 
-while_statement : 'while' comparison ':' '<<INDENT>>'statement_list '<<DEDENT>>';
+while_statement : 'while' '('?comparison')'? ':' '<<INDENT>>'statement_list '<<DEDENT>>';
 
 function_statement : 'def' NAME '(' parameter_list ')' ':' '<<INDENT>>'statement_list '<<DEDENT>>';
 
