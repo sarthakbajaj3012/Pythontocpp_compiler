@@ -1,11 +1,11 @@
 #include <iostream>
 int main(){
-	int a = 4;
-	int b = 6;
-	if(a > b){
+	int a = 3;
+	float b = 2.5;
+	while(a > 1){
 		std::cout << a << std::endl;
+		a = a - 1;
 	}
-
-	std::cout << b << std::endl;
+	std::cout << a << std::endl;
 	return 0; 
 }
