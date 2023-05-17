@@ -51,18 +51,26 @@ int main(int argc, char* argv[]) {
     dedent_num++;
  }
 
+tree::ParseTree *tree2;
 
+try{
   ANTLRInputStream input(new_string);
   PythonLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
   tokens.fill();
   PythonParser parser(&tokens);
   tree::ParseTree *tree2 = parser.program();
-  // std::cout << tree2->children.at(0)->toStringTree(&parser) << std::endl;
+  if( parser.getNumberOfSyntaxErrors() > 0) {
+    throw std::runtime_error("syntax error!");
+  }
   MyListener listener;
   antlr4::tree::ParseTreeWalker::DEFAULT.walk(&listener, tree2);
+} catch(const std::exception &e){
+  std::cout << "Exception Caught " << e.what() <<std::endl;
+  return 0;
+}
+  // // std::cout << tree2->children.at(0)->toStringTree(&parser) << std::endl;
   
-
   return 0;
 }
 

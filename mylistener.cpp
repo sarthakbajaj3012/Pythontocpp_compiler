@@ -98,7 +98,6 @@ public:
             else converted_code.append(addtab() + var + " = ");
         }
     }
-
     virtual void exitAssignment_statement(PythonParser::Assignment_statementContext * ctx) override { 
         var_names[ctx->NAME()->getText()] = assignment_type;
         if(function) function_string.append(functionaddtab() + assignment_type +" " + assignment_string);
@@ -284,7 +283,6 @@ public:
 
     virtual void enterParameter(PythonParser::ParameterContext * /*ctx*/) override { }
     virtual void exitParameter(PythonParser::ParameterContext * /*ctx*/) override { }
-
 
     virtual void enterEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }
     virtual void exitEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }

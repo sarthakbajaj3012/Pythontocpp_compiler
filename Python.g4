@@ -27,7 +27,7 @@ functioncall: NAME '(' parameter_list ')';
 
 conop: '>=' | '>' | '<' | '<=' | '==' | '!=' | 'in';
 
-while_statement : 'while' '('?comparison')'? ':' '<<INDENT>>'statement_list '<<DEDENT>>';
+while_statement : 'while' '('? comparison')'? ':' '<<INDENT>>'statement_list '<<DEDENT>>';
 
 function_statement : 'def' NAME '(' parameter_list ')' ':' '<<INDENT>>'statement_list '<<DEDENT>>';
 
@@ -56,6 +56,6 @@ parameter : NAME;
 
 // Define the tokens used in the grammar
 NAME : [a-zA-Z_] [a-zA-Z0-9_]*;
-INTEGER : [0-9]+;
+INTEGER : '-'?[0-9]+;
 FLOAT : [0-9]* '.' [0-9]+;
 WHITESPACE : [ \t\r\n]+ -> skip;
