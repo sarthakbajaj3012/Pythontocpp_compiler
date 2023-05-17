@@ -21,6 +21,7 @@ public:
     std::string converted_code = "int main(){\n";
     std::string headers = "#include <iostream>\n";
     std::map<std::string, std::string> var_names;
+    std::map<std::string, std::string> function_parameters;
     int tabspaces = 1;
     int function_tabspaces = 0;
     int index = converted_code.size();
@@ -98,7 +99,8 @@ public:
         }
     }
 
-    virtual void exitAssignment_statement(PythonParser::Assignment_statementContext * /*ctx*/) override { 
+    virtual void exitAssignment_statement(PythonParser::Assignment_statementContext * ctx) override { 
+        var_names[ctx->NAME()->getText()] = assignment_type;
         if(function) function_string.append(functionaddtab() + assignment_type +" " + assignment_string);
         else if(assignment) converted_code.append(addtab() + assignment_type +" " + assignment_string);
         assignment_string ="";
@@ -159,11 +161,16 @@ public:
 
     virtual void enterFunction_statement(PythonParser::Function_statementContext * ctx) override { 
         function = true; 
+        function_parameters.clear();
+        function_type = "int";
         function_string = functionaddtab() + ctx->NAME()->getText();
         function_tabspaces++;
+        // std::cout << ctx->NAME()->getText() <<std::endl;
+        var_names[ctx->NAME()->getText()] = "int";
     }
-    virtual void exitFunction_statement(PythonParser::Function_statementContext * /*ctx*/) override { 
-        headers.append( function_type+ " " +function_string);
+    virtual void exitFunction_statement(PythonParser::Function_statementContext * ctx) override { 
+        var_names[ctx->NAME()->getText()] = function_type;
+        headers.append( function_type + " " +function_string);
         function_tabspaces--;
         headers.append(functionaddtab() + "}\n");
         function = false;
@@ -178,7 +185,11 @@ public:
     virtual void enterExpression_statement(PythonParser::Expression_statementContext * /*ctx*/) override { }
     virtual void exitExpression_statement(PythonParser::Expression_statementContext * /*ctx*/) override { }
 
-    virtual void enterExpression(PythonParser::ExpressionContext * /*ctx*/) override {}
+    virtual void enterExpression(PythonParser::ExpressionContext * ctx) override {
+        if(ctx->functioncall() != nullptr){
+            assignment_type = var_names[ctx->functioncall()->NAME()->getText()];
+        }
+    }
     virtual void exitExpression(PythonParser::ExpressionContext * /*ctx*/) override {}
 
     virtual void enterTerm(PythonParser::TermContext * /*ctx*/) override {}
@@ -213,8 +224,9 @@ public:
             if(var_names[ctx->NAME()->getText()] != "int" && assignment){
                 assignment_type = "float";
             }
-            if(var_names[ctx->NAME()->getText()] != "int" && function){
+            if(function_parameters[ctx->NAME()->getText()] != "int" && function){
                 function_type = "float";
+                std::cout << ctx->NAME()->getText() << " " << var_names[ctx->NAME()->getText()] <<std::endl;
             }
         }
         else if(ctx->FLOAT() != nullptr){
@@ -240,13 +252,33 @@ public:
     }
 
     virtual void enterParameter_list(PythonParser::Parameter_listContext * ctx) override { 
-        function_string += "( ";
-        for(int i = 0; i< ctx->parameter().size() - 1 ;i++){
-            function_string += "int " + ctx->parameter().at(i)->getText() + ", "; 
+       
+        if(function){
+            function_string += "( ";
+            if(ctx->parameter().size() > 0){
+                for(int i = 0; i< ctx->parameter().size() - 1 ;i++){
+                    function_string += "int " + ctx->parameter().at(i)->getText() + ", ";
+                    function_parameters[ctx->parameter().at(i)->getText()] = "int";
+                }
+                function_string += "int " + ctx->parameter().at(ctx->parameter().size() -1 )->getText() + "){\n" ;
+                function_parameters[ctx->parameter().at(ctx->parameter().size() -1 )->getText()] = "int";
+            }
+            else {
+                function_string += "){\n" ;
+            }
         }
-        function_string += "int " + ctx->parameter().at(ctx->parameter().size() -1 )->getText() + "){\n" ;
-
-        
+        else if(assignment){
+            assignment_string.append("(");
+            if(ctx->parameter().size() > 0){
+                for(int i = 0; i< ctx->parameter().size() - 1 ;i++){
+                     assignment_string.append(ctx->parameter().at(i)->getText() + ", "); 
+                }
+                assignment_string.append( ctx->parameter().at(ctx->parameter().size() -1 )->getText() + ")" );
+            }
+            else {
+                assignment_string.append(")" );
+            }   
+        }    
     }
     virtual void exitParameter_list(PythonParser::Parameter_listContext * /*ctx*/) override {}
 
@@ -283,5 +315,12 @@ public:
         
     }
     virtual void exitPrint(PythonParser::PrintContext * /*ctx*/) override { }
+
+    virtual void enterFunctioncall(PythonParser::FunctioncallContext * ctx) override {
+        if(assignment) assignment_string.append(ctx->NAME()->getText());
+        else  converted_code.append(addtab() + ctx->NAME()->getText());
+
+    }
+    virtual void exitFunctioncall(PythonParser::FunctioncallContext * /*ctx*/) override { }
     
 };

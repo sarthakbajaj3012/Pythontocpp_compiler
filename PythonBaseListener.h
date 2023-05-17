@@ -40,6 +40,9 @@ public:
   virtual void enterElseop(PythonParser::ElseopContext * /*ctx*/) override { }
   virtual void exitElseop(PythonParser::ElseopContext * /*ctx*/) override { }
 
+  virtual void enterFunctioncall(PythonParser::FunctioncallContext * /*ctx*/) override { }
+  virtual void exitFunctioncall(PythonParser::FunctioncallContext * /*ctx*/) override { }
+
   virtual void enterConop(PythonParser::ConopContext * /*ctx*/) override { }
   virtual void exitConop(PythonParser::ConopContext * /*ctx*/) override { }
 

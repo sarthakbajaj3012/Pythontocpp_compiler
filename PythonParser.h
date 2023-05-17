@@ -22,10 +22,10 @@ public:
   enum {
     RuleProgram = 0, RuleStatement_list = 1, RuleStatement = 2, RuleAssignment_statement = 3, 
     RuleIf_statement = 4, RuleComparison = 5, RuleElif = 6, RuleElseop = 7, 
-    RuleConop = 8, RuleWhile_statement = 9, RuleFunction_statement = 10, 
-    RuleReturn_statement = 11, RuleExpression_statement = 12, RuleAddop = 13, 
-    RuleMulop = 14, RulePrint = 15, RuleExpression = 16, RuleTerm = 17, 
-    RuleFactor = 18, RuleParameter_list = 19, RuleParameter = 20
+    RuleFunctioncall = 8, RuleConop = 9, RuleWhile_statement = 10, RuleFunction_statement = 11, 
+    RuleReturn_statement = 12, RuleExpression_statement = 13, RuleAddop = 14, 
+    RuleMulop = 15, RulePrint = 16, RuleExpression = 17, RuleTerm = 18, 
+    RuleFactor = 19, RuleParameter_list = 20, RuleParameter = 21
   };
 
   explicit PythonParser(antlr4::TokenStream *input);
@@ -53,6 +53,7 @@ public:
   class ComparisonContext;
   class ElifContext;
   class ElseopContext;
+  class FunctioncallContext;
   class ConopContext;
   class While_statementContext;
   class Function_statementContext;
@@ -186,6 +187,20 @@ public:
 
   ElseopContext* elseop();
 
+  class  FunctioncallContext : public antlr4::ParserRuleContext {
+  public:
+    FunctioncallContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *NAME();
+    Parameter_listContext *parameter_list();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  FunctioncallContext* functioncall();
+
   class  ConopContext : public antlr4::ParserRuleContext {
   public:
     ConopContext(antlr4::ParserRuleContext *parent, size_t invokingState);
@@ -298,6 +313,7 @@ public:
     TermContext* term(size_t i);
     std::vector<AddopContext *> addop();
     AddopContext* addop(size_t i);
+    FunctioncallContext *functioncall();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;

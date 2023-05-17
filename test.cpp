@@ -13,6 +13,7 @@ int main() {
             std::cout <<"Test passed" << i << std::endl;
         } catch(const char* errorMessage) {
             std::cout << "ERROR " << errorMessage <<std::endl;
+            break;
         }
 
         

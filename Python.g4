@@ -23,6 +23,8 @@ elif: 'elif' comparison ':' '<<INDENT>>'statement_list '<<DEDENT>>' ;
 
 elseop : 'else' ':' '<<INDENT>>'statement_list '<<DEDENT>>' ;
 
+functioncall: NAME '(' parameter_list ')';
+
 conop: '>=' | '>' | '<' | '<=' | '==' | '!=' | 'in';
 
 while_statement : 'while' '('?comparison')'? ':' '<<INDENT>>'statement_list '<<DEDENT>>';
@@ -39,7 +41,7 @@ mulop : '*' | '/' | '%' ;
 
 print: 'print(' NAME ')';
 
-expression : term ( addop term)*;
+expression : (term ( addop term)*)| functioncall;
 
 term : factor ( mulop factor)*;
 

@@ -1,10 +1,7 @@
-a = 20
-while a > 1:
-    if(a > 2):
-        print(a)
-    else:
-        print(a)
-    a = a - 1
-c = a + 10
-print(c)
+a = 50
+if(a >30):
+    print(a)
+    a = 40
+b = a + 4.5
+
 

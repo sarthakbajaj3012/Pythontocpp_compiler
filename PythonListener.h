@@ -38,6 +38,9 @@ public:
   virtual void enterElseop(PythonParser::ElseopContext *ctx) = 0;
   virtual void exitElseop(PythonParser::ElseopContext *ctx) = 0;
 
+  virtual void enterFunctioncall(PythonParser::FunctioncallContext *ctx) = 0;
+  virtual void exitFunctioncall(PythonParser::FunctioncallContext *ctx) = 0;
+
   virtual void enterConop(PythonParser::ConopContext *ctx) = 0;
   virtual void exitConop(PythonParser::ConopContext *ctx) = 0;
 

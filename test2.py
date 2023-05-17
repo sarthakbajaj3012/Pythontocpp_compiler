@@ -1,5 +1,6 @@
 def trying(a,b):
-    return a + b
+    return a + b +4.5
 a = 5
 b = 6
-print(a)
+c = trying(a,b)
+print(c)
