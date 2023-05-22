@@ -7,9 +7,6 @@
 #include "mylistener.cpp"
 #include <iterator>
 #include <string>
-
-
-
 using namespace antlrcpp;
 using namespace antlr4;
 
@@ -39,17 +36,21 @@ int main(int argc, char* argv[]) {
         indent_num++;
       }
       else if(tab_num < tabspaces){
-        line = "<<DEDENT>>\n" + line;
-        tabspaces-=4;
-        dedent_num++;
+        while(tab_num != tabspaces){
+          line = "<<DEDENT>>\n" + line;
+          tabspaces-=4;
+          dedent_num++;
+        }
       }
       new_string += line +"\n";
     }
-  }
+}
  while(indent_num > dedent_num){
     new_string+= "<<DEDENT>>\n";
     dedent_num++;
  }
+
+//  std::cout <<new_string <<std::endl;
 
 tree::ParseTree *tree2;
 
@@ -65,12 +66,12 @@ try{
   }
   MyListener listener;
   antlr4::tree::ParseTreeWalker::DEFAULT.walk(&listener, tree2);
+  // std::cout << tree2->children.at(0)->toStringTree(&parser) << std::endl;
 } catch(const std::exception &e){
   std::cout << "Exception Caught " << e.what() <<std::endl;
   return 0;
-}
-  // // std::cout << tree2->children.at(0)->toStringTree(&parser) << std::endl;
-  
+} 
+ 
   return 0;
 }
 

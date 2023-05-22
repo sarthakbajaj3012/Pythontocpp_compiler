@@ -119,8 +119,9 @@ void pythonParserInitialize() {
   	0,180,174,1,0,0,0,180,175,1,0,0,0,180,176,1,0,0,0,181,39,1,0,0,0,182,
   	187,3,42,21,0,183,184,5,26,0,0,184,186,3,42,21,0,185,183,1,0,0,0,186,
   	189,1,0,0,0,187,185,1,0,0,0,187,188,1,0,0,0,188,191,1,0,0,0,189,187,1,
-  	0,0,0,190,182,1,0,0,0,190,191,1,0,0,0,191,41,1,0,0,0,192,193,5,27,0,0,
-  	193,43,1,0,0,0,15,53,63,71,75,84,88,94,118,122,158,162,170,180,187,190
+  	0,0,0,190,182,1,0,0,0,190,191,1,0,0,0,191,41,1,0,0,0,192,193,3,34,17,
+  	0,193,43,1,0,0,0,15,53,63,71,75,84,88,94,118,122,158,162,170,180,187,
+  	190
   };
   staticData->serializedATN = antlr4::atn::SerializedATNView(serializedATNSegment, sizeof(serializedATNSegment) / sizeof(serializedATNSegment[0]));
 
@@ -1728,7 +1729,8 @@ PythonParser::Parameter_listContext* PythonParser::parameter_list() {
     _errHandler->sync(this);
 
     _la = _input->LA(1);
-    if (_la == PythonParser::NAME) {
+    if ((((_la & ~ 0x3fULL) == 0) &&
+      ((1ULL << _la) & 939524104) != 0)) {
       setState(182);
       parameter();
       setState(187);
@@ -1761,8 +1763,8 @@ PythonParser::ParameterContext::ParameterContext(ParserRuleContext *parent, size
   : ParserRuleContext(parent, invokingState) {
 }
 
-tree::TerminalNode* PythonParser::ParameterContext::NAME() {
-  return getToken(PythonParser::NAME, 0);
+PythonParser::ExpressionContext* PythonParser::ParameterContext::expression() {
+  return getRuleContext<PythonParser::ExpressionContext>(0);
 }
 
 
@@ -1796,7 +1798,7 @@ PythonParser::ParameterContext* PythonParser::parameter() {
   try {
     enterOuterAlt(_localctx, 1);
     setState(192);
-    match(PythonParser::NAME);
+    expression();
    
   }
   catch (RecognitionException &e) {

@@ -52,7 +52,7 @@ factor : INTEGER
 
 parameter_list : (parameter (',' parameter)*)?;
 
-parameter : NAME;
+parameter : expression;
 
 // Define the tokens used in the grammar
 NAME : [a-zA-Z_] [a-zA-Z0-9_]*;
