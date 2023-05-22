@@ -18,20 +18,16 @@ std::any addtwo( std::any a,std::any b){
 		b_ = std::any_cast<int>(b);
 	}
 	if(a_ == 1){
-		return 1;
-	} 
-	else if(b_ == 1){
 		return b_;
 	}
-	else {
-		return a_;
-	}
+	b_ = 	std::any_cast<int>(addtwo(a_ - 1,b_ - 1));
+	return 0;
 }
 int main(){
 
 	int a = 10;
 	int b = 15;
-	int c = std::any_cast<int>(addtwo(a,b));
-	std::cout << c << std::endl;
+	std::any_cast<int>(addtwo(a,b));
+	std::cout << a << std::endl;
 	return 0; 
 }

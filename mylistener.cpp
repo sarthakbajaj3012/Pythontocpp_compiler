@@ -29,6 +29,7 @@ public:
     int index = converted_code.size();
     bool assignment = false;
     bool function = false;
+    bool functioncall = false;
     std::string assignment_type = "int";
     std::string assignment_string = "";
     std::string function_string = "";
@@ -283,19 +284,10 @@ public:
 
     virtual void enterParameter_list(PythonParser::Parameter_listContext * ctx) override { 
        
-        if(function){
+        if(function & !functioncall){
             function_string += "( ";
             if(ctx->parameter().size() > 0){
                 headers+= "#include <any>\n";
-                // for(int i = 0; i< ctx->parameter().size() - 1 ;i++){
-                //     function_string += "std::any " + ctx->parameter().at(i)->getText() + ", ";
-                //     function_parameters[ctx->parameter().at(i)->getText()] = "std::any";
-                //     function_variables[ctx->parameter().at(i)->getText()] = "std::any";
-                // }
-                // function_string += "std::any " + ctx->parameter().at(ctx->parameter().size() -1 )->getText() + "){\n" ;
-                // function_parameters[ctx->parameter().at(ctx->parameter().size() -1 )->getText()] = "std::any";
-                // function_variables[ctx->parameter().at(ctx->parameter().size() -1 )->getText()] = "std::any";
-                
             }
             else {
                 function_string += "){\n" ;
@@ -303,13 +295,17 @@ public:
         }
         else if(assignment){
             assignment_string.append("(");
-        }    
+        }
+        else if(functioncall){
+            if(function) function_string.append("(");
+            else converted_code.append("(");
+        }
     }
     virtual void exitParameter_list(PythonParser::Parameter_listContext * ctx) override {
         if(assignment) {
             assignment_string[assignment_string.size() -1] = ')';
         }
-        if(function){
+        if(function & !functioncall){
             function_string[function_string.size() - 1] = ')';
             function_string.append("{\n");
             for(int i = 0; i< ctx->parameter().size() - 1 ;i++){
@@ -339,15 +335,20 @@ public:
                 function_string +=  functionaddtab () + "}\n";
                 
         }
+        else if (functioncall & !assignment) {
+            if(function) function_string[function_string.size() -1 ] = ')';
+            else converted_code[converted_code.size() -1 ] = ')';
+        }
     }
 
     virtual void enterParameter(PythonParser::ParameterContext * ctx) override {
-        if(function) function_string += "std::any ";
-        
+        if(function & !functioncall) function_string += "std::any ";
     }
     virtual void exitParameter(PythonParser::ParameterContext * ctx) override { 
         if(assignment) assignment_string.append(",");
-        if(function) function_string.append(",");
+        if(functioncall & !function) converted_code.append(",");
+        else if(function ) function_string.append(",");
+        
         function_parameters[ctx->getText()] = "std::any";
         function_variables[ctx->getText()] = "std::any";
     }
@@ -386,14 +387,23 @@ public:
     virtual void exitPrint(PythonParser::PrintContext * /*ctx*/) override { }
 
     virtual void enterFunctioncall(PythonParser::FunctioncallContext * ctx) override {
-        // std::cout <<"hello" <<std::endl;
-        if(assignment) assignment_string.append("std::any_cast<int>(" + ctx->NAME()->getText());
-        else  converted_code.append(addtab() + "std::any_cast<int>(" + ctx->NAME()->getText());
+        std::cout <<"hello" <<std::endl;
+        functioncall = true;
+        if(function){
+            if(assignment) assignment_string.append("std::any_cast<int>(" + ctx->NAME()->getText());
+            else  function_string.append(functionaddtab() + "std::any_cast<int>(" + ctx->NAME()->getText());
+        }
+        else {
+            if(assignment) assignment_string.append("std::any_cast<int>(" + ctx->NAME()->getText());
+            else  converted_code.append(addtab() + "std::any_cast<int>(" + ctx->NAME()->getText());
+        }
 
     }
     virtual void exitFunctioncall(PythonParser::FunctioncallContext * /*ctx*/) override {
-         if(assignment) assignment_string.append(")");
+        if(assignment) assignment_string.append(")");
+        else if( function) function_string.append(")");
         else  converted_code.append(")");
+        functioncall = false;
      }
     
 };
