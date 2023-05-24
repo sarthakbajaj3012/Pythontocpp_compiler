@@ -1,6 +1,3 @@
-def temp():
-    a = 10.5
-    b = 10
-    return a + b
-c = temp()
-print(c)
+a = "yoyo\n"
+b = a + "hello\n"
+print(b)

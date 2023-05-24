@@ -39,7 +39,7 @@ addop : '+' | '-' ;
  
 mulop : '*' | '/' | '%' ;
 
-print: 'print(' NAME ')';
+print: 'print(' (STRING_LITERAL | INTEGER | NAME | FLOAT)  ')';
 
 expression : functioncall | (term ( addop term)*);
 
@@ -48,6 +48,7 @@ term : factor ( mulop factor)*;
 factor : INTEGER
        | FLOAT
        | NAME
+       | STRING_LITERAL
        | '(' expression ')';
 
 parameter_list : (parameter (',' parameter)*)?;
@@ -58,4 +59,6 @@ parameter : expression;
 NAME : [a-zA-Z_] [a-zA-Z0-9_]*;
 INTEGER : '-'?[0-9]+;
 FLOAT : [0-9]* '.' [0-9]+;
+STRING_LITERAL : '"' ( ESC | ~["\r\n] )* '"';
+ESC : '\\' ( '\\' | 'a' | 'b' | 'f' | 'n' | 'r' | 't' | 'v' | '"' | '\'' );
 WHITESPACE : [ \t\r\n]+ -> skip;

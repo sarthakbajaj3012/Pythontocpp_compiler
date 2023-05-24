@@ -276,37 +276,20 @@ public:
 
             if(function) {
                 if(assignment){
-                    // if(function_parameters.find(ctx->NAME()->getText()) != function_parameters.end()){
-                    //     if(division) assignment_string.append("static_cast<float>(" + ctx->NAME()->getText() +"_)");
-                    //     else assignment_string.append( ctx->NAME()->getText() +"_");
-                        
-                    //     // assignment_type = "float";
-                    // }
-                    // else {
                         if(division) assignment_string.append( "static_cast<float>(" + ctx->NAME()->getText() +")");
                         else assignment_string.append(  ctx->NAME()->getText());
-                    // } 
-                    // if(function_parameters[ctx->NAME()->getText()] != "int"){
-                    //     assignment_type = "float";
-                    // }
                 }
                 else {
-                    // if(function_parameters.find(ctx->NAME()->getText()) != function_parameters.end()){
-                    //     if(division) function_string.append( "static_cast<float>(" + ctx->NAME()->getText() +"_)");
-                    //     else function_string.append( ctx->NAME()->getText() +"_");
-                    // } 
-                    // else {
                         if(division) function_string.append(  "static_cast<float>(" + ctx->NAME()->getText() + ")"); 
                         else function_string.append( ctx->NAME()->getText());
-                        if(return_state & function_variables[ctx->NAME()->getText()] != "int") function_type = "float ";
-                    // }
+                        if(return_state & function_variables[ctx->NAME()->getText()] != "int") function_type = function_variables[ctx->NAME()->getText()];
                 }
             }
             else if(assignment){
                     if(division) assignment_string.append( "static_cast<float>(" + ctx->NAME()->getText() + ")"); 
                     else assignment_string.append( ctx->NAME()->getText());
                     if(var_names[ctx->NAME()->getText()] != "int"){
-                        assignment_type = "float";
+                        assignment_type = var_names[ctx->NAME()->getText()];
                     }
             }
             else converted_code.append( ctx->NAME()->getText());   
@@ -322,6 +305,13 @@ public:
             if(function & !assignment) function_string.append("(");
             if(assignment) assignment_string.append("(");
             else converted_code.append("(");
+        }
+        else if(ctx->STRING_LITERAL()!= nullptr){
+            if(function & !assignment) function_string.append(ctx->STRING_LITERAL()->getText());
+            else if(assignment)  assignment_string.append( ctx->STRING_LITERAL()->getText());
+            else converted_code.append( ctx->STRING_LITERAL()->getText());
+            if(assignment) assignment_type = "std::string";
+
         }
   
     }
@@ -423,13 +413,20 @@ public:
     virtual void exitConop(PythonParser::ConopContext * /*ctx*/) override { }
 
     virtual void enterPrint(PythonParser::PrintContext * ctx) override { 
-        if(function){
-        //   if(function_parameters.find(ctx->NAME()->getText()) != function_parameters.end())  function_string.append( functionaddtab() + "std::cout << " + ctx->NAME()->getText() + "_ << std::endl");
-          function_string.append( functionaddtab() + "std::cout << " + ctx->NAME()->getText() + " << std::endl");
+        
+        if( ctx->NAME() != nullptr){
+            if(function)function_string.append( functionaddtab() + "std::cout << " + ctx->NAME()->getText() + " << std::endl");
+            else converted_code.append(
+                addtab() + "std::cout << " + ctx->NAME()->getText() + " << std::endl"
+            );
         }
-        else converted_code.append(
-            addtab() + "std::cout << " + ctx->NAME()->getText() + " << std::endl"
-        );
+        else if(ctx->STRING_LITERAL() != nullptr){
+            std::cout << ctx->STRING_LITERAL()->getText() << std::endl;
+            if(function)function_string.append( functionaddtab() + "std::cout << " + ctx->STRING_LITERAL()->getText() + " << std::endl");
+            else converted_code.append(
+                addtab() + "std::cout << " + ctx->STRING_LITERAL()->getText() + " << std::endl"
+            );
+        }
         
     }
     virtual void exitPrint(PythonParser::PrintContext * /*ctx*/) override { }
@@ -447,9 +444,6 @@ public:
 
     }
     virtual void exitFunctioncall(PythonParser::FunctioncallContext * ctx) override {
-        // if(assignment) assignment_string.append(")");
-        // else if( function) function_string.append(")");
-        // else  converted_code.append(")");
         functioncall = false;
         assignment_type = var_names[ctx->NAME()->getText()];
      }

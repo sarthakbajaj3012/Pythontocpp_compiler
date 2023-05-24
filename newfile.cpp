@@ -1,11 +1,7 @@
 #include <iostream>
-float temp( ){
-	float a = 10.5;
-	int b = 10;
-	return a + b;
-}
 int main(){
-	float  c = temp();
-	std::cout << c << std::endl;
+	std::string a = "yoyo\n";
+	std::string b = a + "hello\n";
+	std::cout << b << std::endl;
 	return 0; 
 }
