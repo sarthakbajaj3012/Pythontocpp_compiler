@@ -30,9 +30,12 @@ public:
     bool assignment = false;
     bool function = false;
     bool functioncall = false;
+    bool division = false;
+    bool return_state  = false;
     std::string assignment_type = "int";
     std::string assignment_string = "";
     std::string function_string = "";
+    std::string function_type = "int";
 
     std::string addtab() {
         std::string temp =  "";
@@ -97,8 +100,8 @@ public:
                 function_variables[var] = assignment_type;
             } 
             else {
-                if(function_parameters.find(var) != function_parameters.end()) function_string.append(functionaddtab() + var +"_ = ");
-                else function_string.append(functionaddtab() + var +" = ");
+                // if(function_parameters.find(var) != function_parameters.end()) function_string.append(functionaddtab() + var +"_ = ");
+                function_string.append(functionaddtab() + var +" = ");
             }
        }
        else{
@@ -122,9 +125,11 @@ public:
             function_variables[ctx->NAME()->getText()] = assignment_type;
         }
         else {
-            // std::cout << assignment_type <<std::endl;
-            if(assignment) converted_code.append(addtab() + assignment_type + " " + assignment_string);
-            var_names[ctx->NAME()->getText()] = assignment_type;
+            
+            if(assignment) {
+                converted_code.append(addtab() + assignment_type + " " + assignment_string);
+                var_names[ctx->NAME()->getText()] = assignment_type;
+            }
         }
         assignment_string ="";
         assignment = false;
@@ -191,23 +196,29 @@ public:
 
     virtual void enterFunction_statement(PythonParser::Function_statementContext * ctx) override { 
         function = true; 
+        function_type = "int ";
         function_parameters.clear();
         function_string = functionaddtab() + ctx->NAME()->getText();
         function_tabspaces++;
         // std::cout << ctx->NAME()->getText() <<std::endl;
     }
     virtual void exitFunction_statement(PythonParser::Function_statementContext * ctx) override { 
-        functions.append( "std::any " +function_string);
+        functions.append( function_type +function_string);
         function_tabspaces--;
         functions.append(functionaddtab() + "}\n");
         function = false;
+        var_names[ctx->NAME()->getText()] = function_type;
+        function_type = "int";
     }
 
     virtual void enterReturn_statement(PythonParser::Return_statementContext * ctx) override {
+        return_state = true;
         if(function) function_string.append(functionaddtab() + "return " );
         else converted_code.append(addtab() + "return " );
     }
-    virtual void exitReturn_statement(PythonParser::Return_statementContext * /*ctx*/) override { }
+    virtual void exitReturn_statement(PythonParser::Return_statementContext * /*ctx*/) override {
+        return_state = false;
+     }
 
     virtual void enterExpression_statement(PythonParser::Expression_statementContext * /*ctx*/) override { }
     virtual void exitExpression_statement(PythonParser::Expression_statementContext * /*ctx*/) override { }
@@ -216,8 +227,19 @@ public:
     }
     virtual void exitExpression(PythonParser::ExpressionContext * /*ctx*/) override {}
 
-    virtual void enterTerm(PythonParser::TermContext * /*ctx*/) override {}
-    virtual void exitTerm(PythonParser::TermContext * /*ctx*/) override {}
+    virtual void enterTerm(PythonParser::TermContext * ctx) override {
+        for(int i = 0; i< ctx->mulop().size();i++){
+            if(ctx->mulop().at(i)->getText() == "/") {
+                division = true;
+                if(assignment) assignment_type = "float";  
+                break;
+            }
+        }
+
+    }
+    virtual void exitTerm(PythonParser::TermContext * /*ctx*/) override {
+        division = false;
+    }
 
     virtual void enterAddop(PythonParser::AddopContext * ctx) override { 
         if(function  & !assignment) function_string.append(" "+ ctx->getText() + " ");
@@ -236,30 +258,59 @@ public:
     virtual void enterFactor(PythonParser::FactorContext * ctx) override {
 
         if(ctx->INTEGER() != nullptr){
-            if(function & !assignment) function_string.append(ctx->INTEGER()->getText());
-            else if(assignment) assignment_string.append(ctx->INTEGER()->getText());
-            else  converted_code.append(ctx->INTEGER()->getText());
+            if(function & !assignment){
+                if(division) function_string.append("static_cast<float>(" +ctx->INTEGER()->getText() +")"); 
+                else function_string.append(ctx->INTEGER()->getText());
+            }
+            else if(assignment){
+                if(division) assignment_string.append("static_cast<float>(" +ctx->INTEGER()->getText()+")");
+                else assignment_string.append(ctx->INTEGER()->getText());
+            }
+            else {
+                if(division) converted_code.append("static_cast<float>(" +ctx->INTEGER()->getText()+")");
+                else converted_code.append(ctx->INTEGER()->getText());
+            } 
 
         }
         else if(ctx->NAME() != nullptr){  
 
             if(function) {
                 if(assignment){
-                    if(function_parameters.find(ctx->NAME()->getText()) != function_parameters.end()) assignment_string.append( ctx->NAME()->getText() +"_");
-                    else assignment_string.append( ctx->NAME()->getText());
+                    // if(function_parameters.find(ctx->NAME()->getText()) != function_parameters.end()){
+                    //     if(division) assignment_string.append("static_cast<float>(" + ctx->NAME()->getText() +"_)");
+                    //     else assignment_string.append( ctx->NAME()->getText() +"_");
+                        
+                    //     // assignment_type = "float";
+                    // }
+                    // else {
+                        if(division) assignment_string.append( "static_cast<float>(" + ctx->NAME()->getText() +")");
+                        else assignment_string.append(  ctx->NAME()->getText());
+                    // } 
+                    // if(function_parameters[ctx->NAME()->getText()] != "int"){
+                    //     assignment_type = "float";
+                    // }
                 }
                 else {
-                    if(function_parameters.find(ctx->NAME()->getText()) != function_parameters.end()) function_string.append( ctx->NAME()->getText() +"_");
-                    else function_string.append( ctx->NAME()->getText());
+                    // if(function_parameters.find(ctx->NAME()->getText()) != function_parameters.end()){
+                    //     if(division) function_string.append( "static_cast<float>(" + ctx->NAME()->getText() +"_)");
+                    //     else function_string.append( ctx->NAME()->getText() +"_");
+                    // } 
+                    // else {
+                        if(division) function_string.append(  "static_cast<float>(" + ctx->NAME()->getText() + ")"); 
+                        else function_string.append( ctx->NAME()->getText());
+                        if(return_state & function_variables[ctx->NAME()->getText()] != "int") function_type = "float ";
+                    // }
                 }
             }
-            else {
-                if(assignment) assignment_string.append( ctx->NAME()->getText());
-                else converted_code.append( ctx->NAME()->getText());
-                if(var_names[ctx->NAME()->getText()] != "int"){
-                    assignment_type = "float";
-                }
+            else if(assignment){
+                    if(division) assignment_string.append( "static_cast<float>(" + ctx->NAME()->getText() + ")"); 
+                    else assignment_string.append( ctx->NAME()->getText());
+                    if(var_names[ctx->NAME()->getText()] != "int"){
+                        assignment_type = "float";
+                    }
             }
+            else converted_code.append( ctx->NAME()->getText());   
+            
         }
         else if(ctx->FLOAT() != nullptr){
             if(function & !assignment) function_string.append(ctx->FLOAT()->getText());
@@ -283,15 +334,10 @@ public:
     }
 
     virtual void enterParameter_list(PythonParser::Parameter_listContext * ctx) override { 
-       
+        
         if(function & !functioncall){
             function_string += "( ";
-            if(ctx->parameter().size() > 0){
-                headers+= "#include <any>\n";
-            }
-            else {
-                function_string += "){\n" ;
-            }
+            if(ctx->parameter().size() == 0)function_string += "){\n" ;
         }
         else if(assignment){
             assignment_string.append("(");
@@ -302,37 +348,39 @@ public:
         }
     }
     virtual void exitParameter_list(PythonParser::Parameter_listContext * ctx) override {
+        // std::cout <<"it works until here"<<std::endl;
         if(assignment) {
-            assignment_string[assignment_string.size() -1] = ')';
+            if(ctx->parameter().size() > 0 ) assignment_string[assignment_string.size() -1] = ')';
+            else assignment_string.append(")");
         }
         if(function & !functioncall){
-            function_string[function_string.size() - 1] = ')';
-            function_string.append("{\n");
-            for(int i = 0; i< ctx->parameter().size() - 1 ;i++){
-                    function_string += functionaddtab() + "int " + ctx->parameter().at(i)->getText() + "_;\n" + functionaddtab() + "if(" + ctx->parameter().at(i)->getText() + ".type() == typeid(int)){\n";
-                    function_tabspaces++;
-                    function_string += functionaddtab() + ctx->parameter().at(i)->getText() +"_ = std::any_cast<int>(" + ctx->parameter().at(i)->getText() +");\n";
-                    function_tabspaces--;
-                    function_string +=  functionaddtab () + "}\n";
-                    function_string += functionaddtab() + "if(" + ctx->parameter().at(i)->getText() + ".type() == typeid(float)){\n";
-                    function_tabspaces++;
-                    function_string += functionaddtab() + ctx->parameter().at(i)->getText() + "_ = static_cast<float>(" + ctx->parameter().at(i)->getText() +"_);\n";
-                    function_string += functionaddtab() + ctx->parameter().at(i)->getText() +"_ = std::any_cast<int>(" + ctx->parameter().at(i)->getText() +");\n";
-                    function_tabspaces--;
-                    function_string +=  functionaddtab () + "}\n";
+            if(ctx->parameter().size() > 0 ){
+                function_string[function_string.size() - 1] = ')';
+                function_string.append("{\n");
+            //     for(int i = 0; i< ctx->parameter().size() - 1 ;i++){
+            //             function_string += functionaddtab() + "float " + ctx->parameter().at(i)->getText() + "_;\n" + functionaddtab() + "if(" + ctx->parameter().at(i)->getText() + ".type() == typeid(int)){\n";
+            //             function_tabspaces++;
+            //             function_string += functionaddtab() + ctx->parameter().at(i)->getText() +"_ = std::any_cast<int>(" + ctx->parameter().at(i)->getText() +");\n";
+            //             function_tabspaces--;
+            //             function_string +=  functionaddtab () + "}\n";
+            //             function_string += functionaddtab() + "if(" + ctx->parameter().at(i)->getText() + ".type() == typeid(float)){\n";
+            //             function_tabspaces++;
+            //             function_string += functionaddtab() + ctx->parameter().at(i)->getText() +"_ = std::any_cast<float>(" + ctx->parameter().at(i)->getText() +");\n";
+            //             function_tabspaces--;
+            //             function_string +=  functionaddtab () + "}\n";
 
-                }
-                function_string += functionaddtab() + "int " + ctx->parameter().at(ctx->parameter().size() -1)->getText() + "_;\n" + functionaddtab() + "if(" + ctx->parameter().at(ctx->parameter().size() -1)->getText() + ".type() == typeid(int)){\n";
-                function_tabspaces++;
-                function_string += functionaddtab() + ctx->parameter().at(ctx->parameter().size() -1)->getText() +"_ = std::any_cast<int>(" + ctx->parameter().at(ctx->parameter().size() -1)->getText() +");\n";
-                function_tabspaces--;
-                function_string +=  functionaddtab () + "}\n";
-                function_string += functionaddtab() + "if(" + ctx->parameter().at(ctx->parameter().size() -1)->getText() + ".type() == typeid(float)){\n";
-                function_tabspaces++;
-                function_string += functionaddtab() + ctx->parameter().at(ctx->parameter().size() -1)->getText() + "_ = static_cast<float>(" + ctx->parameter().at(ctx->parameter().size() -1)->getText() +"_);\n";
-                function_string += functionaddtab() + ctx->parameter().at(ctx->parameter().size() -1)->getText() +"_ = std::any_cast<int>(" + ctx->parameter().at(ctx->parameter().size() -1)->getText() +");\n";
-                function_tabspaces--;
-                function_string +=  functionaddtab () + "}\n";
+            //         }
+            //         function_string += functionaddtab() + "float " + ctx->parameter().at(ctx->parameter().size() -1)->getText() + "_;\n" + functionaddtab() + "if(" + ctx->parameter().at(ctx->parameter().size() -1)->getText() + ".type() == typeid(int)){\n";
+            //         function_tabspaces++;
+            //         function_string += functionaddtab() + ctx->parameter().at(ctx->parameter().size() -1)->getText() +"_ = std::any_cast<int>(" + ctx->parameter().at(ctx->parameter().size() -1)->getText() +");\n";
+            //         function_tabspaces--;
+            //         function_string +=  functionaddtab () + "}\n";
+            //         function_string += functionaddtab() + "if(" + ctx->parameter().at(ctx->parameter().size() -1)->getText() + ".type() == typeid(float)){\n";
+            //         function_tabspaces++;
+            //         function_string += functionaddtab() + ctx->parameter().at(ctx->parameter().size() -1)->getText() +"_ = std::any_cast<float>(" + ctx->parameter().at(ctx->parameter().size() -1)->getText() +");\n";
+            //         function_tabspaces--;
+            //         function_string +=  functionaddtab () + "}\n";
+            }
                 
         }
         else if (functioncall & !assignment) {
@@ -342,15 +390,15 @@ public:
     }
 
     virtual void enterParameter(PythonParser::ParameterContext * ctx) override {
-        if(function & !functioncall) function_string += "std::any ";
+        if(function & !functioncall) function_string += "float ";
     }
     virtual void exitParameter(PythonParser::ParameterContext * ctx) override { 
         if(assignment) assignment_string.append(",");
-        if(functioncall & !function) converted_code.append(",");
+        else if(functioncall & !function) converted_code.append(",");
         else if(function ) function_string.append(",");
         
-        function_parameters[ctx->getText()] = "std::any";
-        function_variables[ctx->getText()] = "std::any";
+        function_parameters[ctx->getText()] = "float";
+        function_variables[ctx->getText()] = "float";
     }
 
     virtual void enterEveryRule(antlr4::ParserRuleContext * /*ctx*/) override { }
@@ -376,8 +424,8 @@ public:
 
     virtual void enterPrint(PythonParser::PrintContext * ctx) override { 
         if(function){
-          if(function_parameters.find(ctx->NAME()->getText()) != function_parameters.end())  function_string.append( functionaddtab() + "std::cout << " + ctx->NAME()->getText() + "_ << std::endl");
-          else function_string.append( functionaddtab() + "std::cout << " + ctx->NAME()->getText() + " << std::endl");
+        //   if(function_parameters.find(ctx->NAME()->getText()) != function_parameters.end())  function_string.append( functionaddtab() + "std::cout << " + ctx->NAME()->getText() + "_ << std::endl");
+          function_string.append( functionaddtab() + "std::cout << " + ctx->NAME()->getText() + " << std::endl");
         }
         else converted_code.append(
             addtab() + "std::cout << " + ctx->NAME()->getText() + " << std::endl"
@@ -387,23 +435,23 @@ public:
     virtual void exitPrint(PythonParser::PrintContext * /*ctx*/) override { }
 
     virtual void enterFunctioncall(PythonParser::FunctioncallContext * ctx) override {
-        std::cout <<"hello" <<std::endl;
         functioncall = true;
         if(function){
-            if(assignment) assignment_string.append("std::any_cast<int>(" + ctx->NAME()->getText());
-            else  function_string.append(functionaddtab() + "std::any_cast<int>(" + ctx->NAME()->getText());
+            if(assignment) assignment_string.append(ctx->NAME()->getText());
+            else  function_string.append(functionaddtab() + ctx->NAME()->getText());
         }
         else {
-            if(assignment) assignment_string.append("std::any_cast<int>(" + ctx->NAME()->getText());
-            else  converted_code.append(addtab() + "std::any_cast<int>(" + ctx->NAME()->getText());
+            if(assignment) assignment_string.append( ctx->NAME()->getText());
+            else  converted_code.append(addtab() + ctx->NAME()->getText());
         }
 
     }
-    virtual void exitFunctioncall(PythonParser::FunctioncallContext * /*ctx*/) override {
-        if(assignment) assignment_string.append(")");
-        else if( function) function_string.append(")");
-        else  converted_code.append(")");
+    virtual void exitFunctioncall(PythonParser::FunctioncallContext * ctx) override {
+        // if(assignment) assignment_string.append(")");
+        // else if( function) function_string.append(")");
+        // else  converted_code.append(")");
         functioncall = false;
+        assignment_type = var_names[ctx->NAME()->getText()];
      }
     
 };

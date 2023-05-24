@@ -72,8 +72,8 @@ void pythonParserInitialize() {
   	1,7,1,7,1,7,1,7,1,8,1,8,1,8,1,8,1,8,1,9,1,9,1,10,1,10,3,10,119,8,10,1,
   	10,1,10,3,10,123,8,10,1,10,1,10,1,10,1,10,1,10,1,11,1,11,1,11,1,11,1,
   	11,1,11,1,11,1,11,1,11,1,11,1,12,1,12,1,12,1,13,1,13,1,14,1,14,1,15,1,
-  	15,1,16,1,16,1,16,1,16,1,17,1,17,1,17,1,17,5,17,157,8,17,10,17,12,17,
-  	160,9,17,1,17,3,17,163,8,17,1,18,1,18,1,18,1,18,5,18,169,8,18,10,18,12,
+  	15,1,16,1,16,1,16,1,16,1,17,1,17,1,17,1,17,1,17,5,17,158,8,17,10,17,12,
+  	17,161,9,17,3,17,163,8,17,1,18,1,18,1,18,1,18,5,18,169,8,18,10,18,12,
   	18,172,9,18,1,19,1,19,1,19,1,19,1,19,1,19,1,19,3,19,181,8,19,1,20,1,20,
   	1,20,5,20,186,8,20,10,20,12,20,189,9,20,3,20,191,8,20,1,21,1,21,1,21,
   	0,1,2,22,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,
@@ -108,10 +108,10 @@ void pythonParserInitialize() {
   	1,0,137,138,5,7,0,0,138,23,1,0,0,0,139,140,5,19,0,0,140,141,3,34,17,0,
   	141,25,1,0,0,0,142,143,3,34,17,0,143,27,1,0,0,0,144,145,7,1,0,0,145,29,
   	1,0,0,0,146,147,7,2,0,0,147,31,1,0,0,0,148,149,5,25,0,0,149,150,5,27,
-  	0,0,150,151,5,4,0,0,151,33,1,0,0,0,152,158,3,36,18,0,153,154,3,28,14,
-  	0,154,155,3,36,18,0,155,157,1,0,0,0,156,153,1,0,0,0,157,160,1,0,0,0,158,
-  	156,1,0,0,0,158,159,1,0,0,0,159,163,1,0,0,0,160,158,1,0,0,0,161,163,3,
-  	16,8,0,162,152,1,0,0,0,162,161,1,0,0,0,163,35,1,0,0,0,164,170,3,38,19,
+  	0,0,150,151,5,4,0,0,151,33,1,0,0,0,152,163,3,16,8,0,153,159,3,36,18,0,
+  	154,155,3,28,14,0,155,156,3,36,18,0,156,158,1,0,0,0,157,154,1,0,0,0,158,
+  	161,1,0,0,0,159,157,1,0,0,0,159,160,1,0,0,0,160,163,1,0,0,0,161,159,1,
+  	0,0,0,162,152,1,0,0,0,162,153,1,0,0,0,163,35,1,0,0,0,164,170,3,38,19,
   	0,165,166,3,30,15,0,166,167,3,38,19,0,167,169,1,0,0,0,168,165,1,0,0,0,
   	169,172,1,0,0,0,170,168,1,0,0,0,170,171,1,0,0,0,171,37,1,0,0,0,172,170,
   	1,0,0,0,173,181,5,28,0,0,174,181,5,29,0,0,175,181,5,27,0,0,176,177,5,
@@ -120,7 +120,7 @@ void pythonParserInitialize() {
   	187,3,42,21,0,183,184,5,26,0,0,184,186,3,42,21,0,185,183,1,0,0,0,186,
   	189,1,0,0,0,187,185,1,0,0,0,187,188,1,0,0,0,188,191,1,0,0,0,189,187,1,
   	0,0,0,190,182,1,0,0,0,190,191,1,0,0,0,191,41,1,0,0,0,192,193,3,34,17,
-  	0,193,43,1,0,0,0,15,53,63,71,75,84,88,94,118,122,158,162,170,180,187,
+  	0,193,43,1,0,0,0,15,53,63,71,75,84,88,94,118,122,159,162,170,180,187,
   	190
   };
   staticData->serializedATN = antlr4::atn::SerializedATNView(serializedATNSegment, sizeof(serializedATNSegment) / sizeof(serializedATNSegment[0]));
@@ -1405,6 +1405,10 @@ PythonParser::ExpressionContext::ExpressionContext(ParserRuleContext *parent, si
   : ParserRuleContext(parent, invokingState) {
 }
 
+PythonParser::FunctioncallContext* PythonParser::ExpressionContext::functioncall() {
+  return getRuleContext<PythonParser::FunctioncallContext>(0);
+}
+
 std::vector<PythonParser::TermContext *> PythonParser::ExpressionContext::term() {
   return getRuleContexts<PythonParser::TermContext>();
 }
@@ -1419,10 +1423,6 @@ std::vector<PythonParser::AddopContext *> PythonParser::ExpressionContext::addop
 
 PythonParser::AddopContext* PythonParser::ExpressionContext::addop(size_t i) {
   return getRuleContext<PythonParser::AddopContext>(i);
-}
-
-PythonParser::FunctioncallContext* PythonParser::ExpressionContext::functioncall() {
-  return getRuleContext<PythonParser::FunctioncallContext>(0);
 }
 
 
@@ -1461,28 +1461,28 @@ PythonParser::ExpressionContext* PythonParser::expression() {
     case 1: {
       enterOuterAlt(_localctx, 1);
       setState(152);
-      term();
-      setState(158);
-      _errHandler->sync(this);
-      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 9, _ctx);
-      while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
-        if (alt == 1) {
-          setState(153);
-          addop();
-          setState(154);
-          term(); 
-        }
-        setState(160);
-        _errHandler->sync(this);
-        alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 9, _ctx);
-      }
+      functioncall();
       break;
     }
 
     case 2: {
       enterOuterAlt(_localctx, 2);
-      setState(161);
-      functioncall();
+      setState(153);
+      term();
+      setState(159);
+      _errHandler->sync(this);
+      alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 9, _ctx);
+      while (alt != 2 && alt != atn::ATN::INVALID_ALT_NUMBER) {
+        if (alt == 1) {
+          setState(154);
+          addop();
+          setState(155);
+          term(); 
+        }
+        setState(161);
+        _errHandler->sync(this);
+        alt = getInterpreter<atn::ParserATNSimulator>()->adaptivePredict(_input, 9, _ctx);
+      }
       break;
     }
 

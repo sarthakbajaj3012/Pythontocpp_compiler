@@ -41,7 +41,7 @@ mulop : '*' | '/' | '%' ;
 
 print: 'print(' NAME ')';
 
-expression : (term ( addop term)*)| functioncall;
+expression : functioncall | (term ( addop term)*);
 
 term : factor ( mulop factor)*;
 
