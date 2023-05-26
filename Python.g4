@@ -11,6 +11,7 @@ statement : assignment_statement
           | function_statement
           | return_statement
           | print
+          | for_statement
           | expression_statement;
 
 assignment_statement : NAME '=' expression ;
@@ -25,7 +26,9 @@ elseop : 'else' ':' '<<INDENT>>'statement_list '<<DEDENT>>' ;
 
 functioncall: NAME '(' parameter_list ')';
 
-conop: '>=' | '>' | '<' | '<=' | '==' | '!=' | 'in';
+conop: '>=' | '>' | '<' | '<=' | '==' | '!=' ;
+
+for_statement: 'for' NAME 'in' (STRING_LITERAL | NAME ) ':' '<<INDENT>>' statement_list '<<DEDENT>>';
 
 while_statement : 'while' '('? comparison')'? ':' '<<INDENT>>'statement_list '<<DEDENT>>';
 

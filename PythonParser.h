@@ -16,17 +16,17 @@ public:
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
     T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, T__24 = 25, T__25 = 26, 
-    NAME = 27, INTEGER = 28, FLOAT = 29, STRING_LITERAL = 30, ESC = 31, 
-    WHITESPACE = 32
+    T__26 = 27, NAME = 28, INTEGER = 29, FLOAT = 30, STRING_LITERAL = 31, 
+    ESC = 32, WHITESPACE = 33
   };
 
   enum {
     RuleProgram = 0, RuleStatement_list = 1, RuleStatement = 2, RuleAssignment_statement = 3, 
     RuleIf_statement = 4, RuleComparison = 5, RuleElif = 6, RuleElseop = 7, 
-    RuleFunctioncall = 8, RuleConop = 9, RuleWhile_statement = 10, RuleFunction_statement = 11, 
-    RuleReturn_statement = 12, RuleExpression_statement = 13, RuleAddop = 14, 
-    RuleMulop = 15, RulePrint = 16, RuleExpression = 17, RuleTerm = 18, 
-    RuleFactor = 19, RuleParameter_list = 20, RuleParameter = 21
+    RuleFunctioncall = 8, RuleConop = 9, RuleFor_statement = 10, RuleWhile_statement = 11, 
+    RuleFunction_statement = 12, RuleReturn_statement = 13, RuleExpression_statement = 14, 
+    RuleAddop = 15, RuleMulop = 16, RulePrint = 17, RuleExpression = 18, 
+    RuleTerm = 19, RuleFactor = 20, RuleParameter_list = 21, RuleParameter = 22
   };
 
   explicit PythonParser(antlr4::TokenStream *input);
@@ -56,6 +56,7 @@ public:
   class ElseopContext;
   class FunctioncallContext;
   class ConopContext;
+  class For_statementContext;
   class While_statementContext;
   class Function_statementContext;
   class Return_statementContext;
@@ -106,6 +107,7 @@ public:
     Function_statementContext *function_statement();
     Return_statementContext *return_statement();
     PrintContext *print();
+    For_statementContext *for_statement();
     Expression_statementContext *expression_statement();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -213,6 +215,22 @@ public:
   };
 
   ConopContext* conop();
+
+  class  For_statementContext : public antlr4::ParserRuleContext {
+  public:
+    For_statementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<antlr4::tree::TerminalNode *> NAME();
+    antlr4::tree::TerminalNode* NAME(size_t i);
+    Statement_listContext *statement_list();
+    antlr4::tree::TerminalNode *STRING_LITERAL();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  For_statementContext* for_statement();
 
   class  While_statementContext : public antlr4::ParserRuleContext {
   public:

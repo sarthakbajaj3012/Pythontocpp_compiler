@@ -44,6 +44,9 @@ public:
   virtual void enterConop(PythonParser::ConopContext *ctx) = 0;
   virtual void exitConop(PythonParser::ConopContext *ctx) = 0;
 
+  virtual void enterFor_statement(PythonParser::For_statementContext *ctx) = 0;
+  virtual void exitFor_statement(PythonParser::For_statementContext *ctx) = 0;
+
   virtual void enterWhile_statement(PythonParser::While_statementContext *ctx) = 0;
   virtual void exitWhile_statement(PythonParser::While_statementContext *ctx) = 0;
 

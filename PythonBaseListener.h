@@ -46,6 +46,9 @@ public:
   virtual void enterConop(PythonParser::ConopContext * /*ctx*/) override { }
   virtual void exitConop(PythonParser::ConopContext * /*ctx*/) override { }
 
+  virtual void enterFor_statement(PythonParser::For_statementContext * /*ctx*/) override { }
+  virtual void exitFor_statement(PythonParser::For_statementContext * /*ctx*/) override { }
+
   virtual void enterWhile_statement(PythonParser::While_statementContext * /*ctx*/) override { }
   virtual void exitWhile_statement(PythonParser::While_statementContext * /*ctx*/) override { }
 

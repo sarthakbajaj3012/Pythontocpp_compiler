@@ -1,3 +1,3 @@
-a = "yoyo\n"
-b = a + "hello\n"
-print(b)
+x = "hello my name is"
+for ele in x:
+    print(ele)
