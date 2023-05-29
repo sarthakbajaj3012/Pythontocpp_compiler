@@ -24,17 +24,20 @@ public:
     std::map<std::string, std::string> var_names;
     std::map<std::string,std::string> function_parameters;
     std::map<std::string,std::string> function_variables;
+    std::vector<std::string> loop_var;
     std::string iterator_name = "";
     std::string iterator_new = "";
     int tabspaces = 1;
     int function_tabspaces = 0;
     int index = converted_code.size();
     bool for_loop = false;
+    bool while_loop = false;
     bool assignment = false;
     bool function = false;
     bool functioncall = false;
     bool division = false;
     bool return_state  = false;
+    bool expression_state = true;
     std::string assignment_type = "int";
     std::string assignment_string = "";
     std::string function_string = "";
@@ -83,7 +86,10 @@ public:
 
     virtual void enterStatement(PythonParser::StatementContext * /*ctx*/) override {}
     virtual void exitStatement(PythonParser::StatementContext * ctx) override { 
-       if( ctx->if_statement() != nullptr || ctx->while_statement() != nullptr ) converted_code.append("\n");
+       if( ctx->if_statement() != nullptr || ctx->while_statement() != nullptr || ctx->for_statement() != nullptr) {
+            if(function) function_string.append("\n");
+            else converted_code.append("\n");
+        }
        else if(ctx->function_statement()!= nullptr) converted_code.append("");
        else {
             if(function) function_string.append(";\n");
@@ -103,19 +109,18 @@ public:
                 function_variables[var] = assignment_type;
             } 
             else {
-                // if(function_parameters.find(var) != function_parameters.end()) function_string.append(functionaddtab() + var +"_ = ");
                 function_string.append(functionaddtab() + var +" = ");
             }
        }
        else{
             
             if(var_names.find(var) == var_names.end() || var_names[var] == ""){
-                // std::cout <<var <<std::endl;
                 assignment_string = "";
                 assignment_type = "int";
                 assignment = true;
                 assignment_string = var + " = ";
                 var_names[var] = assignment_type;
+                std::cout << var <<std::endl;
             } 
             else {
                 converted_code.append(addtab() + var + " = ");
@@ -126,12 +131,14 @@ public:
         if(function) {
             if(assignment) function_string.append(functionaddtab() + assignment_type +" " + assignment_string);
             function_variables[ctx->NAME()->getText()] = assignment_type;
+            if(for_loop || while_loop) loop_var.push_back(ctx->NAME()->getText());
         }
         else {
             
             if(assignment) {
                 converted_code.append(addtab() + assignment_type + " " + assignment_string);
                 var_names[ctx->NAME()->getText()] = assignment_type;
+                if(for_loop || while_loop) loop_var.push_back(ctx->NAME()->getText());
             }
         }
         assignment_string ="";
@@ -187,14 +194,33 @@ public:
     }
 
     virtual void enterWhile_statement(PythonParser::While_statementContext * ctx) override {
-        std::string temp = addtab();
-        tabspaces++;
-        converted_code.append(temp + "while(" );
+        while_loop = true;
+        if(function) {
+            function_string.append(functionaddtab() + "while(");
+            function_tabspaces++;
+        }
+        else{
+             converted_code.append(addtab() + "while(" );
+             tabspaces++;
+        }
      }
     virtual void exitWhile_statement(PythonParser::While_statementContext * /*ctx*/) override {
-        tabspaces--;
-        std::string temp = addtab();
-        converted_code.append(temp + "}");
+        if(function) {
+            function_tabspaces--;
+            function_string.append( functionaddtab() + "}");
+            for (int i = 0; i < loop_var.size();i++){
+                function_variables.erase(loop_var.at(i));
+            }
+        }
+        else {
+            tabspaces--;
+            converted_code.append(addtab() + "}");
+            for (int i = 0; i < loop_var.size();i++){
+                var_names.erase(loop_var.at(i));
+            }
+        }
+        loop_var.clear();
+        while_loop = false;
      }
 
     virtual void enterFunction_statement(PythonParser::Function_statementContext * ctx) override { 
@@ -202,11 +228,10 @@ public:
         function_type = "int ";
         function_parameters.clear();
         function_string = functionaddtab() + ctx->NAME()->getText();
-        function_tabspaces++;
-        // std::cout << ctx->NAME()->getText() <<std::endl;
+        function_tabspaces++;   
     }
     virtual void exitFunction_statement(PythonParser::Function_statementContext * ctx) override { 
-        functions.append( function_type +function_string);
+        functions.append( function_type+" " +function_string);
         function_tabspaces--;
         functions.append(functionaddtab() + "}\n");
         function = false;
@@ -227,6 +252,9 @@ public:
     virtual void exitExpression_statement(PythonParser::Expression_statementContext * /*ctx*/) override { }
 
     virtual void enterExpression(PythonParser::ExpressionContext * ctx) override {
+
+        if( strcmp(typeid(*ctx->parent).name(),  "N12PythonParser12RangeContextE") == 0) expression_state = false;
+        else expression_state = true;
     }
     virtual void exitExpression(PythonParser::ExpressionContext * /*ctx*/) override {}
 
@@ -245,81 +273,84 @@ public:
     }
 
     virtual void enterAddop(PythonParser::AddopContext * ctx) override { 
-        if(function  & !assignment) function_string.append(" "+ ctx->getText() + " ");
-        else if(assignment)assignment_string.append( " "+ ctx->getText() + " ");
-        else converted_code.append( " "+ ctx->getText() + " ");
+        if(expression_state){
+            if(function  & !assignment) function_string.append(" "+ ctx->getText() + " ");
+            else if(assignment)assignment_string.append( " "+ ctx->getText() + " ");
+            else converted_code.append( " "+ ctx->getText() + " ");
+        }
     }
     virtual void exitAddop(PythonParser::AddopContext * /*ctx*/) override { }
 
     virtual void enterMulop(PythonParser::MulopContext * ctx) override {
-        if(function & !assignment) function_string.append(ctx->getText());
-        else if(assignment) assignment_string.append( ctx->getText());
-        else converted_code.append( ctx->getText());
+        if(expression_state){
+            if(function & !assignment) function_string.append(ctx->getText());
+            else if(assignment) assignment_string.append( ctx->getText());
+            else converted_code.append( ctx->getText());
+        }
     }
     virtual void exitMulop(PythonParser::MulopContext * /*ctx*/) override { }
 
     virtual void enterFactor(PythonParser::FactorContext * ctx) override {
-
-        if(ctx->INTEGER() != nullptr){
-            if(function & !assignment){
-                if(division) function_string.append("static_cast<float>(" +ctx->INTEGER()->getText() +")"); 
-                else function_string.append(ctx->INTEGER()->getText());
-            }
-            else if(assignment){
-                if(division) assignment_string.append("static_cast<float>(" +ctx->INTEGER()->getText()+")");
-                else assignment_string.append(ctx->INTEGER()->getText());
-            }
-            else {
-                if(division) converted_code.append("static_cast<float>(" +ctx->INTEGER()->getText()+")");
-                else converted_code.append(ctx->INTEGER()->getText());
-            } 
-
-        }
-        else if(ctx->NAME() != nullptr){  
-
-            if(function) {
-                if(assignment){
-                        if(division) assignment_string.append( "static_cast<float>(" + ctx->NAME()->getText() +")");
-                        else assignment_string.append(  ctx->NAME()->getText());
+        if(expression_state){
+            if(ctx->INTEGER() != nullptr){
+                if(function & !assignment){
+                    if(division) function_string.append("static_cast<float>(" +ctx->INTEGER()->getText() +")"); 
+                    else function_string.append(ctx->INTEGER()->getText());
+                }
+                else if(assignment){
+                    if(division) assignment_string.append("static_cast<float>(" +ctx->INTEGER()->getText()+")");
+                    else assignment_string.append(ctx->INTEGER()->getText());
                 }
                 else {
-                        if(division) function_string.append(  "static_cast<float>(" + ctx->NAME()->getText() + ")"); 
-                        else function_string.append( ctx->NAME()->getText());
-                        if(return_state & function_variables[ctx->NAME()->getText()] != "int") function_type = function_variables[ctx->NAME()->getText()];
-                }
-            }
-            else if(assignment){
-                    if(division) assignment_string.append( "static_cast<float>(" + ctx->NAME()->getText() + ")"); 
-                    else {
-                        // if(for_loop & ctx->NAME()->getText() == iterator_name) assignment_string.append( iterator_new)
-                        assignment_string.append( ctx->NAME()->getText());
-                        }
-                    if(var_names[ctx->NAME()->getText()] != "int"){
-                        assignment_type = var_names[ctx->NAME()->getText()];
-                    }
-            }
-            else converted_code.append( ctx->NAME()->getText());   
-            
-        }
-        else if(ctx->FLOAT() != nullptr){
-            if(function & !assignment) function_string.append(ctx->FLOAT()->getText());
-            else if(assignment)  assignment_string.append( ctx->FLOAT()->getText());
-            else converted_code.append( ctx->FLOAT()->getText());
-            if(assignment) assignment_type = "float";
-        }
-        else if(ctx->expression() != nullptr) {
-            if(function & !assignment) function_string.append("(");
-            if(assignment) assignment_string.append("(");
-            else converted_code.append("(");
-        }
-        else if(ctx->STRING_LITERAL()!= nullptr){
-            if(function & !assignment) function_string.append(ctx->STRING_LITERAL()->getText());
-            else if(assignment)  assignment_string.append( ctx->STRING_LITERAL()->getText());
-            else converted_code.append( ctx->STRING_LITERAL()->getText());
-            if(assignment) assignment_type = "std::string";
+                    if(division) converted_code.append("static_cast<float>(" +ctx->INTEGER()->getText()+")");
+                    else converted_code.append(ctx->INTEGER()->getText());
+                } 
 
+            }
+            else if(ctx->NAME() != nullptr){  
+
+                if(function) {
+                    if(assignment){
+                            if(division) assignment_string.append( "static_cast<float>(" + ctx->NAME()->getText() +")");
+                            else assignment_string.append(  ctx->NAME()->getText());
+                    }
+                    else {
+                            if(division) function_string.append(  "static_cast<float>(" + ctx->NAME()->getText() + ")"); 
+                            else function_string.append( ctx->NAME()->getText());
+                            if(return_state & function_variables[ctx->NAME()->getText()] != "int") function_type = function_variables[ctx->NAME()->getText()];
+                    }
+                }
+                else if(assignment){
+                        if(division) assignment_string.append( "static_cast<float>(" + ctx->NAME()->getText() + ")"); 
+                        else {
+                            assignment_string.append( ctx->NAME()->getText());
+                            }
+                        if(var_names[ctx->NAME()->getText()] != "int"){
+                            assignment_type = var_names[ctx->NAME()->getText()];
+                        }
+                }
+                else converted_code.append( ctx->NAME()->getText());   
+                
+            }
+            else if(ctx->FLOAT() != nullptr){
+                if(function & !assignment) function_string.append(ctx->FLOAT()->getText());
+                else if(assignment)  assignment_string.append( ctx->FLOAT()->getText());
+                else converted_code.append( ctx->FLOAT()->getText());
+                if(assignment) assignment_type = "float";
+            }
+            else if(ctx->expression() != nullptr) {
+                if(function & !assignment) function_string.append("(");
+                if(assignment) assignment_string.append("(");
+                else converted_code.append("(");
+            }
+            else if(ctx->STRING_LITERAL()!= nullptr){
+                if(function & !assignment) function_string.append(ctx->STRING_LITERAL()->getText());
+                else if(assignment)  assignment_string.append( ctx->STRING_LITERAL()->getText());
+                else converted_code.append( ctx->STRING_LITERAL()->getText());
+                if(assignment) assignment_type = "std::string";
+
+            }  
         }
-  
     }
     virtual void exitFactor(PythonParser::FactorContext * ctx) override { 
         if(ctx->expression() != nullptr) {
@@ -433,23 +464,73 @@ public:
     virtual void enterFor_statement(PythonParser::For_statementContext * ctx) override {
         iterator_name = ctx->NAME().at(0)->getText();
         for_loop = true;
-        if(ctx->NAME().size() >1 ) {
-            converted_code.append(addtab() +"for(int i_ = 0; i_ <" + ctx->NAME().at(1)->getText()+ ".size();i_++){\n");
-            tabspaces++;
-            converted_code.append( addtab() + "char " + iterator_name +" = " + ctx->NAME().at(1)->getText()+".at(i_);\n");
+        if(function){
+            if(ctx->NAME().size() >1 ) {
+                function_string.append(functionaddtab() +"for(int i_ = 0; i_ <" + ctx->NAME().at(1)->getText()+ ".size();i_++){\n");
+                function_tabspaces++;
+                function_string.append( functionaddtab() + "char " + iterator_name +" = " + ctx->NAME().at(1)->getText()+".at(i_);\n");
+                function_variables["i_"] = "int";  
+                loop_var.push_back("i_");
+            }
+            else if(ctx->range() != nullptr){
+                function_string.append(addtab()+ "for(int " + ctx->NAME().at(0)->getText() + " = " + ctx->range()->expression().at(0)->getText()+";"+ctx->NAME().at(0)->getText()+
+                "<"+ ctx->range()->expression().at(1)->getText() +";" +ctx->NAME().at(0)->getText() +"++){\n");
+                function_tabspaces++;
+                function_variables[ctx->NAME().at(0)->getText()] = "int"; 
+                loop_var.push_back(ctx->NAME().at(0)->getText());    
+            }
+            else {
+                function_string.append(functionaddtab()+ "for(int i_ = 0; i_ <" + ctx->STRING_LITERAL()->getText()+ ".size();i_++){\n");
+                function_tabspaces++;
+                function_string.append( functionaddtab() + "char " + iterator_name +" = " + ctx->STRING_LITERAL()->getText()+".at(i_);\n");
+                function_variables["i_"] = "int";  
+                loop_var.push_back("i_");
+            }
         }
         else {
-            converted_code.append(addtab()+ "for(int i_ = 0; i_ <" + ctx->STRING_LITERAL()->getText()+ ".size();i_++){\n");
-            tabspaces++;
-            converted_code.append( addtab() + "char " + iterator_name +" = " + ctx->NAME().at(1)->getText()+".at(i_);\n");
+            if(ctx->NAME().size() >1 ) {
+                converted_code.append(addtab() +"for(int i_ = 0; i_ <" + ctx->NAME().at(1)->getText()+ ".size();i_++){\n");
+                tabspaces++;
+                converted_code.append( addtab() + "char " + iterator_name +" = " + ctx->NAME().at(1)->getText()+".at(i_);\n");
+                var_names["i_"] = "int";  
+                loop_var.push_back("i_");
+            }
+            else if(ctx->range() != nullptr){
+                converted_code.append(addtab()+ "for(int " + ctx->NAME().at(0)->getText() + " = " + ctx->range()->expression().at(0)->getText()+";"+ctx->NAME().at(0)->getText()+
+                "<"+ ctx->range()->expression().at(1)->getText() +";" +ctx->NAME().at(0)->getText() +"++){\n");
+                tabspaces++;
+                var_names[ctx->NAME().at(0)->getText()] = "int"; 
+                loop_var.push_back(ctx->NAME().at(0)->getText());             
+            }
+            else {
+                converted_code.append(addtab()+ "for(int i_ = 0; i_ <" + ctx->STRING_LITERAL()->getText()+ ".size();i_++){\n");
+                tabspaces++;
+                converted_code.append( addtab() + "char " + iterator_name +" = " +ctx->STRING_LITERAL()->getText()+".at(i_);\n");
+                var_names["i_"] = "int";  
+                loop_var.push_back("i_");
+            }
         }
         
 
     }
     virtual void exitFor_statement(PythonParser::For_statementContext * /*ctx*/) override {
-        converted_code.append("}");
+
         for_loop = false;
-        tabspaces--;
+        if(function) {
+            function_tabspaces--;
+            function_string.append( functionaddtab() + "}");
+            for (int i = 0; i < loop_var.size();i++){
+                function_variables.erase(loop_var.at(i));
+            }
+        }
+        else {
+            tabspaces--;
+            converted_code.append(addtab() + "}");
+            for (int i = 0; i < loop_var.size();i++){
+                var_names.erase(loop_var.at(i));
+            }
+        }
+        loop_var.clear();
     }
     
 };

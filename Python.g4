@@ -28,7 +28,9 @@ functioncall: NAME '(' parameter_list ')';
 
 conop: '>=' | '>' | '<' | '<=' | '==' | '!=' ;
 
-for_statement: 'for' NAME 'in' (STRING_LITERAL | NAME ) ':' '<<INDENT>>' statement_list '<<DEDENT>>';
+range: 'range' '(' expression ',' expression ')';
+
+for_statement: 'for' NAME 'in' (STRING_LITERAL | NAME | range) ':' '<<INDENT>>' statement_list '<<DEDENT>>';
 
 while_statement : 'while' '('? comparison')'? ':' '<<INDENT>>'statement_list '<<DEDENT>>';
 

@@ -1,9 +1,13 @@
 #include <iostream>
-int main(){
-	std::string x = "hello my name is";
-	for(int i_ = 0; i_ <x.size();i_++){
-		char ele = x.at(i_);
+float test1( float x,float y){
+	for(int ele = x;ele<y;ele++){
 		std::cout << ele << std::endl;
-};
+	}
+	return x;
+}
+int main(){
+	int x = 10;
+	int y = 40;
+	float q = test1(x,y);
 	return 0; 
 }
