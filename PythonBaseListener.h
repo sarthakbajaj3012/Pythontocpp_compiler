@@ -88,8 +88,11 @@ public:
   virtual void enterData_type(PythonParser::Data_typeContext * /*ctx*/) override { }
   virtual void exitData_type(PythonParser::Data_typeContext * /*ctx*/) override { }
 
-  virtual void enterData_type_list(PythonParser::Data_type_listContext * /*ctx*/) override { }
-  virtual void exitData_type_list(PythonParser::Data_type_listContext * /*ctx*/) override { }
+  virtual void enterPrint_type(PythonParser::Print_typeContext * /*ctx*/) override { }
+  virtual void exitPrint_type(PythonParser::Print_typeContext * /*ctx*/) override { }
+
+  virtual void enterPrinttype_list(PythonParser::Printtype_listContext * /*ctx*/) override { }
+  virtual void exitPrinttype_list(PythonParser::Printtype_listContext * /*ctx*/) override { }
 
   virtual void enterFactor(PythonParser::FactorContext * /*ctx*/) override { }
   virtual void exitFactor(PythonParser::FactorContext * /*ctx*/) override { }

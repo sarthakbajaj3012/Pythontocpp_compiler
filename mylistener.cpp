@@ -33,6 +33,7 @@ public:
     bool for_loop = false;
     bool while_loop = false;
     bool assignment = false;
+    bool print = false;
     bool function = false;
     bool functioncall = false;
     bool division = false;
@@ -370,12 +371,13 @@ public:
     virtual void exitConop(PythonParser::ConopContext * /*ctx*/) override { }
 
     virtual void enterPrint(PythonParser::PrintContext * ctx) override { 
+        print = true;
         if(function) function_string.append(functionaddtab()+ "std::cout << ");
-        else converted_code.append( addtab() + "std::cout <<");
+        else converted_code.append( addtab() + "std::cout ");
     }
     virtual void exitPrint(PythonParser::PrintContext * ctx) override { 
-        if(function) function_string.append("std::endl");
-        else converted_code.append("std::endl");
+        if(function) function_string.append("<<std::endl");
+        else converted_code.append("<<std::endl");
     }
 
     virtual void enterFunctioncall(PythonParser::FunctioncallContext * ctx) override {
@@ -553,14 +555,14 @@ public:
     }
     virtual void exitData_type(PythonParser::Data_typeContext * /*ctx*/) override { }
 
-    virtual void enterData_type_list(PythonParser::Data_type_listContext * ctx) override {
-        expression_state = false;
-        for(int i = 0; i < ctx->data_type().size();i++){
-            if(function) function_string.append(ctx->data_type().at(i)->getText()+"<<\" \" << ");
-            else converted_code.append(ctx->data_type().at(i)->getText()+"<<\" \" << ");
-        }
+    virtual void enterPrinttype_list(PythonParser::Printtype_listContext * ctx) override {
+     
     }
-    virtual void exitData_type_list(PythonParser::Data_type_listContext * /*ctx*/) override {
-        expression_state = true;
-    }
+    virtual void exitPrinttype_list(PythonParser::Printtype_listContext * /*ctx*/) override { }
+
+    virtual void enterPrint_type(PythonParser::Print_typeContext * /*ctx*/) override {
+        if(function) function_string.append(" <<\" \" << ");
+        else converted_code.append(" <<\" \" << ");
+     }
+    virtual void exitPrint_type(PythonParser::Print_typeContext * /*ctx*/) override { }
 };

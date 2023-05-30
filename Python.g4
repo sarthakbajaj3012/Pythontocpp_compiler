@@ -48,7 +48,7 @@ addop : '+' | '-' ;
  
 mulop : '*' | '/' | '%' ;
 
-print: 'print(' data_type_list ')';
+print: 'print(' printtype_list ')';
 
 expression : functioncall | (term ( addop term)*);
 
@@ -56,7 +56,9 @@ term : factor ( mulop factor)*;
 
 data_type: STRING_LITERAL | INTEGER | NAME | FLOAT;
 
-data_type_list : data_type (',' data_type )*;
+print_type: data_type| expression;
+
+printtype_list : print_type (',' print_type )*;
 
 factor : data_type | '(' expression ')';
 

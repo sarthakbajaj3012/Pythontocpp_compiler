@@ -86,8 +86,11 @@ public:
   virtual void enterData_type(PythonParser::Data_typeContext *ctx) = 0;
   virtual void exitData_type(PythonParser::Data_typeContext *ctx) = 0;
 
-  virtual void enterData_type_list(PythonParser::Data_type_listContext *ctx) = 0;
-  virtual void exitData_type_list(PythonParser::Data_type_listContext *ctx) = 0;
+  virtual void enterPrint_type(PythonParser::Print_typeContext *ctx) = 0;
+  virtual void exitPrint_type(PythonParser::Print_typeContext *ctx) = 0;
+
+  virtual void enterPrinttype_list(PythonParser::Printtype_listContext *ctx) = 0;
+  virtual void exitPrinttype_list(PythonParser::Printtype_listContext *ctx) = 0;
 
   virtual void enterFactor(PythonParser::FactorContext *ctx) = 0;
   virtual void exitFactor(PythonParser::FactorContext *ctx) = 0;

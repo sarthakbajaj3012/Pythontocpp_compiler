@@ -28,8 +28,8 @@ public:
     RuleConop = 11, RuleRange = 12, RuleFor_statement = 13, RuleWhile_statement = 14, 
     RuleFunction_statement = 15, RuleReturn_statement = 16, RuleExpression_statement = 17, 
     RuleAddop = 18, RuleMulop = 19, RulePrint = 20, RuleExpression = 21, 
-    RuleTerm = 22, RuleData_type = 23, RuleData_type_list = 24, RuleFactor = 25, 
-    RuleParameter_list = 26, RuleParameter = 27
+    RuleTerm = 22, RuleData_type = 23, RulePrint_type = 24, RulePrinttype_list = 25, 
+    RuleFactor = 26, RuleParameter_list = 27, RuleParameter = 28
   };
 
   explicit PythonParser(antlr4::TokenStream *input);
@@ -73,7 +73,8 @@ public:
   class ExpressionContext;
   class TermContext;
   class Data_typeContext;
-  class Data_type_listContext;
+  class Print_typeContext;
+  class Printtype_listContext;
   class FactorContext;
   class Parameter_listContext;
   class ParameterContext; 
@@ -366,7 +367,7 @@ public:
   public:
     PrintContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    Data_type_listContext *data_type_list();
+    Printtype_listContext *printtype_list();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -424,19 +425,33 @@ public:
 
   Data_typeContext* data_type();
 
-  class  Data_type_listContext : public antlr4::ParserRuleContext {
+  class  Print_typeContext : public antlr4::ParserRuleContext {
   public:
-    Data_type_listContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    Print_typeContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    std::vector<Data_typeContext *> data_type();
-    Data_typeContext* data_type(size_t i);
+    Data_typeContext *data_type();
+    ExpressionContext *expression();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
    
   };
 
-  Data_type_listContext* data_type_list();
+  Print_typeContext* print_type();
+
+  class  Printtype_listContext : public antlr4::ParserRuleContext {
+  public:
+    Printtype_listContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<Print_typeContext *> print_type();
+    Print_typeContext* print_type(size_t i);
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  Printtype_listContext* printtype_list();
 
   class  FactorContext : public antlr4::ParserRuleContext {
   public:
