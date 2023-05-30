@@ -29,6 +29,12 @@ public:
   virtual void enterIf_statement(PythonParser::If_statementContext *ctx) = 0;
   virtual void exitIf_statement(PythonParser::If_statementContext *ctx) = 0;
 
+  virtual void enterJoin_op(PythonParser::Join_opContext *ctx) = 0;
+  virtual void exitJoin_op(PythonParser::Join_opContext *ctx) = 0;
+
+  virtual void enterComparison_statement(PythonParser::Comparison_statementContext *ctx) = 0;
+  virtual void exitComparison_statement(PythonParser::Comparison_statementContext *ctx) = 0;
+
   virtual void enterComparison(PythonParser::ComparisonContext *ctx) = 0;
   virtual void exitComparison(PythonParser::ComparisonContext *ctx) = 0;
 
@@ -76,6 +82,12 @@ public:
 
   virtual void enterTerm(PythonParser::TermContext *ctx) = 0;
   virtual void exitTerm(PythonParser::TermContext *ctx) = 0;
+
+  virtual void enterData_type(PythonParser::Data_typeContext *ctx) = 0;
+  virtual void exitData_type(PythonParser::Data_typeContext *ctx) = 0;
+
+  virtual void enterData_type_list(PythonParser::Data_type_listContext *ctx) = 0;
+  virtual void exitData_type_list(PythonParser::Data_type_listContext *ctx) = 0;
 
   virtual void enterFactor(PythonParser::FactorContext *ctx) = 0;
   virtual void exitFactor(PythonParser::FactorContext *ctx) = 0;

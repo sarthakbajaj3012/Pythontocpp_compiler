@@ -16,8 +16,9 @@ public:
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
     T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, T__24 = 25, T__25 = 26, 
-    T__26 = 27, T__27 = 28, NAME = 29, INTEGER = 30, FLOAT = 31, STRING_LITERAL = 32, 
-    ESC = 33, WHITESPACE = 34
+    T__26 = 27, T__27 = 28, T__28 = 29, T__29 = 30, T__30 = 31, T__31 = 32, 
+    NAME = 33, INTEGER = 34, FLOAT = 35, STRING_LITERAL = 36, ESC = 37, 
+    WHITESPACE = 38
   };
 
   explicit PythonLexer(antlr4::CharStream *input);

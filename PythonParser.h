@@ -16,18 +16,20 @@ public:
     T__7 = 8, T__8 = 9, T__9 = 10, T__10 = 11, T__11 = 12, T__12 = 13, T__13 = 14, 
     T__14 = 15, T__15 = 16, T__16 = 17, T__17 = 18, T__18 = 19, T__19 = 20, 
     T__20 = 21, T__21 = 22, T__22 = 23, T__23 = 24, T__24 = 25, T__25 = 26, 
-    T__26 = 27, T__27 = 28, NAME = 29, INTEGER = 30, FLOAT = 31, STRING_LITERAL = 32, 
-    ESC = 33, WHITESPACE = 34
+    T__26 = 27, T__27 = 28, T__28 = 29, T__29 = 30, T__30 = 31, T__31 = 32, 
+    NAME = 33, INTEGER = 34, FLOAT = 35, STRING_LITERAL = 36, ESC = 37, 
+    WHITESPACE = 38
   };
 
   enum {
     RuleProgram = 0, RuleStatement_list = 1, RuleStatement = 2, RuleAssignment_statement = 3, 
-    RuleIf_statement = 4, RuleComparison = 5, RuleElif = 6, RuleElseop = 7, 
-    RuleFunctioncall = 8, RuleConop = 9, RuleRange = 10, RuleFor_statement = 11, 
-    RuleWhile_statement = 12, RuleFunction_statement = 13, RuleReturn_statement = 14, 
-    RuleExpression_statement = 15, RuleAddop = 16, RuleMulop = 17, RulePrint = 18, 
-    RuleExpression = 19, RuleTerm = 20, RuleFactor = 21, RuleParameter_list = 22, 
-    RuleParameter = 23
+    RuleIf_statement = 4, RuleJoin_op = 5, RuleComparison_statement = 6, 
+    RuleComparison = 7, RuleElif = 8, RuleElseop = 9, RuleFunctioncall = 10, 
+    RuleConop = 11, RuleRange = 12, RuleFor_statement = 13, RuleWhile_statement = 14, 
+    RuleFunction_statement = 15, RuleReturn_statement = 16, RuleExpression_statement = 17, 
+    RuleAddop = 18, RuleMulop = 19, RulePrint = 20, RuleExpression = 21, 
+    RuleTerm = 22, RuleData_type = 23, RuleData_type_list = 24, RuleFactor = 25, 
+    RuleParameter_list = 26, RuleParameter = 27
   };
 
   explicit PythonParser(antlr4::TokenStream *input);
@@ -52,6 +54,8 @@ public:
   class StatementContext;
   class Assignment_statementContext;
   class If_statementContext;
+  class Join_opContext;
+  class Comparison_statementContext;
   class ComparisonContext;
   class ElifContext;
   class ElseopContext;
@@ -68,6 +72,8 @@ public:
   class PrintContext;
   class ExpressionContext;
   class TermContext;
+  class Data_typeContext;
+  class Data_type_listContext;
   class FactorContext;
   class Parameter_listContext;
   class ParameterContext; 
@@ -137,7 +143,7 @@ public:
   public:
     If_statementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    ComparisonContext *comparison();
+    Comparison_statementContext *comparison_statement();
     Statement_listContext *statement_list();
     std::vector<ElifContext *> elif();
     ElifContext* elif(size_t i);
@@ -149,6 +155,34 @@ public:
   };
 
   If_statementContext* if_statement();
+
+  class  Join_opContext : public antlr4::ParserRuleContext {
+  public:
+    Join_opContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  Join_opContext* join_op();
+
+  class  Comparison_statementContext : public antlr4::ParserRuleContext {
+  public:
+    Comparison_statementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<ComparisonContext *> comparison();
+    ComparisonContext* comparison(size_t i);
+    std::vector<Join_opContext *> join_op();
+    Join_opContext* join_op(size_t i);
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  Comparison_statementContext* comparison_statement();
 
   class  ComparisonContext : public antlr4::ParserRuleContext {
   public:
@@ -169,7 +203,7 @@ public:
   public:
     ElifContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    ComparisonContext *comparison();
+    Comparison_statementContext *comparison_statement();
     Statement_listContext *statement_list();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -253,7 +287,7 @@ public:
   public:
     While_statementContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    ComparisonContext *comparison();
+    Comparison_statementContext *comparison_statement();
     Statement_listContext *statement_list();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -332,10 +366,7 @@ public:
   public:
     PrintContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *STRING_LITERAL();
-    antlr4::tree::TerminalNode *INTEGER();
-    antlr4::tree::TerminalNode *NAME();
-    antlr4::tree::TerminalNode *FLOAT();
+    Data_type_listContext *data_type_list();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
     virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
@@ -377,14 +408,41 @@ public:
 
   TermContext* term();
 
+  class  Data_typeContext : public antlr4::ParserRuleContext {
+  public:
+    Data_typeContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    antlr4::tree::TerminalNode *STRING_LITERAL();
+    antlr4::tree::TerminalNode *INTEGER();
+    antlr4::tree::TerminalNode *NAME();
+    antlr4::tree::TerminalNode *FLOAT();
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  Data_typeContext* data_type();
+
+  class  Data_type_listContext : public antlr4::ParserRuleContext {
+  public:
+    Data_type_listContext(antlr4::ParserRuleContext *parent, size_t invokingState);
+    virtual size_t getRuleIndex() const override;
+    std::vector<Data_typeContext *> data_type();
+    Data_typeContext* data_type(size_t i);
+
+    virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;
+    virtual void exitRule(antlr4::tree::ParseTreeListener *listener) override;
+   
+  };
+
+  Data_type_listContext* data_type_list();
+
   class  FactorContext : public antlr4::ParserRuleContext {
   public:
     FactorContext(antlr4::ParserRuleContext *parent, size_t invokingState);
     virtual size_t getRuleIndex() const override;
-    antlr4::tree::TerminalNode *INTEGER();
-    antlr4::tree::TerminalNode *FLOAT();
-    antlr4::tree::TerminalNode *NAME();
-    antlr4::tree::TerminalNode *STRING_LITERAL();
+    Data_typeContext *data_type();
     ExpressionContext *expression();
 
     virtual void enterRule(antlr4::tree::ParseTreeListener *listener) override;

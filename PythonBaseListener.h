@@ -31,6 +31,12 @@ public:
   virtual void enterIf_statement(PythonParser::If_statementContext * /*ctx*/) override { }
   virtual void exitIf_statement(PythonParser::If_statementContext * /*ctx*/) override { }
 
+  virtual void enterJoin_op(PythonParser::Join_opContext * /*ctx*/) override { }
+  virtual void exitJoin_op(PythonParser::Join_opContext * /*ctx*/) override { }
+
+  virtual void enterComparison_statement(PythonParser::Comparison_statementContext * /*ctx*/) override { }
+  virtual void exitComparison_statement(PythonParser::Comparison_statementContext * /*ctx*/) override { }
+
   virtual void enterComparison(PythonParser::ComparisonContext * /*ctx*/) override { }
   virtual void exitComparison(PythonParser::ComparisonContext * /*ctx*/) override { }
 
@@ -78,6 +84,12 @@ public:
 
   virtual void enterTerm(PythonParser::TermContext * /*ctx*/) override { }
   virtual void exitTerm(PythonParser::TermContext * /*ctx*/) override { }
+
+  virtual void enterData_type(PythonParser::Data_typeContext * /*ctx*/) override { }
+  virtual void exitData_type(PythonParser::Data_typeContext * /*ctx*/) override { }
+
+  virtual void enterData_type_list(PythonParser::Data_type_listContext * /*ctx*/) override { }
+  virtual void exitData_type_list(PythonParser::Data_type_listContext * /*ctx*/) override { }
 
   virtual void enterFactor(PythonParser::FactorContext * /*ctx*/) override { }
   virtual void exitFactor(PythonParser::FactorContext * /*ctx*/) override { }

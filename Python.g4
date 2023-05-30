@@ -16,11 +16,15 @@ statement : assignment_statement
 
 assignment_statement : NAME '=' expression ;
 
-if_statement : 'if' '('? comparison')'? ':' '<<INDENT>>' statement_list '<<DEDENT>>' ( elif )* (elseop)?;
+if_statement : 'if' '('? comparison_statement ')'? ':' '<<INDENT>>' statement_list '<<DEDENT>>' ( elif )* (elseop)?;
+
+join_op: '&' | 'and' | '|' | 'or';
+
+comparison_statement: comparison (join_op comparison)* ;
 
 comparison: expression (conop expression)?;
 
-elif: 'elif' comparison ':' '<<INDENT>>'statement_list '<<DEDENT>>' ;
+elif: 'elif' comparison_statement ':' '<<INDENT>>'statement_list '<<DEDENT>>' ;
 
 elseop : 'else' ':' '<<INDENT>>'statement_list '<<DEDENT>>' ;
 
@@ -32,7 +36,7 @@ range: 'range' '(' expression ',' expression ')';
 
 for_statement: 'for' NAME 'in' (STRING_LITERAL | NAME | range) ':' '<<INDENT>>' statement_list '<<DEDENT>>';
 
-while_statement : 'while' '('? comparison')'? ':' '<<INDENT>>'statement_list '<<DEDENT>>';
+while_statement : 'while' '('? comparison_statement')'? ':' '<<INDENT>>'statement_list '<<DEDENT>>';
 
 function_statement : 'def' NAME '(' parameter_list ')' ':' '<<INDENT>>'statement_list '<<DEDENT>>';
 
@@ -44,17 +48,17 @@ addop : '+' | '-' ;
  
 mulop : '*' | '/' | '%' ;
 
-print: 'print(' (STRING_LITERAL | INTEGER | NAME | FLOAT)  ')';
+print: 'print(' data_type_list ')';
 
 expression : functioncall | (term ( addop term)*);
 
 term : factor ( mulop factor)*;
 
-factor : INTEGER
-       | FLOAT
-       | NAME
-       | STRING_LITERAL
-       | '(' expression ')';
+data_type: STRING_LITERAL | INTEGER | NAME | FLOAT;
+
+data_type_list : data_type (',' data_type )*;
+
+factor : data_type | '(' expression ')';
 
 parameter_list : (parameter (',' parameter)*)?;
 
