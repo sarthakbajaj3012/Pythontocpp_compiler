@@ -256,7 +256,9 @@ public:
         if( strcmp(typeid(*ctx->parent).name(),  "N12PythonParser12RangeContextE") == 0) expression_state = false;
         else expression_state = true;
     }
-    virtual void exitExpression(PythonParser::ExpressionContext * /*ctx*/) override {}
+    virtual void exitExpression(PythonParser::ExpressionContext * /*ctx*/) override {
+        expression_state = true;
+    }
 
     virtual void enterTerm(PythonParser::TermContext * ctx) override {
         for(int i = 0; i< ctx->mulop().size();i++){
@@ -372,12 +374,12 @@ public:
 
     virtual void enterPrint(PythonParser::PrintContext * ctx) override { 
         print = true;
-        if(function) function_string.append(functionaddtab()+ "std::cout << ");
-        else converted_code.append( addtab() + "std::cout ");
+        if(function) function_string.append(functionaddtab()+ "std::cout <<");
+        else converted_code.append( addtab() + "std::cout << ");
     }
     virtual void exitPrint(PythonParser::PrintContext * ctx) override { 
-        if(function) function_string.append("<<std::endl");
-        else converted_code.append("<<std::endl");
+        if(function) function_string.append("std::endl");
+        else converted_code.append("std::endl");
     }
 
     virtual void enterFunctioncall(PythonParser::FunctioncallContext * ctx) override {
@@ -496,6 +498,7 @@ public:
     }
 
     virtual void enterData_type(PythonParser::Data_typeContext * ctx) override {
+        // std::cout << ctx->getText()<<std::endl;
         if(expression_state){
             if(ctx->INTEGER() != nullptr){
                 if(function & !assignment){
@@ -513,7 +516,7 @@ public:
 
             }
             else if(ctx->NAME() != nullptr){  
-
+                // std::cout << ctx->NAME()->getText() <<std::endl;
                 if(function) {
                     if(assignment){
                             if(division) assignment_string.append( "static_cast<float>(" + ctx->NAME()->getText() +")");
@@ -544,6 +547,7 @@ public:
                 if(assignment) assignment_type = "float";
             }
             else if(ctx->STRING_LITERAL()!= nullptr){
+                std::cout << ctx->STRING_LITERAL()->getText() <<std::endl;
                 if(function & !assignment) function_string.append(ctx->STRING_LITERAL()->getText());
                 else if(assignment)  assignment_string.append( ctx->STRING_LITERAL()->getText());
                 else converted_code.append( ctx->STRING_LITERAL()->getText());
@@ -555,14 +559,12 @@ public:
     }
     virtual void exitData_type(PythonParser::Data_typeContext * /*ctx*/) override { }
 
-    virtual void enterPrinttype_list(PythonParser::Printtype_listContext * ctx) override {
-     
-    }
+    virtual void enterPrinttype_list(PythonParser::Printtype_listContext * ctx) override {}
     virtual void exitPrinttype_list(PythonParser::Printtype_listContext * /*ctx*/) override { }
 
-    virtual void enterPrint_type(PythonParser::Print_typeContext * /*ctx*/) override {
+    virtual void enterPrint_type(PythonParser::Print_typeContext * /*ctx*/) override {}
+    virtual void exitPrint_type(PythonParser::Print_typeContext * /*ctx*/) override { 
         if(function) function_string.append(" <<\" \" << ");
         else converted_code.append(" <<\" \" << ");
-     }
-    virtual void exitPrint_type(PythonParser::Print_typeContext * /*ctx*/) override { }
+    }
 };
