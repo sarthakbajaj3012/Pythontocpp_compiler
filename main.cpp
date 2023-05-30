@@ -64,7 +64,7 @@ try{
   if( parser.getNumberOfSyntaxErrors() > 0) {
     throw std::runtime_error("syntax error!");
   }
-  std::cout << tree2->children.at(0)->toStringTree(&parser) << std::endl;
+  // std::cout << tree2->children.at(0)->toStringTree(&parser) << std::endl;
   MyListener listener;
   antlr4::tree::ParseTreeWalker::DEFAULT.walk(&listener, tree2);
   

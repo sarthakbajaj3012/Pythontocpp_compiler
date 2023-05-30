@@ -10,11 +10,12 @@ int main() {
         try{
             std::string temp = "./PythonParser " + test + std::to_string(i) +".py";
             system( temp.c_str() );
-            std::cout <<"Test passed" << i << std::endl;
+            
         } catch(const char* errorMessage) {
             std::cout << "ERROR " << errorMessage <<std::endl;
             break;
         }
+        std::cout <<"Test passed" << i << std::endl;
 
         
     }

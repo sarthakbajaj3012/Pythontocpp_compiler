@@ -547,7 +547,6 @@ public:
                 if(assignment) assignment_type = "float";
             }
             else if(ctx->STRING_LITERAL()!= nullptr){
-                std::cout << ctx->STRING_LITERAL()->getText() <<std::endl;
                 if(function & !assignment) function_string.append(ctx->STRING_LITERAL()->getText());
                 else if(assignment)  assignment_string.append( ctx->STRING_LITERAL()->getText());
                 else converted_code.append( ctx->STRING_LITERAL()->getText());
