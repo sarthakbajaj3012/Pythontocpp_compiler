@@ -1,7 +1,9 @@
-def test1(x,y):
-    for ele in range(x,y):
-        print(ele)
-    return 0
-x = 10
-y = 40
-q = test1(x,y)
+x = 40
+y = 50
+for ele in range(0,80):
+    if(ele > 60):
+        z = ele
+        m = z + 1
+print(z,m)
+d = z + m
+print(d)

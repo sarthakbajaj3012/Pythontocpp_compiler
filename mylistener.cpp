@@ -24,7 +24,6 @@ public:
     std::map<std::string, std::string> var_names;
     std::map<std::string,std::string> function_parameters;
     std::map<std::string,std::string> function_variables;
-    std::vector<std::string> loop_var;
     std::string iterator_name = "";
     std::string iterator_new = "";
     int tabspaces = 1;
@@ -43,6 +42,8 @@ public:
     std::string assignment_string = "";
     std::string function_string = "";
     std::string function_type = "int";
+    std::string loopstring = "";
+    int for_index = 0;
 
     std::string addtab() {
         std::string temp =  "";
@@ -71,7 +72,7 @@ public:
             outfile << ss.rdbuf();
             outfile.close();
 
-            std::cout << "New file created: " << filename << std::endl;
+            //  std::cout << "New file created: " << filename << std::endl;
             system("g++ -std=c++17 -o new newfile.cpp"); // Compile the C++ file
             system("./new"); // Execute the compiled program
             //to-do add error catching while compiling the c++ file
@@ -131,14 +132,16 @@ public:
         if(function) {
             if(assignment) function_string.append(functionaddtab() + assignment_type +" " + assignment_string);
             function_variables[ctx->NAME()->getText()] = assignment_type;
-            if(for_loop || while_loop) loop_var.push_back(ctx->NAME()->getText());
         }
         else {
             
             if(assignment) {
-                converted_code.append(addtab() + assignment_type + " " + assignment_string);
+                if(for_loop) {
+                     loopstring.append("\n\t" +  assignment_type + " " + ctx->NAME()->getText() + ";\n");
+                     converted_code.append(addtab()  + assignment_string );
+                }
+                else converted_code.append(addtab() + assignment_type + " " + assignment_string);
                 var_names[ctx->NAME()->getText()] = assignment_type;
-                if(for_loop || while_loop) loop_var.push_back(ctx->NAME()->getText());
             }
         }
         assignment_string ="";
@@ -208,18 +211,11 @@ public:
         if(function) {
             function_tabspaces--;
             function_string.append( functionaddtab() + "}");
-            for (int i = 0; i < loop_var.size();i++){
-                function_variables.erase(loop_var.at(i));
-            }
         }
         else {
             tabspaces--;
             converted_code.append(addtab() + "}");
-            for (int i = 0; i < loop_var.size();i++){
-                var_names.erase(loop_var.at(i));
-            }
         }
-        loop_var.clear();
         while_loop = false;
      }
 
@@ -403,49 +399,51 @@ public:
         iterator_name = ctx->NAME().at(0)->getText();
         for_loop = true;
         if(function){
+            for_index = function_string.size() -1;
             if(ctx->NAME().size() >1 ) {
                 function_string.append(functionaddtab() +"for(int i_ = 0; i_ <" + ctx->NAME().at(1)->getText()+ ".size();i_++){\n");
                 function_tabspaces++;
                 function_string.append( functionaddtab() + "char " + iterator_name +" = " + ctx->NAME().at(1)->getText()+".at(i_);\n");
                 function_variables["i_"] = "int";  
-                loop_var.push_back("i_");
+                // loop_var.push_back("i_");
             }
             else if(ctx->range() != nullptr){
                 function_string.append(addtab()+ "for(int " + ctx->NAME().at(0)->getText() + " = " + ctx->range()->expression().at(0)->getText()+";"+ctx->NAME().at(0)->getText()+
                 "<"+ ctx->range()->expression().at(1)->getText() +";" +ctx->NAME().at(0)->getText() +"++){\n");
                 function_tabspaces++;
                 function_variables[ctx->NAME().at(0)->getText()] = "int"; 
-                loop_var.push_back(ctx->NAME().at(0)->getText());    
+                // loop_var.push_back(ctx->NAME().at(0)->getText());    
             }
             else {
                 function_string.append(functionaddtab()+ "for(int i_ = 0; i_ <" + ctx->STRING_LITERAL()->getText()+ ".size();i_++){\n");
                 function_tabspaces++;
                 function_string.append( functionaddtab() + "char " + iterator_name +" = " + ctx->STRING_LITERAL()->getText()+".at(i_);\n");
                 function_variables["i_"] = "int";  
-                loop_var.push_back("i_");
+                // loop_var.push_back("i_");
             }
         }
         else {
+            for_index = converted_code.size() -1;
             if(ctx->NAME().size() >1 ) {
                 converted_code.append(addtab() +"for(int i_ = 0; i_ <" + ctx->NAME().at(1)->getText()+ ".size();i_++){\n");
                 tabspaces++;
                 converted_code.append( addtab() + "char " + iterator_name +" = " + ctx->NAME().at(1)->getText()+".at(i_);\n");
                 var_names["i_"] = "int";  
-                loop_var.push_back("i_");
+                // loop_var.push_back("i_");
             }
             else if(ctx->range() != nullptr){
                 converted_code.append(addtab()+ "for(int " + ctx->NAME().at(0)->getText() + " = " + ctx->range()->expression().at(0)->getText()+";"+ctx->NAME().at(0)->getText()+
                 "<"+ ctx->range()->expression().at(1)->getText() +";" +ctx->NAME().at(0)->getText() +"++){\n");
                 tabspaces++;
                 var_names[ctx->NAME().at(0)->getText()] = "int"; 
-                loop_var.push_back(ctx->NAME().at(0)->getText());             
+                // loop_var.push_back(ctx->NAME().at(0)->getText());             
             }
             else {
                 converted_code.append(addtab()+ "for(int i_ = 0; i_ <" + ctx->STRING_LITERAL()->getText()+ ".size();i_++){\n");
                 tabspaces++;
                 converted_code.append( addtab() + "char " + iterator_name +" = " +ctx->STRING_LITERAL()->getText()+".at(i_);\n");
                 var_names["i_"] = "int";  
-                loop_var.push_back("i_");
+                // loop_var.push_back("i_");
             }
         }
         
@@ -457,18 +455,14 @@ public:
         if(function) {
             function_tabspaces--;
             function_string.append( functionaddtab() + "}");
-            for (int i = 0; i < loop_var.size();i++){
-                function_variables.erase(loop_var.at(i));
-            }
+            function_variables.erase("i_");
         }
         else {
             tabspaces--;
+            converted_code.insert(for_index,loopstring);
             converted_code.append(addtab() + "}");
-            for (int i = 0; i < loop_var.size();i++){
-                var_names.erase(loop_var.at(i));
-            }
+            var_names.erase("i_");
         }
-        loop_var.clear();
     }
     
     virtual void enterJoin_op(PythonParser::Join_opContext *ctx) override{
@@ -559,11 +553,15 @@ public:
     virtual void exitData_type(PythonParser::Data_typeContext * /*ctx*/) override { }
 
     virtual void enterPrinttype_list(PythonParser::Printtype_listContext * ctx) override {}
-    virtual void exitPrinttype_list(PythonParser::Printtype_listContext * /*ctx*/) override { }
+    virtual void exitPrinttype_list(PythonParser::Printtype_listContext * /*ctx*/) override {
+        if(function) function_string.erase( function_string.size() - 7);
+        else converted_code.erase(converted_code.size() - 7);
+     }
 
     virtual void enterPrint_type(PythonParser::Print_typeContext * /*ctx*/) override {}
     virtual void exitPrint_type(PythonParser::Print_typeContext * /*ctx*/) override { 
         if(function) function_string.append(" <<\" \" << ");
         else converted_code.append(" <<\" \" << ");
+        
     }
 };
