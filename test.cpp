@@ -35,7 +35,7 @@ int main() {
     
     system("g++ -std=c++17 -o PythonParser PythonParser.cpp PythonLexer.cpp main.cpp -I /usr/local/include/antlr4-runtime -L /usr/local/lib -lantlr4-runtime "); 
 
-    for(int i = 1; i<= 5; i++){
+    for(int i = 1; i<= 10; i++){
         std::string test = "test" + std::to_string(i) + ".py";
         std::string cpp_output = executeCommand("./PythonParser " + test);
         std::string python_output = executeCommand("python3 " + test );  
@@ -50,10 +50,10 @@ int main() {
         python_file << python_output;
         python_file.close();
 
-        if (compareOutputs("cpp_output.txt", "python_output.txt")) {
+        if (compareOutputs(cpp_filename, python_filename)) {
             std::cout << "Outputs are the same.Test" << i << " Passed"<< std::endl;
         } else {
-            std::cout << "Outputs are different. Test" <<i <<" Failed" << std::endl;
+            std::cout << "Outputs are different.Test" <<i <<"Failed" << std::endl;
         }
     }
     

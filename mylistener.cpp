@@ -30,6 +30,7 @@ public:
     int function_tabspaces = 0;
     int index = converted_code.size();
     bool for_loop = false;
+    bool if_statement = false;
     bool while_loop = false;
     bool assignment = false;
     bool print = false;
@@ -44,6 +45,7 @@ public:
     std::string function_type = "int";
     std::string loopstring = "";
     int for_index = 0;
+    int if_index = 0;
 
     std::string addtab() {
         std::string temp =  "";
@@ -73,8 +75,8 @@ public:
             outfile.close();
 
             //  std::cout << "New file created: " << filename << std::endl;
-            system("g++ -std=c++17 -o new newfile.cpp"); // Compile the C++ file
-            system("./new"); // Execute the compiled program
+            system("g++ -std=c++17 -o newfile newfile.cpp"); // Compile the C++ file
+            system("./newfile"); // Execute the compiled program
             //to-do add error catching while compiling the c++ file
 
         }  
@@ -136,7 +138,7 @@ public:
         else {
             
             if(assignment) {
-                if(for_loop) {
+                if(for_loop | while_loop | if_statement) {
                      loopstring.append("\n\t" +  assignment_type + " " + ctx->NAME()->getText() + ";\n");
                      converted_code.append(addtab()  + assignment_string );
                 }
@@ -149,6 +151,11 @@ public:
     }
 
     virtual void enterIf_statement(PythonParser::If_statementContext * ctx) override { 
+        if(!if_statement & !for_loop & !while_loop){
+            if(function) for_index = function_string.size() -1;
+            else for_index = converted_code.size() -1;
+        }
+        if_statement = true;
         if(function) function_string.append(functionaddtab() + "if(");
         else converted_code.append(addtab() + "if(");
         if(function) function_tabspaces++;
@@ -159,11 +166,15 @@ public:
         if(function) { 
             function_tabspaces--;
             function_string.append(functionaddtab() +"}\n");
+            function_string.insert(for_index,loopstring);
         }
         else {
             tabspaces--;
             converted_code.append(addtab() +"}\n");
+            converted_code.insert(for_index,loopstring);
         }
+        if_statement = false;
+        loopstring.clear();
         
     }
 
@@ -225,8 +236,10 @@ public:
         function_parameters.clear();
         function_string = functionaddtab() + ctx->NAME()->getText();
         function_tabspaces++;   
+        function_variables[ctx->NAME()->getText()] = "int ";
     }
     virtual void exitFunction_statement(PythonParser::Function_statementContext * ctx) override { 
+        // std::cout << function_type << std::endl;
         functions.append( function_type+" " +function_string);
         function_tabspaces--;
         functions.append(functionaddtab() + "}\n");
@@ -382,11 +395,11 @@ public:
         functioncall = true;
         if(function){
             if(assignment) assignment_string.append(ctx->NAME()->getText());
-            else  function_string.append(functionaddtab() + ctx->NAME()->getText());
+            else  function_string.append(ctx->NAME()->getText());
         }
         else {
             if(assignment) assignment_string.append( ctx->NAME()->getText());
-            else  converted_code.append(addtab() + ctx->NAME()->getText());
+            else  converted_code.append(ctx->NAME()->getText());
         }
 
     }
@@ -397,9 +410,12 @@ public:
 
     virtual void enterFor_statement(PythonParser::For_statementContext * ctx) override {
         iterator_name = ctx->NAME().at(0)->getText();
+        if(!for_loop){
+            if(function) for_index = function_string.size() -1;
+            else for_index = converted_code.size() -1;
+        }
         for_loop = true;
         if(function){
-            for_index = function_string.size() -1;
             if(ctx->NAME().size() >1 ) {
                 function_string.append(functionaddtab() +"for(int i_ = 0; i_ <" + ctx->NAME().at(1)->getText()+ ".size();i_++){\n");
                 function_tabspaces++;
@@ -423,7 +439,6 @@ public:
             }
         }
         else {
-            for_index = converted_code.size() -1;
             if(ctx->NAME().size() >1 ) {
                 converted_code.append(addtab() +"for(int i_ = 0; i_ <" + ctx->NAME().at(1)->getText()+ ".size();i_++){\n");
                 tabspaces++;
@@ -463,6 +478,8 @@ public:
             converted_code.append(addtab() + "}");
             var_names.erase("i_");
         }
+
+        loopstring.clear();
     }
     
     virtual void enterJoin_op(PythonParser::Join_opContext *ctx) override{

@@ -50,7 +50,7 @@ mulop : '*' | '/' | '%' ;
 
 print: 'print(' printtype_list ')';
 
-expression : functioncall | (term ( addop term)*);
+expression : functioncall | (term ( addop term)*) ;
 
 term : factor ( mulop factor)*;
 
@@ -60,7 +60,7 @@ print_type: data_type| expression;
 
 printtype_list : print_type (',' print_type )*;
 
-factor : data_type | '(' expression ')';
+factor :  functioncall | '('expression ')' | data_type;
 
 parameter_list : (parameter (',' parameter)*)?;
 

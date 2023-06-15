@@ -1,9 +1,12 @@
 #include <iostream>
 int main(){
-	int x = 50;
-	while(x < 50){
-		std::cout << x <<std::endl;
-		x = x - 1;
+	int x = 20;
+	int z;
+
+	if(x > 10){
+		z = 30;
 	}
+
+	std::cout << z <<std::endl;
 	return 0; 
 }
