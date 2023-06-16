@@ -1,5 +1,6 @@
-x = 40
+x = -0
 y = 50
+print(x+y)
 for ele in range(0,80):
     if(ele > 60):
         z = ele

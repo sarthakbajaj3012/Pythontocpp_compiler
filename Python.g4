@@ -66,7 +66,6 @@ parameter_list : (parameter (',' parameter)*)?;
 
 parameter : expression;
 
-// Define the tokens used in the grammar
 NAME : [a-zA-Z_] [a-zA-Z0-9_]*;
 INTEGER : '-'?[0-9]+;
 FLOAT : [0-9]* '.' [0-9]+;
