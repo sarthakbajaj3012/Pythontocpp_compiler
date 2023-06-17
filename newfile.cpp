@@ -1,12 +1,9 @@
 #include <iostream>
 int main(){
-	int x = 20;
-	int z;
-
-	if(x > 10){
-		z = 30;
+	float x = 100.5;
+	while(x > 0.5){
+		std::cout << x <<std::endl;
+		x = x/static_cast<float>(2);
 	}
-
-	std::cout << z <<std::endl;
 	return 0; 
 }

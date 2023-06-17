@@ -1,6 +1,6 @@
 grammar Python;
 
-program : statement_list;
+program : statement_list EOF;
 
 statement_list : statement
                | statement_list statement;

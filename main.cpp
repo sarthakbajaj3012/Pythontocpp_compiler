@@ -10,6 +10,8 @@
 using namespace antlrcpp;
 using namespace antlr4;
 
+
+
 int main(int argc, char* argv[]) {
   std::ifstream python_file(argv[1]);
   std::string line;
@@ -22,7 +24,6 @@ int main(int argc, char* argv[]) {
 
     while(std::getline(python_file,line)){
 
-      int inlinetab = 0;
       int tab_num = 0;
       
       int x= 0;
@@ -59,11 +60,14 @@ try{
   PythonLexer lexer(&input);
   CommonTokenStream tokens(&lexer);
   tokens.fill();
+  // std::cout << tokens.getText() << std::endl;
   PythonParser parser(&tokens);
   tree::ParseTree *tree2 = parser.program();
+ 
   if( parser.getNumberOfSyntaxErrors() > 0) {
     throw std::runtime_error("syntax error!");
   }
+
   // std::cout << tree2->children.at(0)->toStringTree(&parser) << std::endl;
   MyListener listener;
   antlr4::tree::ParseTreeWalker::DEFAULT.walk(&listener, tree2);

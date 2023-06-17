@@ -56,8 +56,6 @@ int main() {
             std::cout << "Outputs are different.Test" <<i <<"Failed" << std::endl;
         }
     }
-    
-
     return 0;
 }
 

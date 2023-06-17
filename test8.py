@@ -1,4 +1,9 @@
-x = 100.5
-while( x > 0.5):
-    print(x)
-    x = x/2
+def factorial(n):
+    if n == 0:
+        return 1
+    else:
+        return n * factorial(n - 1)
+
+result = factorial(5)
+print(result)
+
