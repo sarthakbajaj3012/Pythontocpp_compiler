@@ -1,19 +1,10 @@
 #include <iostream>
+#include<any>
 int main(){
-	int x = 40;
-	int y = 50;
-	if(x > y){
-		if(x == 30){
-			std::cout << "hello" <<std::endl;
-		}
-		else {
-			std::cout << "myname" <<std::endl;
-		}
-
+	std::any x = 100.5f;
+	while(std::any_cast<float>(x) > 0.5){
+		std::cout << std::any_cast<float>(x) <<std::endl;
+		x = std::any_cast<float>(x)/static_cast<float>(2);
 	}
-	else {
-		std::cout << "yo" <<std::endl;
-	}
-
 	return 0; 
 }

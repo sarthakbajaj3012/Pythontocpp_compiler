@@ -17,7 +17,7 @@ using namespace antlr4;
 class MyListener : public PythonBaseListener {
     private:
         std::string converted_code = "int main(){\n";
-        std::string headers = "#include <iostream>\n";
+        std::string headers = "#include <iostream>\n#include<any>\n";
         std::string functions = "";
         std::map<std::string, std::string> var_names;
         std::map<std::string,std::string> function_parameters;
@@ -31,13 +31,16 @@ class MyListener : public PythonBaseListener {
         bool if_statement = false;
         bool while_loop = false;
         bool assignment = false;
+        bool reassignment = false;
         bool print = false;
         bool function = false;
         bool functioncall = false;
         bool division = false;
         bool return_state  = false;
+        bool parameter_list = false;
         bool expression_state = true;
         std::string assignment_type = "int";
+        std::string reassignment_type = "int";
         std::string assignment_string = "";
         std::string function_string = "";
         std::string function_type = "int";
@@ -117,7 +120,9 @@ class MyListener : public PythonBaseListener {
                     function_variables[var] = assignment_type;
                 } 
                 else {
+                    reassignment = true;
                     function_string.append(functionaddtab() + var +" = ");
+                    reassignment_type = function_variables[var];
                 }
         }
         else{
@@ -130,28 +135,33 @@ class MyListener : public PythonBaseListener {
                     var_names[var] = assignment_type;
                 } 
                 else {
+                    reassignment = true;
                     converted_code.append(addtab() + var + " = ");
+                    reassignment_type = var_names[var];
                 }
         }
         }
         virtual void exitAssignment_statement(PythonParser::Assignment_statementContext * ctx) override { 
             if(function) {
-                if(assignment) function_string.append(functionaddtab() + assignment_type +" " + assignment_string);
+                if(assignment) function_string.append(functionaddtab() + "std::any " + assignment_string);
                 function_variables[ctx->NAME()->getText()] = assignment_type;
+                if(reassignment) function_variables[ctx->NAME()->getText() ] = reassignment_type;
             }
             else {
                 
                 if(assignment) {
                     if(for_loop | while_loop | if_statement) {
-                        loopstring.append("\n\t" +  assignment_type + " " + ctx->NAME()->getText() + ";\n");
+                        loopstring.append("\n\t std::any " + ctx->NAME()->getText() + ";\n");
                         converted_code.append(addtab()  + assignment_string );
                     }
-                    else converted_code.append(addtab() + assignment_type + " " + assignment_string);
+                    else converted_code.append(addtab() + "std::any " + assignment_string);
                     var_names[ctx->NAME()->getText()] = assignment_type;
                 }
+                if(reassignment) var_names[ctx->NAME()->getText() ] = reassignment_type;
             }
             assignment_string ="";
             assignment = false;
+            reassignment = false;
         }
 
         virtual void enterIf_statement(PythonParser::If_statementContext * ctx) override { 
@@ -327,6 +337,7 @@ class MyListener : public PythonBaseListener {
         virtual void enterParameter_list(PythonParser::Parameter_listContext * ctx) override { 
             
             if(function & !functioncall){
+                parameter_list = true;
                 function_string += "( ";
                 if(ctx->parameter().size() == 0)function_string += "){\n" ;
             }
@@ -354,6 +365,7 @@ class MyListener : public PythonBaseListener {
                 if(function) function_string[function_string.size() -1 ] = ')';
                 else converted_code[converted_code.size() -1 ] = ')';
             }
+            parameter_list = false;
         }
 
         virtual void enterParameter(PythonParser::ParameterContext * ctx) override {
@@ -519,6 +531,7 @@ class MyListener : public PythonBaseListener {
                     if(function & !assignment){
                         if(division) function_string.append("static_cast<float>(" +ctx->INTEGER()->getText() +")"); 
                         else function_string.append(ctx->INTEGER()->getText());
+                        
                     }
                     else if(assignment){
                         if(division) assignment_string.append("static_cast<float>(" +ctx->INTEGER()->getText()+")");
@@ -528,46 +541,60 @@ class MyListener : public PythonBaseListener {
                         if(division) converted_code.append("static_cast<float>(" +ctx->INTEGER()->getText()+")");
                         else converted_code.append(ctx->INTEGER()->getText());
                     } 
+                    if(reassignment & (reassignment_type != "int" | reassignment_type != "float" )) reassignment_type = "int";
 
                 }
                 else if(ctx->NAME() != nullptr){  
-                    // std::cout << ctx->NAME()->getText() <<std::endl;
+                
                     if(function) {
+                        std::string temp = function_variables[ctx->NAME()->getText()];
                         if(assignment){
-                                if(division) assignment_string.append( "static_cast<float>(" + ctx->NAME()->getText() +")");
-                                else assignment_string.append(  ctx->NAME()->getText());
+                            if(division) assignment_string.append( "static_cast<float>(std::any_cast<" + temp +">("+ctx->NAME()->getText()+")" + ")");
+                            else if(function_parameters.find(ctx->NAME()->getText()) == function_parameters.end()) assignment_string.append(  ctx->NAME()->getText());
+                            else assignment_string.append( "std::any_cast<" + temp +">("+ctx->NAME()->getText()+")");
                         }
                         else {
-                                if(division) function_string.append(  "static_cast<float>(" + ctx->NAME()->getText() + ")"); 
-                                else function_string.append( ctx->NAME()->getText());
-                                if(return_state ) function_type = function_variables[ctx->NAME()->getText()];
+                            if(division) function_string.append( "static_cast<float>(std::any_cast<" + temp +">("+ctx->NAME()->getText()+")" + ")"); 
+                            else if(!parameter_list & function_parameters.find(ctx->NAME()->getText()) == function_parameters.end()) function_string.append( "std::any_cast<" + temp +">("+ctx->NAME()->getText()+")");
+                            else function_string.append( ctx->NAME()->getText());
+                            if(return_state ) function_type = function_variables[ctx->NAME()->getText()];
+                            if(reassignment) reassignment_type = function_variables[ctx->NAME()->getText()];
                         }
                     }
                     else if(assignment){
-                            if(division) assignment_string.append( "static_cast<float>(" + ctx->NAME()->getText() + ")"); 
-                            else {
-                                assignment_string.append( ctx->NAME()->getText());
-                                }
-                            if(var_names[ctx->NAME()->getText()] != "int"){
-                                assignment_type = var_names[ctx->NAME()->getText()];
-                            }
+                        std::string temp = var_names[ctx->NAME()->getText()];
+                        if(division) assignment_string.append( "static_cast<float>(std::any_cast<" + temp +">("+ctx->NAME()->getText()+")" + ")"); 
+                        else assignment_string.append( "std::any_cast<" + temp +">("+ctx->NAME()->getText()+")");
+                        assignment_type = var_names[ctx->NAME()->getText()];
                     }
-                    else converted_code.append( ctx->NAME()->getText());   
+                    else {
+                        std::string temp = var_names[ctx->NAME()->getText()];
+                        converted_code.append( "std::any_cast<" + temp +">("+ctx->NAME()->getText()+")"); 
+                        if(reassignment) reassignment_type = temp;
+                        // std::cout<<temp <<std::endl;  
+                    }
                     
                 }
                 else if(ctx->FLOAT() != nullptr){
                     if(function & !assignment) function_string.append(ctx->FLOAT()->getText());
-                    else if(assignment)  assignment_string.append( ctx->FLOAT()->getText());
+                    else if(assignment)  assignment_string.append( ctx->FLOAT()->getText()+"f");
+                    else if(reassignment) converted_code.append(ctx->FLOAT()->getText()+"f");
                     else converted_code.append( ctx->FLOAT()->getText());
                     if(assignment) assignment_type = "float";
                     if(return_state) function_type = "float";
+                    if(reassignment & (reassignment_type != "int" | reassignment_type != "float" )) reassignment_type = "float";
                 }
                 else if(ctx->STRING_LITERAL()!= nullptr){
-                    if(function & !assignment) function_string.append(ctx->STRING_LITERAL()->getText());
-                    else if(assignment)  assignment_string.append( ctx->STRING_LITERAL()->getText());
+                    if(function & !assignment) {
+                        if(reassignment) function_string.append("std::string("+ ctx->STRING_LITERAL()->getText() + ")");
+                        else function_string.append(ctx->STRING_LITERAL()->getText());
+                    }
+                    else if(assignment)  assignment_string.append( "std::string("+ ctx->STRING_LITERAL()->getText() + ")");
+                    else if(reassignment) converted_code.append("std::string("+ ctx->STRING_LITERAL()->getText() + ")");
                     else converted_code.append( ctx->STRING_LITERAL()->getText());
                     if(assignment) assignment_type = "std::string";
                     if(return_state) function_type = "std::string";
+                    if(reassignment & reassignment_type != "std::string") reassignment_type = "std::string";
 
                 }  
             }

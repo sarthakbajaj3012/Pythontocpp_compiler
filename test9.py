@@ -1,3 +1,4 @@
-x = 20.5
-y = 50.5
-print(x+y)
+x = 40
+y = "hello"
+x = y 
+print(x)
