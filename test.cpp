@@ -53,7 +53,7 @@ int main() {
         if (compareOutputs(cpp_filename, python_filename)) {
             std::cout << "Outputs are the same.Test" << i << " Passed"<< std::endl;
         } else {
-            std::cout << "Outputs are different.Test" <<i <<"Failed" << std::endl;
+            std::cout << "Outputs are different.Test" <<i <<" Failed" << std::endl;
         }
     }
     return 0;
