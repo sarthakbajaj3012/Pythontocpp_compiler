@@ -441,7 +441,7 @@ class MyListener : public PythonBaseListener {
                 }
                 else if(ctx->range() != nullptr){
                     function_string.append(addtab()+ "for(int " + ctx->NAME().at(0)->getText() + " = " + ctx->range()->expression().at(0)->getText()+";"+ctx->NAME().at(0)->getText()+
-                    "<"+ ctx->range()->expression().at(1)->getText() +";" +ctx->NAME().at(0)->getText() +"++){\n");
+                    "< std::any_cast<int>("+ ctx->range()->expression().at(1)->getText() +");" +ctx->NAME().at(0)->getText() +"++){\n");
                     function_tabspaces++;
                     function_variables[ctx->NAME().at(0)->getText()] = "int"; 
                     // loop_var.push_back(ctx->NAME().at(0)->getText());    
@@ -464,7 +464,7 @@ class MyListener : public PythonBaseListener {
                 }
                 else if(ctx->range() != nullptr){
                     converted_code.append(addtab()+ "for(int " + ctx->NAME().at(0)->getText() + " = " + ctx->range()->expression().at(0)->getText()+";"+ctx->NAME().at(0)->getText()+
-                    "<"+ ctx->range()->expression().at(1)->getText() +";" +ctx->NAME().at(0)->getText() +"++){\n");
+                    "< std::any_cast<int>("+ ctx->range()->expression().at(1)->getText() +");" +ctx->NAME().at(0)->getText() +"++){\n");
                     tabspaces++;
                     var_names[ctx->NAME().at(0)->getText()] = "int"; 
                     // loop_var.push_back(ctx->NAME().at(0)->getText());             
@@ -525,7 +525,6 @@ class MyListener : public PythonBaseListener {
         }
 
         virtual void enterData_type(PythonParser::Data_typeContext * ctx) override {
-            // std::cout << ctx->getText()<<std::endl;
             if(expression_state){
                 if(ctx->INTEGER() != nullptr){
                     if(function & !assignment){
@@ -534,14 +533,21 @@ class MyListener : public PythonBaseListener {
                         
                     }
                     else if(assignment){
-                        if(division) assignment_string.append("static_cast<float>(" +ctx->INTEGER()->getText()+")");
+                        if(division) {
+                            assignment_string.append("static_cast<float>(" +ctx->INTEGER()->getText()+")");
+                            assignment_type = "float";
+                        }
                         else assignment_string.append(ctx->INTEGER()->getText());
                     }
                     else {
                         if(division) converted_code.append("static_cast<float>(" +ctx->INTEGER()->getText()+")");
                         else converted_code.append(ctx->INTEGER()->getText());
                     } 
-                    if(reassignment & (reassignment_type != "int" | reassignment_type != "float" )) reassignment_type = "int";
+                    if(reassignment & (reassignment_type != "int" | reassignment_type != "float" )) {
+                        if(division) reassignment_type = "float";
+                        else reassignment_type = "int";
+
+                    }
 
                 }
                 else if(ctx->NAME() != nullptr){  
@@ -571,7 +577,6 @@ class MyListener : public PythonBaseListener {
                         std::string temp = var_names[ctx->NAME()->getText()];
                         converted_code.append( "std::any_cast<" + temp +">("+ctx->NAME()->getText()+")"); 
                         if(reassignment) reassignment_type = temp;
-                        // std::cout<<temp <<std::endl;  
                     }
                     
                 }

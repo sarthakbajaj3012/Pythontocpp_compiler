@@ -1,10 +1,16 @@
 #include <iostream>
 #include<any>
 int main(){
-	std::any x = 100.5f;
-	while(std::any_cast<float>(x) > 0.5){
-		std::cout << std::any_cast<float>(x) <<std::endl;
-		x = std::any_cast<float>(x)/static_cast<float>(2);
+	std::any y = std::string("hello");
+	if(std::any_cast<std::string>(y) == "hell"){
+		std::cout << std::any_cast<std::string>(y) <<std::endl;
 	}
+	else if(std::any_cast<std::string>(y) == "hello"){
+		std::cout << "Pass" <<std::endl;
+	}
+	else {
+		std::cout << "error" <<std::endl;
+	}
+
 	return 0; 
 }

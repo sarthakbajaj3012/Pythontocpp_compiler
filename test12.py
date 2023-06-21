@@ -1,9 +1,5 @@
-x = 40
-y = 50 
-if(x > y):
- if(x==30):
-    print("hello")
- else:
-   print("myname")
-else:
-    print("yo")
+x = 100
+while(x >50):
+    for ele in range(0,x):
+        print(x,ele)
+    x = x - 1

@@ -24,7 +24,7 @@ comparison_statement: comparison (join_op comparison)* ;
 
 comparison: expression (conop expression)?;
 
-elif: 'elif' comparison_statement ':' '<<INDENT>>'statement_list '<<DEDENT>>' ;
+elif: 'elif'  '('? comparison_statement ')'? ':' '<<INDENT>>'statement_list '<<DEDENT>>' ;
 
 elseop : 'else' ':' '<<INDENT>>'statement_list '<<DEDENT>>' ;
 

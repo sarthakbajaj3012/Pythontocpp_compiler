@@ -2,8 +2,6 @@
 #include<any>
 
 int main() {
-
-    std::any temp = std::string("helloworls");
-    std::cout << std::any_cast<std::string>(temp);
-    return 0;
+    float x = static_cast<float>(22)/7;
+    std::cout << x <<std::endl;  
 }
