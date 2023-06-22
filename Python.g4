@@ -16,15 +16,17 @@ statement : assignment_statement
 
 assignment_statement : NAME '=' expression ;
 
-if_statement : 'if' '('? comparison_statement ')'? ':' '<<INDENT>>' statement_list '<<DEDENT>>' ( elif )* (elseop)?;
+if_statement : 'if' '('? condition_statement ')'? ':' '<<INDENT>>' statement_list '<<DEDENT>>' ( elif )* (elseop)?;
 
 join_op: '&' | 'and' | '|' | 'or';
 
+condition_statement: comparison_statement;
+
 comparison_statement: comparison (join_op comparison)* ;
 
-comparison: expression (conop expression)?;
+comparison: ('(' comparison_statement ')') |expression (conop expression)?;
 
-elif: 'elif'  '('? comparison_statement ')'? ':' '<<INDENT>>'statement_list '<<DEDENT>>' ;
+elif: 'elif'  '('? condition_statement ')'? ':' '<<INDENT>>'statement_list '<<DEDENT>>' ;
 
 elseop : 'else' ':' '<<INDENT>>'statement_list '<<DEDENT>>' ;
 
@@ -36,7 +38,7 @@ range: 'range' '(' expression ',' expression ')';
 
 for_statement: 'for' NAME 'in' (STRING_LITERAL | NAME | range) ':' '<<INDENT>>' statement_list '<<DEDENT>>';
 
-while_statement : 'while' '('? comparison_statement')'? ':' '<<INDENT>>'statement_list '<<DEDENT>>';
+while_statement : 'while' '('? condition_statement')'? ':' '<<INDENT>>'statement_list '<<DEDENT>>';
 
 function_statement : 'def' NAME '(' parameter_list ')' ':' '<<INDENT>>'statement_list '<<DEDENT>>';
 

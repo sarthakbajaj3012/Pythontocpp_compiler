@@ -34,6 +34,9 @@ public:
   virtual void enterJoin_op(PythonParser::Join_opContext * /*ctx*/) override { }
   virtual void exitJoin_op(PythonParser::Join_opContext * /*ctx*/) override { }
 
+  virtual void enterCondition_statement(PythonParser::Condition_statementContext * /*ctx*/) override { }
+  virtual void exitCondition_statement(PythonParser::Condition_statementContext * /*ctx*/) override { }
+
   virtual void enterComparison_statement(PythonParser::Comparison_statementContext * /*ctx*/) override { }
   virtual void exitComparison_statement(PythonParser::Comparison_statementContext * /*ctx*/) override { }
 

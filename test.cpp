@@ -35,7 +35,7 @@ int main() {
     
     system("g++ -std=c++17 -o PythonParser PythonParser.cpp PythonLexer.cpp main.cpp -I /usr/local/include/antlr4-runtime -L /usr/local/lib -lantlr4-runtime "); 
 
-    for(int i = 1; i<= 13; i++){
+    for(int i = 1; i<= 14; i++){
         std::string test = "testcases/test" + std::to_string(i) + ".py";
         std::string cpp_output = executeCommand("./PythonParser " + test);
         std::string python_output = executeCommand("python3 " + test );  

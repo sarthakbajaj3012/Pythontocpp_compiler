@@ -386,8 +386,18 @@ class MyListener : public PythonBaseListener {
         virtual void visitTerminal(antlr4::tree::TerminalNode * /*node*/) override { }
         virtual void visitErrorNode(antlr4::tree::ErrorNode * /*node*/) override { }
 
-        virtual void enterComparison(PythonParser::ComparisonContext * /*ctx*/) override { }
-        virtual void exitComparison(PythonParser::ComparisonContext * ctx) override {}
+        virtual void enterComparison(PythonParser::ComparisonContext * ctx) override {
+            if(ctx->comparison_statement() != nullptr){
+                if(function) function_string.append("(");
+                else converted_code.append("(");
+            }
+        }
+        virtual void exitComparison(PythonParser::ComparisonContext * ctx) override {
+            if(ctx->comparison_statement() != nullptr){
+                if(function) function_string.append(")");
+                else converted_code.append(")");
+            }
+        }
 
         virtual void enterConop(PythonParser::ConopContext * ctx) override {
             if(function) function_string.append( " "+ ctx->getText() + " ");
@@ -519,10 +529,7 @@ class MyListener : public PythonBaseListener {
         virtual void exitJoin_op(PythonParser::Join_opContext */*ctx*/) override {}
 
         virtual void enterComparison_statement(PythonParser::Comparison_statementContext * /*ctx*/) override { }
-        virtual void exitComparison_statement(PythonParser::Comparison_statementContext * /*ctx*/) override {
-            if(function) function_string.append("){\n");
-            else converted_code.append("){\n");
-        }
+        virtual void exitComparison_statement(PythonParser::Comparison_statementContext * /*ctx*/) override {}
 
         virtual void enterData_type(PythonParser::Data_typeContext * ctx) override {
             if(expression_state){
@@ -584,7 +591,7 @@ class MyListener : public PythonBaseListener {
                     if(function & !assignment) function_string.append(ctx->FLOAT()->getText());
                     else if(assignment)  assignment_string.append( ctx->FLOAT()->getText()+"f");
                     else if(reassignment) converted_code.append(ctx->FLOAT()->getText()+"f");
-                    else converted_code.append( ctx->FLOAT()->getText());
+                    else converted_code.append( ctx->FLOAT()->getText()+"f");
                     if(assignment) assignment_type = "float";
                     if(return_state) function_type = "float";
                     if(reassignment & (reassignment_type != "int" | reassignment_type != "float" )) reassignment_type = "float";
@@ -619,4 +626,11 @@ class MyListener : public PythonBaseListener {
             else converted_code.append(" <<\" \" << ");
             
         }
+        
+        virtual void enterCondition_statement(PythonParser::Condition_statementContext *ctx) override{}
+        virtual void exitCondition_statement(PythonParser::Condition_statementContext *ctx) override {
+            if(function) function_string.append("){\n");
+            else converted_code.append("){\n");
+        }
+
 };

@@ -32,6 +32,9 @@ public:
   virtual void enterJoin_op(PythonParser::Join_opContext *ctx) = 0;
   virtual void exitJoin_op(PythonParser::Join_opContext *ctx) = 0;
 
+  virtual void enterCondition_statement(PythonParser::Condition_statementContext *ctx) = 0;
+  virtual void exitCondition_statement(PythonParser::Condition_statementContext *ctx) = 0;
+
   virtual void enterComparison_statement(PythonParser::Comparison_statementContext *ctx) = 0;
   virtual void exitComparison_statement(PythonParser::Comparison_statementContext *ctx) = 0;
 
